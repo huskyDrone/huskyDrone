@@ -1,0 +1,1528 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 18, 4
+  12              		.thumb
+  13              		.file	"lcd.c"
+  23              	.Ltext0:
+  24              		.file 1 "../src/LCD/lcd.c"
+ 1889              		.align	2
+ 1890              		.global	LCD_FilledRect
+ 1891              		.thumb
+ 1892              		.thumb_func
+ 1894              	LCD_FilledRect:
+ 1895              	.LFB0:
+   1:../src/LCD/lcd.c **** //*****************************************************************************
+   2:../src/LCD/lcd.c **** //   +--+       
+   3:../src/LCD/lcd.c **** //   | ++----+   
+   4:../src/LCD/lcd.c **** //   +-++    |  
+   5:../src/LCD/lcd.c **** //     |     |  
+   6:../src/LCD/lcd.c **** //   +-+--+  |   
+   7:../src/LCD/lcd.c **** //   | +--+--+  
+   8:../src/LCD/lcd.c **** //   +----+    Copyright (c) 2009 Code Red Technologies Ltd. 
+   9:../src/LCD/lcd.c **** //
+  10:../src/LCD/lcd.c **** // lcd.c contains various routines to plot to the LCD display on the RDB1768
+  11:../src/LCD/lcd.c **** // development board.
+  12:../src/LCD/lcd.c **** //
+  13:../src/LCD/lcd.c **** // Software License Agreement
+  14:../src/LCD/lcd.c **** // 
+  15:../src/LCD/lcd.c **** // The software is owned by Code Red Technologies and/or its suppliers, and is 
+  16:../src/LCD/lcd.c **** // protected under applicable copyright laws.  All rights are reserved.  Any 
+  17:../src/LCD/lcd.c **** // use in violation of the foregoing restrictions may subject the user to criminal 
+  18:../src/LCD/lcd.c **** // sanctions under applicable laws, as well as to civil liability for the breach 
+  19:../src/LCD/lcd.c **** // of the terms and conditions of this license.
+  20:../src/LCD/lcd.c **** // 
+  21:../src/LCD/lcd.c **** // THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHETHER EXPRESS, IMPLIED
+  22:../src/LCD/lcd.c **** // OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF
+  23:../src/LCD/lcd.c **** // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE.
+  24:../src/LCD/lcd.c **** // USE OF THIS SOFTWARE FOR COMMERCIAL DEVELOPMENT AND/OR EDUCATION IS SUBJECT
+  25:../src/LCD/lcd.c **** // TO A CURRENT END USER LICENSE AGREEMENT (COMMERCIAL OR EDUCATIONAL) WITH
+  26:../src/LCD/lcd.c **** // CODE RED TECHNOLOGIES LTD. 
+  27:../src/LCD/lcd.c **** 
+  28:../src/LCD/lcd.c **** #include "lcd_commands.h"
+  29:../src/LCD/lcd.c **** #include "lcd.h"
+  30:../src/LCD/lcd.c **** #include "lcd_driver.h"
+  31:../src/LCD/lcd.c **** #include "font.h"
+  32:../src/LCD/lcd.c **** 
+  33:../src/LCD/lcd.c **** #include <stdlib.h>		// to provice abs() function
+  34:../src/LCD/lcd.c **** 
+  35:../src/LCD/lcd.c **** // Routine to draw a filled rectangle to the LCD.
+  36:../src/LCD/lcd.c **** // Two corners of rectangle are at (xmin,ymin) and (xmax,ymax).
+  37:../src/LCD/lcd.c **** // The Rectangle is filled with the RGB565 color specified
+  38:../src/LCD/lcd.c **** void LCD_FilledRect(int xmin,int xmax,int ymin,int ymax,int color)
+  39:../src/LCD/lcd.c **** {
+ 1896              		.loc 1 39 0
+ 1897              		.cfi_startproc
+ 1898              		@ args = 4, pretend = 0, frame = 24
+ 1899              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1900 0000 80B5     		push	{r7, lr}
+ 1901              	.LCFI0:
+ 1902              		.cfi_def_cfa_offset 8
+ 1903 0002 86B0     		sub	sp, sp, #24
+ 1904              	.LCFI1:
+ 1905              		.cfi_def_cfa_offset 32
+ 1906 0004 00AF     		add	r7, sp, #0
+ 1907              		.cfi_offset 14, -4
+ 1908              		.cfi_offset 7, -8
+ 1909              	.LCFI2:
+ 1910              		.cfi_def_cfa_register 7
+ 1911 0006 F860     		str	r0, [r7, #12]
+ 1912 0008 B960     		str	r1, [r7, #8]
+ 1913 000a 7A60     		str	r2, [r7, #4]
+ 1914 000c 3B60     		str	r3, [r7, #0]
+  40:../src/LCD/lcd.c ****     int i;
+  41:../src/LCD/lcd.c **** 
+  42:../src/LCD/lcd.c ****     // Specify to LCD controller coordinates we are writing to...
+  43:../src/LCD/lcd.c ****     LCDdriver_WriteCom(DD_CASET); 	// Set the column address
+ 1915              		.loc 1 43 0
+ 1916 000e 4FF02A00 		mov	r0, #42
+ 1917 0012 FFF7FEFF 		bl	LCDdriver_WriteCom
+  44:../src/LCD/lcd.c ****     LCDdriver_WriteData(xmin);		// min address
+ 1918              		.loc 1 44 0
+ 1919 0016 FB68     		ldr	r3, [r7, #12]
+ 1920 0018 DBB2     		uxtb	r3, r3
+ 1921 001a 1846     		mov	r0, r3
+ 1922 001c FFF7FEFF 		bl	LCDdriver_WriteData
+  45:../src/LCD/lcd.c ****     LCDdriver_WriteData(xmax);		// max address
+ 1923              		.loc 1 45 0
+ 1924 0020 BB68     		ldr	r3, [r7, #8]
+ 1925 0022 DBB2     		uxtb	r3, r3
+ 1926 0024 1846     		mov	r0, r3
+ 1927 0026 FFF7FEFF 		bl	LCDdriver_WriteData
+  46:../src/LCD/lcd.c ****     LCDdriver_WriteCom(DD_RASET);	// Set the row address
+ 1928              		.loc 1 46 0
+ 1929 002a 4FF02B00 		mov	r0, #43
+ 1930 002e FFF7FEFF 		bl	LCDdriver_WriteCom
+  47:../src/LCD/lcd.c ****     LCDdriver_WriteData(ymin + 1);	// min address
+ 1931              		.loc 1 47 0
+ 1932 0032 7B68     		ldr	r3, [r7, #4]
+ 1933 0034 DBB2     		uxtb	r3, r3
+ 1934 0036 03F10103 		add	r3, r3, #1
+ 1935 003a DBB2     		uxtb	r3, r3
+ 1936 003c 1846     		mov	r0, r3
+ 1937 003e FFF7FEFF 		bl	LCDdriver_WriteData
+  48:../src/LCD/lcd.c ****     LCDdriver_WriteData(ymax + 1);	// max address
+ 1938              		.loc 1 48 0
+ 1939 0042 3B68     		ldr	r3, [r7, #0]
+ 1940 0044 DBB2     		uxtb	r3, r3
+ 1941 0046 03F10103 		add	r3, r3, #1
+ 1942 004a DBB2     		uxtb	r3, r3
+ 1943 004c 1846     		mov	r0, r3
+ 1944 004e FFF7FEFF 		bl	LCDdriver_WriteData
+  49:../src/LCD/lcd.c ****     LCDdriver_WriteCom(DD_RAMWR);	// RAM Write command
+ 1945              		.loc 1 49 0
+ 1946 0052 4FF02C00 		mov	r0, #44
+ 1947 0056 FFF7FEFF 		bl	LCDdriver_WriteCom
+  50:../src/LCD/lcd.c **** 
+  51:../src/LCD/lcd.c ****     // Plot the color data to the LCD buffer
+  52:../src/LCD/lcd.c ****     for(i = ((xmax - xmin + 1) * (ymax - ymin + 1)); i > 0; i--)
+ 1948              		.loc 1 52 0
+ 1949 005a BA68     		ldr	r2, [r7, #8]
+ 1950 005c FB68     		ldr	r3, [r7, #12]
+ 1951 005e D31A     		subs	r3, r2, r3
+ 1952 0060 03F10103 		add	r3, r3, #1
+ 1953 0064 3968     		ldr	r1, [r7, #0]
+ 1954 0066 7A68     		ldr	r2, [r7, #4]
+ 1955 0068 8A1A     		subs	r2, r1, r2
+ 1956 006a 02F10102 		add	r2, r2, #1
+ 1957 006e 02FB03F3 		mul	r3, r2, r3
+ 1958 0072 7B61     		str	r3, [r7, #20]
+ 1959 0074 0FE0     		b	.L2
+ 1960              	.L3:
+  53:../src/LCD/lcd.c ****     {
+  54:../src/LCD/lcd.c ****     	LCDdriver_WriteData(color >> 8);	// top 8 bits of RGB565 color
+ 1961              		.loc 1 54 0 discriminator 2
+ 1962 0076 3B6A     		ldr	r3, [r7, #32]
+ 1963 0078 4FEA2323 		asr	r3, r3, #8
+ 1964 007c DBB2     		uxtb	r3, r3
+ 1965 007e 1846     		mov	r0, r3
+ 1966 0080 FFF7FEFF 		bl	LCDdriver_WriteData
+  55:../src/LCD/lcd.c ****     	LCDdriver_WriteData(color);			// bottom 8 bits of RGB565 color
+ 1967              		.loc 1 55 0 discriminator 2
+ 1968 0084 3B6A     		ldr	r3, [r7, #32]
+ 1969 0086 DBB2     		uxtb	r3, r3
+ 1970 0088 1846     		mov	r0, r3
+ 1971 008a FFF7FEFF 		bl	LCDdriver_WriteData
+  52:../src/LCD/lcd.c ****     for(i = ((xmax - xmin + 1) * (ymax - ymin + 1)); i > 0; i--)
+ 1972              		.loc 1 52 0 discriminator 2
+ 1973 008e 7B69     		ldr	r3, [r7, #20]
+ 1974 0090 03F1FF33 		add	r3, r3, #-1
+ 1975 0094 7B61     		str	r3, [r7, #20]
+ 1976              	.L2:
+  52:../src/LCD/lcd.c ****     for(i = ((xmax - xmin + 1) * (ymax - ymin + 1)); i > 0; i--)
+ 1977              		.loc 1 52 0 is_stmt 0 discriminator 1
+ 1978 0096 7B69     		ldr	r3, [r7, #20]
+ 1979 0098 002B     		cmp	r3, #0
+ 1980 009a ECDC     		bgt	.L3
+  56:../src/LCD/lcd.c ****     }
+  57:../src/LCD/lcd.c **** }
+ 1981              		.loc 1 57 0 is_stmt 1
+ 1982 009c 07F11807 		add	r7, r7, #24
+ 1983 00a0 BD46     		mov	sp, r7
+ 1984 00a2 80BD     		pop	{r7, pc}
+ 1985              		.cfi_endproc
+ 1986              	.LFE0:
+ 1988              		.align	2
+ 1989              		.global	LCD_Rect
+ 1990              		.thumb
+ 1991              		.thumb_func
+ 1993              	LCD_Rect:
+ 1994              	.LFB1:
+  58:../src/LCD/lcd.c **** 
+  59:../src/LCD/lcd.c **** // Routine to draw an unfilled rectangle to the LCD.
+  60:../src/LCD/lcd.c **** // Two corners of rectangle are at (xmin,ymin) and (xmax,ymax).
+  61:../src/LCD/lcd.c **** // The Rectangle is drawn in the RGB565 color specified
+  62:../src/LCD/lcd.c **** void LCD_Rect(int xmin,int xmax,int ymin,int ymax,int color)
+  63:../src/LCD/lcd.c **** {
+ 1995              		.loc 1 63 0
+ 1996              		.cfi_startproc
+ 1997              		@ args = 4, pretend = 0, frame = 16
+ 1998              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1999 00a4 80B5     		push	{r7, lr}
+ 2000              	.LCFI3:
+ 2001              		.cfi_def_cfa_offset 8
+ 2002 00a6 86B0     		sub	sp, sp, #24
+ 2003              	.LCFI4:
+ 2004              		.cfi_def_cfa_offset 32
+ 2005 00a8 02AF     		add	r7, sp, #8
+ 2006              		.cfi_offset 14, -4
+ 2007              		.cfi_offset 7, -8
+ 2008              	.LCFI5:
+ 2009              		.cfi_def_cfa 7, 24
+ 2010 00aa F860     		str	r0, [r7, #12]
+ 2011 00ac B960     		str	r1, [r7, #8]
+ 2012 00ae 7A60     		str	r2, [r7, #4]
+ 2013 00b0 3B60     		str	r3, [r7, #0]
+  64:../src/LCD/lcd.c **** 	// Draw 4 lines of rectange as 4 filled rectanges, each of 1 pixel wide
+  65:../src/LCD/lcd.c **** 	LCD_FilledRect(xmin,xmin,ymin,ymax,color);
+ 2014              		.loc 1 65 0
+ 2015 00b2 BB69     		ldr	r3, [r7, #24]
+ 2016 00b4 0093     		str	r3, [sp, #0]
+ 2017 00b6 F868     		ldr	r0, [r7, #12]
+ 2018 00b8 F968     		ldr	r1, [r7, #12]
+ 2019 00ba 7A68     		ldr	r2, [r7, #4]
+ 2020 00bc 3B68     		ldr	r3, [r7, #0]
+ 2021 00be FFF7FEFF 		bl	LCD_FilledRect
+  66:../src/LCD/lcd.c **** 	LCD_FilledRect(xmax,xmax,ymin,ymax,color);
+ 2022              		.loc 1 66 0
+ 2023 00c2 BB69     		ldr	r3, [r7, #24]
+ 2024 00c4 0093     		str	r3, [sp, #0]
+ 2025 00c6 B868     		ldr	r0, [r7, #8]
+ 2026 00c8 B968     		ldr	r1, [r7, #8]
+ 2027 00ca 7A68     		ldr	r2, [r7, #4]
+ 2028 00cc 3B68     		ldr	r3, [r7, #0]
+ 2029 00ce FFF7FEFF 		bl	LCD_FilledRect
+  67:../src/LCD/lcd.c **** 	LCD_FilledRect(xmin,xmax,ymin,ymin,color);
+ 2030              		.loc 1 67 0
+ 2031 00d2 BB69     		ldr	r3, [r7, #24]
+ 2032 00d4 0093     		str	r3, [sp, #0]
+ 2033 00d6 F868     		ldr	r0, [r7, #12]
+ 2034 00d8 B968     		ldr	r1, [r7, #8]
+ 2035 00da 7A68     		ldr	r2, [r7, #4]
+ 2036 00dc 7B68     		ldr	r3, [r7, #4]
+ 2037 00de FFF7FEFF 		bl	LCD_FilledRect
+  68:../src/LCD/lcd.c **** 	LCD_FilledRect(xmin,xmax,ymax,ymax,color);
+ 2038              		.loc 1 68 0
+ 2039 00e2 BB69     		ldr	r3, [r7, #24]
+ 2040 00e4 0093     		str	r3, [sp, #0]
+ 2041 00e6 F868     		ldr	r0, [r7, #12]
+ 2042 00e8 B968     		ldr	r1, [r7, #8]
+ 2043 00ea 3A68     		ldr	r2, [r7, #0]
+ 2044 00ec 3B68     		ldr	r3, [r7, #0]
+ 2045 00ee FFF7FEFF 		bl	LCD_FilledRect
+  69:../src/LCD/lcd.c **** }
+ 2046              		.loc 1 69 0
+ 2047 00f2 07F11007 		add	r7, r7, #16
+ 2048 00f6 BD46     		mov	sp, r7
+ 2049 00f8 80BD     		pop	{r7, pc}
+ 2050              		.cfi_endproc
+ 2051              	.LFE1:
+ 2053 00fa 00BF     		.align	2
+ 2054              		.global	LCD_PlotPoint
+ 2055              		.thumb
+ 2056              		.thumb_func
+ 2058              	LCD_PlotPoint:
+ 2059              	.LFB2:
+  70:../src/LCD/lcd.c **** 
+  71:../src/LCD/lcd.c **** 
+  72:../src/LCD/lcd.c **** 
+  73:../src/LCD/lcd.c **** // Plot a point on the screen in the 6:5:6 color format
+  74:../src/LCD/lcd.c **** void LCD_PlotPoint(int x,int y,int color)
+  75:../src/LCD/lcd.c **** {
+ 2060              		.loc 1 75 0
+ 2061              		.cfi_startproc
+ 2062              		@ args = 0, pretend = 0, frame = 16
+ 2063              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2064 00fc 80B5     		push	{r7, lr}
+ 2065              	.LCFI6:
+ 2066              		.cfi_def_cfa_offset 8
+ 2067 00fe 84B0     		sub	sp, sp, #16
+ 2068              	.LCFI7:
+ 2069              		.cfi_def_cfa_offset 24
+ 2070 0100 00AF     		add	r7, sp, #0
+ 2071              		.cfi_offset 14, -4
+ 2072              		.cfi_offset 7, -8
+ 2073              	.LCFI8:
+ 2074              		.cfi_def_cfa_register 7
+ 2075 0102 F860     		str	r0, [r7, #12]
+ 2076 0104 B960     		str	r1, [r7, #8]
+ 2077 0106 7A60     		str	r2, [r7, #4]
+  76:../src/LCD/lcd.c ****     LCDdriver_WriteCom(DD_CASET);	// Set the column address 
+ 2078              		.loc 1 76 0
+ 2079 0108 4FF02A00 		mov	r0, #42
+ 2080 010c FFF7FEFF 		bl	LCDdriver_WriteCom
+  77:../src/LCD/lcd.c ****     LCDdriver_WriteData(x);			// min address
+ 2081              		.loc 1 77 0
+ 2082 0110 FB68     		ldr	r3, [r7, #12]
+ 2083 0112 DBB2     		uxtb	r3, r3
+ 2084 0114 1846     		mov	r0, r3
+ 2085 0116 FFF7FEFF 		bl	LCDdriver_WriteData
+  78:../src/LCD/lcd.c ****     LCDdriver_WriteData(x);			// max address
+ 2086              		.loc 1 78 0
+ 2087 011a FB68     		ldr	r3, [r7, #12]
+ 2088 011c DBB2     		uxtb	r3, r3
+ 2089 011e 1846     		mov	r0, r3
+ 2090 0120 FFF7FEFF 		bl	LCDdriver_WriteData
+  79:../src/LCD/lcd.c ****     LCDdriver_WriteCom(DD_RASET);	// Set the row address
+ 2091              		.loc 1 79 0
+ 2092 0124 4FF02B00 		mov	r0, #43
+ 2093 0128 FFF7FEFF 		bl	LCDdriver_WriteCom
+  80:../src/LCD/lcd.c ****     LCDdriver_WriteData(y + 1);		// min address
+ 2094              		.loc 1 80 0
+ 2095 012c BB68     		ldr	r3, [r7, #8]
+ 2096 012e DBB2     		uxtb	r3, r3
+ 2097 0130 03F10103 		add	r3, r3, #1
+ 2098 0134 DBB2     		uxtb	r3, r3
+ 2099 0136 1846     		mov	r0, r3
+ 2100 0138 FFF7FEFF 		bl	LCDdriver_WriteData
+  81:../src/LCD/lcd.c ****     LCDdriver_WriteData(y + 1);		// max address
+ 2101              		.loc 1 81 0
+ 2102 013c BB68     		ldr	r3, [r7, #8]
+ 2103 013e DBB2     		uxtb	r3, r3
+ 2104 0140 03F10103 		add	r3, r3, #1
+ 2105 0144 DBB2     		uxtb	r3, r3
+ 2106 0146 1846     		mov	r0, r3
+ 2107 0148 FFF7FEFF 		bl	LCDdriver_WriteData
+  82:../src/LCD/lcd.c ****     LCDdriver_WriteCom(DD_RAMWR);	// RAM Write command
+ 2108              		.loc 1 82 0
+ 2109 014c 4FF02C00 		mov	r0, #44
+ 2110 0150 FFF7FEFF 		bl	LCDdriver_WriteCom
+  83:../src/LCD/lcd.c ****     LCDdriver_WriteData(color >> 8);	// top 8 bits of RGB565 color
+ 2111              		.loc 1 83 0
+ 2112 0154 7B68     		ldr	r3, [r7, #4]
+ 2113 0156 4FEA2323 		asr	r3, r3, #8
+ 2114 015a DBB2     		uxtb	r3, r3
+ 2115 015c 1846     		mov	r0, r3
+ 2116 015e FFF7FEFF 		bl	LCDdriver_WriteData
+  84:../src/LCD/lcd.c ****     LCDdriver_WriteData(color);			// top 8 bits of RGB565 color
+ 2117              		.loc 1 84 0
+ 2118 0162 7B68     		ldr	r3, [r7, #4]
+ 2119 0164 DBB2     		uxtb	r3, r3
+ 2120 0166 1846     		mov	r0, r3
+ 2121 0168 FFF7FEFF 		bl	LCDdriver_WriteData
+  85:../src/LCD/lcd.c **** }
+ 2122              		.loc 1 85 0
+ 2123 016c 07F11007 		add	r7, r7, #16
+ 2124 0170 BD46     		mov	sp, r7
+ 2125 0172 80BD     		pop	{r7, pc}
+ 2126              		.cfi_endproc
+ 2127              	.LFE2:
+ 2129              		.align	2
+ 2130              		.global	LCD_FilledCircle
+ 2131              		.thumb
+ 2132              		.thumb_func
+ 2134              	LCD_FilledCircle:
+ 2135              	.LFB3:
+  86:../src/LCD/lcd.c **** 
+  87:../src/LCD/lcd.c **** // Routine to draw a filled circle to the LCD.
+  88:../src/LCD/lcd.c **** // The centre of the circle is at (x0,y0) and the circle has the 
+  89:../src/LCD/lcd.c **** // specifed radius. The circle is filled with the RGB565 color 
+  90:../src/LCD/lcd.c **** // The circle is drawn using the "Midpoint circle algorithm", 
+  91:../src/LCD/lcd.c **** // also known as "Bresenham's circle algorithm". In order to fill
+  92:../src/LCD/lcd.c **** // the circle, the algorithm has been modifed to draw a line between
+  93:../src/LCD/lcd.c **** // each two points, rather than plotting the two points individually.
+  94:../src/LCD/lcd.c **** void LCD_FilledCircle (int x0, int y0, int radius, int color)
+  95:../src/LCD/lcd.c **** {
+ 2136              		.loc 1 95 0
+ 2137              		.cfi_startproc
+ 2138              		@ args = 0, pretend = 0, frame = 40
+ 2139              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2140 0174 90B5     		push	{r4, r7, lr}
+ 2141              	.LCFI9:
+ 2142              		.cfi_def_cfa_offset 12
+ 2143 0176 8DB0     		sub	sp, sp, #52
+ 2144              	.LCFI10:
+ 2145              		.cfi_def_cfa_offset 64
+ 2146 0178 02AF     		add	r7, sp, #8
+ 2147              		.cfi_offset 14, -4
+ 2148              		.cfi_offset 7, -8
+ 2149              		.cfi_offset 4, -12
+ 2150              	.LCFI11:
+ 2151              		.cfi_def_cfa 7, 56
+ 2152 017a F860     		str	r0, [r7, #12]
+ 2153 017c B960     		str	r1, [r7, #8]
+ 2154 017e 7A60     		str	r2, [r7, #4]
+ 2155 0180 3B60     		str	r3, [r7, #0]
+  96:../src/LCD/lcd.c ****   int f = 1 - radius;
+ 2156              		.loc 1 96 0
+ 2157 0182 7B68     		ldr	r3, [r7, #4]
+ 2158 0184 C3F10103 		rsb	r3, r3, #1
+ 2159 0188 7B62     		str	r3, [r7, #36]
+  97:../src/LCD/lcd.c ****   int ddF_x = 1;
+ 2160              		.loc 1 97 0
+ 2161 018a 4FF00103 		mov	r3, #1
+ 2162 018e 3B62     		str	r3, [r7, #32]
+  98:../src/LCD/lcd.c ****   int ddF_y = -2 * radius;
+ 2163              		.loc 1 98 0
+ 2164 0190 7A68     		ldr	r2, [r7, #4]
+ 2165 0192 1346     		mov	r3, r2
+ 2166 0194 4FEAC373 		lsl	r3, r3, #31
+ 2167 0198 9B1A     		subs	r3, r3, r2
+ 2168 019a 4FEA4303 		lsl	r3, r3, #1
+ 2169 019e FB61     		str	r3, [r7, #28]
+  99:../src/LCD/lcd.c ****   int x = 0;
+ 2170              		.loc 1 99 0
+ 2171 01a0 4FF00003 		mov	r3, #0
+ 2172 01a4 BB61     		str	r3, [r7, #24]
+ 100:../src/LCD/lcd.c ****   int y = radius;
+ 2173              		.loc 1 100 0
+ 2174 01a6 7B68     		ldr	r3, [r7, #4]
+ 2175 01a8 7B61     		str	r3, [r7, #20]
+ 101:../src/LCD/lcd.c ****   
+ 102:../src/LCD/lcd.c ****   LCD_FilledRect(x0, x0 ,y0 - radius,y0 + radius, color); 
+ 2176              		.loc 1 102 0
+ 2177 01aa BA68     		ldr	r2, [r7, #8]
+ 2178 01ac 7B68     		ldr	r3, [r7, #4]
+ 2179 01ae D21A     		subs	r2, r2, r3
+ 2180 01b0 B968     		ldr	r1, [r7, #8]
+ 2181 01b2 7B68     		ldr	r3, [r7, #4]
+ 2182 01b4 CB18     		adds	r3, r1, r3
+ 2183 01b6 3968     		ldr	r1, [r7, #0]
+ 2184 01b8 0091     		str	r1, [sp, #0]
+ 2185 01ba F868     		ldr	r0, [r7, #12]
+ 2186 01bc F968     		ldr	r1, [r7, #12]
+ 2187 01be FFF7FEFF 		bl	LCD_FilledRect
+ 103:../src/LCD/lcd.c ****   LCD_FilledRect(x0 - radius, x0 + radius ,y0,y0, color);  
+ 2188              		.loc 1 103 0
+ 2189 01c2 FA68     		ldr	r2, [r7, #12]
+ 2190 01c4 7B68     		ldr	r3, [r7, #4]
+ 2191 01c6 D21A     		subs	r2, r2, r3
+ 2192 01c8 F968     		ldr	r1, [r7, #12]
+ 2193 01ca 7B68     		ldr	r3, [r7, #4]
+ 2194 01cc CB18     		adds	r3, r1, r3
+ 2195 01ce 3968     		ldr	r1, [r7, #0]
+ 2196 01d0 0091     		str	r1, [sp, #0]
+ 2197 01d2 1046     		mov	r0, r2
+ 2198 01d4 1946     		mov	r1, r3
+ 2199 01d6 BA68     		ldr	r2, [r7, #8]
+ 2200 01d8 BB68     		ldr	r3, [r7, #8]
+ 2201 01da FFF7FEFF 		bl	LCD_FilledRect
+ 104:../src/LCD/lcd.c ****   
+ 105:../src/LCD/lcd.c ****   while(x < y)
+ 2202              		.loc 1 105 0
+ 2203 01de 5AE0     		b	.L7
+ 2204              	.L9:
+ 106:../src/LCD/lcd.c ****   {
+ 107:../src/LCD/lcd.c ****     if(f >= 0) 
+ 2205              		.loc 1 107 0
+ 2206 01e0 7B6A     		ldr	r3, [r7, #36]
+ 2207 01e2 002B     		cmp	r3, #0
+ 2208 01e4 0BDB     		blt	.L8
+ 108:../src/LCD/lcd.c ****     {
+ 109:../src/LCD/lcd.c ****       y--;
+ 2209              		.loc 1 109 0
+ 2210 01e6 7B69     		ldr	r3, [r7, #20]
+ 2211 01e8 03F1FF33 		add	r3, r3, #-1
+ 2212 01ec 7B61     		str	r3, [r7, #20]
+ 110:../src/LCD/lcd.c ****       ddF_y += 2;
+ 2213              		.loc 1 110 0
+ 2214 01ee FB69     		ldr	r3, [r7, #28]
+ 2215 01f0 03F10203 		add	r3, r3, #2
+ 2216 01f4 FB61     		str	r3, [r7, #28]
+ 111:../src/LCD/lcd.c ****       f += ddF_y;
+ 2217              		.loc 1 111 0
+ 2218 01f6 7A6A     		ldr	r2, [r7, #36]
+ 2219 01f8 FB69     		ldr	r3, [r7, #28]
+ 2220 01fa D318     		adds	r3, r2, r3
+ 2221 01fc 7B62     		str	r3, [r7, #36]
+ 2222              	.L8:
+ 112:../src/LCD/lcd.c ****     }
+ 113:../src/LCD/lcd.c ****     x++;
+ 2223              		.loc 1 113 0
+ 2224 01fe BB69     		ldr	r3, [r7, #24]
+ 2225 0200 03F10103 		add	r3, r3, #1
+ 2226 0204 BB61     		str	r3, [r7, #24]
+ 114:../src/LCD/lcd.c ****     ddF_x += 2;
+ 2227              		.loc 1 114 0
+ 2228 0206 3B6A     		ldr	r3, [r7, #32]
+ 2229 0208 03F10203 		add	r3, r3, #2
+ 2230 020c 3B62     		str	r3, [r7, #32]
+ 115:../src/LCD/lcd.c ****     f += ddF_x;    
+ 2231              		.loc 1 115 0
+ 2232 020e 7A6A     		ldr	r2, [r7, #36]
+ 2233 0210 3B6A     		ldr	r3, [r7, #32]
+ 2234 0212 D318     		adds	r3, r2, r3
+ 2235 0214 7B62     		str	r3, [r7, #36]
+ 116:../src/LCD/lcd.c **** 
+ 117:../src/LCD/lcd.c ****     LCD_FilledRect(x0-x, x0+x ,y0 +y, y0 + y, color);    
+ 2236              		.loc 1 117 0
+ 2237 0216 FA68     		ldr	r2, [r7, #12]
+ 2238 0218 BB69     		ldr	r3, [r7, #24]
+ 2239 021a D01A     		subs	r0, r2, r3
+ 2240 021c FA68     		ldr	r2, [r7, #12]
+ 2241 021e BB69     		ldr	r3, [r7, #24]
+ 2242 0220 D118     		adds	r1, r2, r3
+ 2243 0222 BA68     		ldr	r2, [r7, #8]
+ 2244 0224 7B69     		ldr	r3, [r7, #20]
+ 2245 0226 D218     		adds	r2, r2, r3
+ 2246 0228 BC68     		ldr	r4, [r7, #8]
+ 2247 022a 7B69     		ldr	r3, [r7, #20]
+ 2248 022c E318     		adds	r3, r4, r3
+ 2249 022e 3C68     		ldr	r4, [r7, #0]
+ 2250 0230 0094     		str	r4, [sp, #0]
+ 2251 0232 FFF7FEFF 		bl	LCD_FilledRect
+ 118:../src/LCD/lcd.c ****     LCD_FilledRect(x0-x, x0+x ,y0 - y, y0 - y, color); 
+ 2252              		.loc 1 118 0
+ 2253 0236 FA68     		ldr	r2, [r7, #12]
+ 2254 0238 BB69     		ldr	r3, [r7, #24]
+ 2255 023a D01A     		subs	r0, r2, r3
+ 2256 023c FA68     		ldr	r2, [r7, #12]
+ 2257 023e BB69     		ldr	r3, [r7, #24]
+ 2258 0240 D118     		adds	r1, r2, r3
+ 2259 0242 BA68     		ldr	r2, [r7, #8]
+ 2260 0244 7B69     		ldr	r3, [r7, #20]
+ 2261 0246 D21A     		subs	r2, r2, r3
+ 2262 0248 BC68     		ldr	r4, [r7, #8]
+ 2263 024a 7B69     		ldr	r3, [r7, #20]
+ 2264 024c E31A     		subs	r3, r4, r3
+ 2265 024e 3C68     		ldr	r4, [r7, #0]
+ 2266 0250 0094     		str	r4, [sp, #0]
+ 2267 0252 FFF7FEFF 		bl	LCD_FilledRect
+ 119:../src/LCD/lcd.c ****     LCD_FilledRect(x0-y, x0+y ,y0 + x, y0 + x, color);         
+ 2268              		.loc 1 119 0
+ 2269 0256 FA68     		ldr	r2, [r7, #12]
+ 2270 0258 7B69     		ldr	r3, [r7, #20]
+ 2271 025a D01A     		subs	r0, r2, r3
+ 2272 025c FA68     		ldr	r2, [r7, #12]
+ 2273 025e 7B69     		ldr	r3, [r7, #20]
+ 2274 0260 D118     		adds	r1, r2, r3
+ 2275 0262 BA68     		ldr	r2, [r7, #8]
+ 2276 0264 BB69     		ldr	r3, [r7, #24]
+ 2277 0266 D218     		adds	r2, r2, r3
+ 2278 0268 BC68     		ldr	r4, [r7, #8]
+ 2279 026a BB69     		ldr	r3, [r7, #24]
+ 2280 026c E318     		adds	r3, r4, r3
+ 2281 026e 3C68     		ldr	r4, [r7, #0]
+ 2282 0270 0094     		str	r4, [sp, #0]
+ 2283 0272 FFF7FEFF 		bl	LCD_FilledRect
+ 120:../src/LCD/lcd.c ****     LCD_FilledRect(x0-y, x0+y ,y0 - x, y0 - x, color); 
+ 2284              		.loc 1 120 0
+ 2285 0276 FA68     		ldr	r2, [r7, #12]
+ 2286 0278 7B69     		ldr	r3, [r7, #20]
+ 2287 027a D01A     		subs	r0, r2, r3
+ 2288 027c FA68     		ldr	r2, [r7, #12]
+ 2289 027e 7B69     		ldr	r3, [r7, #20]
+ 2290 0280 D118     		adds	r1, r2, r3
+ 2291 0282 BA68     		ldr	r2, [r7, #8]
+ 2292 0284 BB69     		ldr	r3, [r7, #24]
+ 2293 0286 D21A     		subs	r2, r2, r3
+ 2294 0288 BC68     		ldr	r4, [r7, #8]
+ 2295 028a BB69     		ldr	r3, [r7, #24]
+ 2296 028c E31A     		subs	r3, r4, r3
+ 2297 028e 3C68     		ldr	r4, [r7, #0]
+ 2298 0290 0094     		str	r4, [sp, #0]
+ 2299 0292 FFF7FEFF 		bl	LCD_FilledRect
+ 2300              	.L7:
+ 105:../src/LCD/lcd.c ****   while(x < y)
+ 2301              		.loc 1 105 0 discriminator 1
+ 2302 0296 BA69     		ldr	r2, [r7, #24]
+ 2303 0298 7B69     		ldr	r3, [r7, #20]
+ 2304 029a 9A42     		cmp	r2, r3
+ 2305 029c A0DB     		blt	.L9
+ 121:../src/LCD/lcd.c ****   }
+ 122:../src/LCD/lcd.c **** }
+ 2306              		.loc 1 122 0
+ 2307 029e 07F12C07 		add	r7, r7, #44
+ 2308 02a2 BD46     		mov	sp, r7
+ 2309 02a4 90BD     		pop	{r4, r7, pc}
+ 2310              		.cfi_endproc
+ 2311              	.LFE3:
+ 2313 02a6 00BF     		.align	2
+ 2314              		.global	LCD_Circle
+ 2315              		.thumb
+ 2316              		.thumb_func
+ 2318              	LCD_Circle:
+ 2319              	.LFB4:
+ 123:../src/LCD/lcd.c **** 
+ 124:../src/LCD/lcd.c **** // Routine to draw an unfilled circle to the LCD.
+ 125:../src/LCD/lcd.c **** // The centre of the circle is at (x0,y0) and the circle has the 
+ 126:../src/LCD/lcd.c **** // specifed radius. The circle is drawn in the RGB565 color 
+ 127:../src/LCD/lcd.c **** // The circle is drawn using the "Midpoint circle algorithm", 
+ 128:../src/LCD/lcd.c **** // also known as "Bresenham's circle algorithm". 
+ 129:../src/LCD/lcd.c **** void LCD_Circle (int x0, int y0, int radius, int color)
+ 130:../src/LCD/lcd.c **** {
+ 2320              		.loc 1 130 0
+ 2321              		.cfi_startproc
+ 2322              		@ args = 0, pretend = 0, frame = 40
+ 2323              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2324 02a8 80B5     		push	{r7, lr}
+ 2325              	.LCFI12:
+ 2326              		.cfi_def_cfa_offset 8
+ 2327 02aa 8AB0     		sub	sp, sp, #40
+ 2328              	.LCFI13:
+ 2329              		.cfi_def_cfa_offset 48
+ 2330 02ac 00AF     		add	r7, sp, #0
+ 2331              		.cfi_offset 14, -4
+ 2332              		.cfi_offset 7, -8
+ 2333              	.LCFI14:
+ 2334              		.cfi_def_cfa_register 7
+ 2335 02ae F860     		str	r0, [r7, #12]
+ 2336 02b0 B960     		str	r1, [r7, #8]
+ 2337 02b2 7A60     		str	r2, [r7, #4]
+ 2338 02b4 3B60     		str	r3, [r7, #0]
+ 131:../src/LCD/lcd.c ****   int f = 1 - radius;
+ 2339              		.loc 1 131 0
+ 2340 02b6 7B68     		ldr	r3, [r7, #4]
+ 2341 02b8 C3F10103 		rsb	r3, r3, #1
+ 2342 02bc 7B62     		str	r3, [r7, #36]
+ 132:../src/LCD/lcd.c ****   int ddF_x = 1;
+ 2343              		.loc 1 132 0
+ 2344 02be 4FF00103 		mov	r3, #1
+ 2345 02c2 3B62     		str	r3, [r7, #32]
+ 133:../src/LCD/lcd.c ****   int ddF_y = -2 * radius;
+ 2346              		.loc 1 133 0
+ 2347 02c4 7A68     		ldr	r2, [r7, #4]
+ 2348 02c6 1346     		mov	r3, r2
+ 2349 02c8 4FEAC373 		lsl	r3, r3, #31
+ 2350 02cc 9B1A     		subs	r3, r3, r2
+ 2351 02ce 4FEA4303 		lsl	r3, r3, #1
+ 2352 02d2 FB61     		str	r3, [r7, #28]
+ 134:../src/LCD/lcd.c ****   int x = 0;
+ 2353              		.loc 1 134 0
+ 2354 02d4 4FF00003 		mov	r3, #0
+ 2355 02d8 BB61     		str	r3, [r7, #24]
+ 135:../src/LCD/lcd.c ****   int y = radius;
+ 2356              		.loc 1 135 0
+ 2357 02da 7B68     		ldr	r3, [r7, #4]
+ 2358 02dc 7B61     		str	r3, [r7, #20]
+ 136:../src/LCD/lcd.c **** 
+ 137:../src/LCD/lcd.c ****   LCD_PlotPoint(x0, y0 + radius, color);
+ 2359              		.loc 1 137 0
+ 2360 02de BA68     		ldr	r2, [r7, #8]
+ 2361 02e0 7B68     		ldr	r3, [r7, #4]
+ 2362 02e2 D318     		adds	r3, r2, r3
+ 2363 02e4 F868     		ldr	r0, [r7, #12]
+ 2364 02e6 1946     		mov	r1, r3
+ 2365 02e8 3A68     		ldr	r2, [r7, #0]
+ 2366 02ea FFF7FEFF 		bl	LCD_PlotPoint
+ 138:../src/LCD/lcd.c ****   LCD_PlotPoint(x0, y0 - radius, color);
+ 2367              		.loc 1 138 0
+ 2368 02ee BA68     		ldr	r2, [r7, #8]
+ 2369 02f0 7B68     		ldr	r3, [r7, #4]
+ 2370 02f2 D31A     		subs	r3, r2, r3
+ 2371 02f4 F868     		ldr	r0, [r7, #12]
+ 2372 02f6 1946     		mov	r1, r3
+ 2373 02f8 3A68     		ldr	r2, [r7, #0]
+ 2374 02fa FFF7FEFF 		bl	LCD_PlotPoint
+ 139:../src/LCD/lcd.c ****   LCD_PlotPoint(x0 + radius, y0, color);
+ 2375              		.loc 1 139 0
+ 2376 02fe FA68     		ldr	r2, [r7, #12]
+ 2377 0300 7B68     		ldr	r3, [r7, #4]
+ 2378 0302 D318     		adds	r3, r2, r3
+ 2379 0304 1846     		mov	r0, r3
+ 2380 0306 B968     		ldr	r1, [r7, #8]
+ 2381 0308 3A68     		ldr	r2, [r7, #0]
+ 2382 030a FFF7FEFF 		bl	LCD_PlotPoint
+ 140:../src/LCD/lcd.c ****   LCD_PlotPoint(x0 - radius, y0, color);
+ 2383              		.loc 1 140 0
+ 2384 030e FA68     		ldr	r2, [r7, #12]
+ 2385 0310 7B68     		ldr	r3, [r7, #4]
+ 2386 0312 D31A     		subs	r3, r2, r3
+ 2387 0314 1846     		mov	r0, r3
+ 2388 0316 B968     		ldr	r1, [r7, #8]
+ 2389 0318 3A68     		ldr	r2, [r7, #0]
+ 2390 031a FFF7FEFF 		bl	LCD_PlotPoint
+ 141:../src/LCD/lcd.c **** 
+ 142:../src/LCD/lcd.c ****   while(x < y)
+ 2391              		.loc 1 142 0
+ 2392 031e 72E0     		b	.L11
+ 2393              	.L13:
+ 143:../src/LCD/lcd.c ****   {
+ 144:../src/LCD/lcd.c ****     if(f >= 0) 
+ 2394              		.loc 1 144 0
+ 2395 0320 7B6A     		ldr	r3, [r7, #36]
+ 2396 0322 002B     		cmp	r3, #0
+ 2397 0324 0BDB     		blt	.L12
+ 145:../src/LCD/lcd.c ****     {
+ 146:../src/LCD/lcd.c ****       y--;
+ 2398              		.loc 1 146 0
+ 2399 0326 7B69     		ldr	r3, [r7, #20]
+ 2400 0328 03F1FF33 		add	r3, r3, #-1
+ 2401 032c 7B61     		str	r3, [r7, #20]
+ 147:../src/LCD/lcd.c ****       ddF_y += 2;
+ 2402              		.loc 1 147 0
+ 2403 032e FB69     		ldr	r3, [r7, #28]
+ 2404 0330 03F10203 		add	r3, r3, #2
+ 2405 0334 FB61     		str	r3, [r7, #28]
+ 148:../src/LCD/lcd.c ****       f += ddF_y;
+ 2406              		.loc 1 148 0
+ 2407 0336 7A6A     		ldr	r2, [r7, #36]
+ 2408 0338 FB69     		ldr	r3, [r7, #28]
+ 2409 033a D318     		adds	r3, r2, r3
+ 2410 033c 7B62     		str	r3, [r7, #36]
+ 2411              	.L12:
+ 149:../src/LCD/lcd.c ****     }
+ 150:../src/LCD/lcd.c ****     x++;
+ 2412              		.loc 1 150 0
+ 2413 033e BB69     		ldr	r3, [r7, #24]
+ 2414 0340 03F10103 		add	r3, r3, #1
+ 2415 0344 BB61     		str	r3, [r7, #24]
+ 151:../src/LCD/lcd.c ****     ddF_x += 2;
+ 2416              		.loc 1 151 0
+ 2417 0346 3B6A     		ldr	r3, [r7, #32]
+ 2418 0348 03F10203 		add	r3, r3, #2
+ 2419 034c 3B62     		str	r3, [r7, #32]
+ 152:../src/LCD/lcd.c ****     f += ddF_x;    
+ 2420              		.loc 1 152 0
+ 2421 034e 7A6A     		ldr	r2, [r7, #36]
+ 2422 0350 3B6A     		ldr	r3, [r7, #32]
+ 2423 0352 D318     		adds	r3, r2, r3
+ 2424 0354 7B62     		str	r3, [r7, #36]
+ 153:../src/LCD/lcd.c ****     LCD_PlotPoint(x0 + x, y0 + y, color);
+ 2425              		.loc 1 153 0
+ 2426 0356 FA68     		ldr	r2, [r7, #12]
+ 2427 0358 BB69     		ldr	r3, [r7, #24]
+ 2428 035a D218     		adds	r2, r2, r3
+ 2429 035c B968     		ldr	r1, [r7, #8]
+ 2430 035e 7B69     		ldr	r3, [r7, #20]
+ 2431 0360 CB18     		adds	r3, r1, r3
+ 2432 0362 1046     		mov	r0, r2
+ 2433 0364 1946     		mov	r1, r3
+ 2434 0366 3A68     		ldr	r2, [r7, #0]
+ 2435 0368 FFF7FEFF 		bl	LCD_PlotPoint
+ 154:../src/LCD/lcd.c ****     LCD_PlotPoint(x0 - x, y0 + y, color);
+ 2436              		.loc 1 154 0
+ 2437 036c FA68     		ldr	r2, [r7, #12]
+ 2438 036e BB69     		ldr	r3, [r7, #24]
+ 2439 0370 D21A     		subs	r2, r2, r3
+ 2440 0372 B968     		ldr	r1, [r7, #8]
+ 2441 0374 7B69     		ldr	r3, [r7, #20]
+ 2442 0376 CB18     		adds	r3, r1, r3
+ 2443 0378 1046     		mov	r0, r2
+ 2444 037a 1946     		mov	r1, r3
+ 2445 037c 3A68     		ldr	r2, [r7, #0]
+ 2446 037e FFF7FEFF 		bl	LCD_PlotPoint
+ 155:../src/LCD/lcd.c ****     LCD_PlotPoint(x0 + x, y0 - y, color);
+ 2447              		.loc 1 155 0
+ 2448 0382 FA68     		ldr	r2, [r7, #12]
+ 2449 0384 BB69     		ldr	r3, [r7, #24]
+ 2450 0386 D218     		adds	r2, r2, r3
+ 2451 0388 B968     		ldr	r1, [r7, #8]
+ 2452 038a 7B69     		ldr	r3, [r7, #20]
+ 2453 038c CB1A     		subs	r3, r1, r3
+ 2454 038e 1046     		mov	r0, r2
+ 2455 0390 1946     		mov	r1, r3
+ 2456 0392 3A68     		ldr	r2, [r7, #0]
+ 2457 0394 FFF7FEFF 		bl	LCD_PlotPoint
+ 156:../src/LCD/lcd.c ****     LCD_PlotPoint(x0 - x, y0 - y, color);
+ 2458              		.loc 1 156 0
+ 2459 0398 FA68     		ldr	r2, [r7, #12]
+ 2460 039a BB69     		ldr	r3, [r7, #24]
+ 2461 039c D21A     		subs	r2, r2, r3
+ 2462 039e B968     		ldr	r1, [r7, #8]
+ 2463 03a0 7B69     		ldr	r3, [r7, #20]
+ 2464 03a2 CB1A     		subs	r3, r1, r3
+ 2465 03a4 1046     		mov	r0, r2
+ 2466 03a6 1946     		mov	r1, r3
+ 2467 03a8 3A68     		ldr	r2, [r7, #0]
+ 2468 03aa FFF7FEFF 		bl	LCD_PlotPoint
+ 157:../src/LCD/lcd.c ****     LCD_PlotPoint(x0 + y, y0 + x, color);
+ 2469              		.loc 1 157 0
+ 2470 03ae FA68     		ldr	r2, [r7, #12]
+ 2471 03b0 7B69     		ldr	r3, [r7, #20]
+ 2472 03b2 D218     		adds	r2, r2, r3
+ 2473 03b4 B968     		ldr	r1, [r7, #8]
+ 2474 03b6 BB69     		ldr	r3, [r7, #24]
+ 2475 03b8 CB18     		adds	r3, r1, r3
+ 2476 03ba 1046     		mov	r0, r2
+ 2477 03bc 1946     		mov	r1, r3
+ 2478 03be 3A68     		ldr	r2, [r7, #0]
+ 2479 03c0 FFF7FEFF 		bl	LCD_PlotPoint
+ 158:../src/LCD/lcd.c ****     LCD_PlotPoint(x0 - y, y0 + x, color);
+ 2480              		.loc 1 158 0
+ 2481 03c4 FA68     		ldr	r2, [r7, #12]
+ 2482 03c6 7B69     		ldr	r3, [r7, #20]
+ 2483 03c8 D21A     		subs	r2, r2, r3
+ 2484 03ca B968     		ldr	r1, [r7, #8]
+ 2485 03cc BB69     		ldr	r3, [r7, #24]
+ 2486 03ce CB18     		adds	r3, r1, r3
+ 2487 03d0 1046     		mov	r0, r2
+ 2488 03d2 1946     		mov	r1, r3
+ 2489 03d4 3A68     		ldr	r2, [r7, #0]
+ 2490 03d6 FFF7FEFF 		bl	LCD_PlotPoint
+ 159:../src/LCD/lcd.c ****     LCD_PlotPoint(x0 + y, y0 - x, color);
+ 2491              		.loc 1 159 0
+ 2492 03da FA68     		ldr	r2, [r7, #12]
+ 2493 03dc 7B69     		ldr	r3, [r7, #20]
+ 2494 03de D218     		adds	r2, r2, r3
+ 2495 03e0 B968     		ldr	r1, [r7, #8]
+ 2496 03e2 BB69     		ldr	r3, [r7, #24]
+ 2497 03e4 CB1A     		subs	r3, r1, r3
+ 2498 03e6 1046     		mov	r0, r2
+ 2499 03e8 1946     		mov	r1, r3
+ 2500 03ea 3A68     		ldr	r2, [r7, #0]
+ 2501 03ec FFF7FEFF 		bl	LCD_PlotPoint
+ 160:../src/LCD/lcd.c ****     LCD_PlotPoint(x0 - y, y0 - x, color);
+ 2502              		.loc 1 160 0
+ 2503 03f0 FA68     		ldr	r2, [r7, #12]
+ 2504 03f2 7B69     		ldr	r3, [r7, #20]
+ 2505 03f4 D21A     		subs	r2, r2, r3
+ 2506 03f6 B968     		ldr	r1, [r7, #8]
+ 2507 03f8 BB69     		ldr	r3, [r7, #24]
+ 2508 03fa CB1A     		subs	r3, r1, r3
+ 2509 03fc 1046     		mov	r0, r2
+ 2510 03fe 1946     		mov	r1, r3
+ 2511 0400 3A68     		ldr	r2, [r7, #0]
+ 2512 0402 FFF7FEFF 		bl	LCD_PlotPoint
+ 2513              	.L11:
+ 142:../src/LCD/lcd.c ****   while(x < y)
+ 2514              		.loc 1 142 0 discriminator 1
+ 2515 0406 BA69     		ldr	r2, [r7, #24]
+ 2516 0408 7B69     		ldr	r3, [r7, #20]
+ 2517 040a 9A42     		cmp	r2, r3
+ 2518 040c 88DB     		blt	.L13
+ 161:../src/LCD/lcd.c ****   }
+ 162:../src/LCD/lcd.c **** }
+ 2519              		.loc 1 162 0
+ 2520 040e 07F12807 		add	r7, r7, #40
+ 2521 0412 BD46     		mov	sp, r7
+ 2522 0414 80BD     		pop	{r7, pc}
+ 2523              		.cfi_endproc
+ 2524              	.LFE4:
+ 2526 0416 00BF     		.align	2
+ 2527              		.global	LCD_Line
+ 2528              		.thumb
+ 2529              		.thumb_func
+ 2531              	LCD_Line:
+ 2532              	.LFB5:
+ 163:../src/LCD/lcd.c **** 
+ 164:../src/LCD/lcd.c **** // Routine to draw a line in the RGB565 color to the LCD.
+ 165:../src/LCD/lcd.c **** // The line is drawn from (xmin,ymin) to (xmax,ymax).
+ 166:../src/LCD/lcd.c **** // The algorithm used to draw the line is "Bresenham's line
+ 167:../src/LCD/lcd.c **** // algorithm". 
+ 168:../src/LCD/lcd.c **** #define SWAP(a, b)  a ^= b; b ^= a; a ^= b; 
+ 169:../src/LCD/lcd.c **** 
+ 170:../src/LCD/lcd.c **** void LCD_Line (int xmin,int xmax,int ymin,int ymax,int color)
+ 171:../src/LCD/lcd.c **** {
+ 2533              		.loc 1 171 0
+ 2534              		.cfi_startproc
+ 2535              		@ args = 4, pretend = 0, frame = 64
+ 2536              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2537 0418 80B5     		push	{r7, lr}
+ 2538              	.LCFI15:
+ 2539              		.cfi_def_cfa_offset 8
+ 2540 041a 90B0     		sub	sp, sp, #64
+ 2541              	.LCFI16:
+ 2542              		.cfi_def_cfa_offset 72
+ 2543 041c 00AF     		add	r7, sp, #0
+ 2544              		.cfi_offset 14, -4
+ 2545              		.cfi_offset 7, -8
+ 2546              	.LCFI17:
+ 2547              		.cfi_def_cfa_register 7
+ 2548 041e F860     		str	r0, [r7, #12]
+ 2549 0420 B960     		str	r1, [r7, #8]
+ 2550 0422 7A60     		str	r2, [r7, #4]
+ 2551 0424 3B60     		str	r3, [r7, #0]
+ 172:../src/LCD/lcd.c ****    int Dx = xmax - xmin; 
+ 2552              		.loc 1 172 0
+ 2553 0426 BA68     		ldr	r2, [r7, #8]
+ 2554 0428 FB68     		ldr	r3, [r7, #12]
+ 2555 042a D31A     		subs	r3, r2, r3
+ 2556 042c FB63     		str	r3, [r7, #60]
+ 173:../src/LCD/lcd.c ****    int Dy = ymax - ymin;
+ 2557              		.loc 1 173 0
+ 2558 042e 3A68     		ldr	r2, [r7, #0]
+ 2559 0430 7B68     		ldr	r3, [r7, #4]
+ 2560 0432 D31A     		subs	r3, r2, r3
+ 2561 0434 BB63     		str	r3, [r7, #56]
+ 174:../src/LCD/lcd.c ****    int steep = (abs(Dy) >= abs(Dx));
+ 2562              		.loc 1 174 0
+ 2563 0436 BB6B     		ldr	r3, [r7, #56]
+ 2564 0438 83EAE372 		eor	r2, r3, r3, asr #31
+ 2565 043c A2EBE372 		sub	r2, r2, r3, asr #31
+ 2566 0440 FB6B     		ldr	r3, [r7, #60]
+ 2567 0442 002B     		cmp	r3, #0
+ 2568 0444 B8BF     		it	lt
+ 2569 0446 5B42     		rsblt	r3, r3, #0
+ 2570 0448 9A42     		cmp	r2, r3
+ 2571 044a B4BF     		ite	lt
+ 2572 044c 0023     		movlt	r3, #0
+ 2573 044e 0123     		movge	r3, #1
+ 2574 0450 BB61     		str	r3, [r7, #24]
+ 175:../src/LCD/lcd.c ****    if (steep) {
+ 2575              		.loc 1 175 0
+ 2576 0452 BB69     		ldr	r3, [r7, #24]
+ 2577 0454 002B     		cmp	r3, #0
+ 2578 0456 25D0     		beq	.L15
+ 176:../src/LCD/lcd.c ****        SWAP(xmin, ymin);
+ 2579              		.loc 1 176 0
+ 2580 0458 FA68     		ldr	r2, [r7, #12]
+ 2581 045a 7B68     		ldr	r3, [r7, #4]
+ 2582 045c 82EA0303 		eor	r3, r2, r3
+ 2583 0460 FB60     		str	r3, [r7, #12]
+ 2584 0462 7A68     		ldr	r2, [r7, #4]
+ 2585 0464 FB68     		ldr	r3, [r7, #12]
+ 2586 0466 82EA0303 		eor	r3, r2, r3
+ 2587 046a 7B60     		str	r3, [r7, #4]
+ 2588 046c FA68     		ldr	r2, [r7, #12]
+ 2589 046e 7B68     		ldr	r3, [r7, #4]
+ 2590 0470 82EA0303 		eor	r3, r2, r3
+ 2591 0474 FB60     		str	r3, [r7, #12]
+ 177:../src/LCD/lcd.c ****        SWAP(xmax, ymax);
+ 2592              		.loc 1 177 0
+ 2593 0476 BA68     		ldr	r2, [r7, #8]
+ 2594 0478 3B68     		ldr	r3, [r7, #0]
+ 2595 047a 82EA0303 		eor	r3, r2, r3
+ 2596 047e BB60     		str	r3, [r7, #8]
+ 2597 0480 3A68     		ldr	r2, [r7, #0]
+ 2598 0482 BB68     		ldr	r3, [r7, #8]
+ 2599 0484 82EA0303 		eor	r3, r2, r3
+ 2600 0488 3B60     		str	r3, [r7, #0]
+ 2601 048a BA68     		ldr	r2, [r7, #8]
+ 2602 048c 3B68     		ldr	r3, [r7, #0]
+ 2603 048e 82EA0303 		eor	r3, r2, r3
+ 2604 0492 BB60     		str	r3, [r7, #8]
+ 178:../src/LCD/lcd.c ****        // recompute Dx, Dy after swap
+ 179:../src/LCD/lcd.c ****        Dx = xmax - xmin;
+ 2605              		.loc 1 179 0
+ 2606 0494 BA68     		ldr	r2, [r7, #8]
+ 2607 0496 FB68     		ldr	r3, [r7, #12]
+ 2608 0498 D31A     		subs	r3, r2, r3
+ 2609 049a FB63     		str	r3, [r7, #60]
+ 180:../src/LCD/lcd.c ****        Dy = ymax - ymin;
+ 2610              		.loc 1 180 0
+ 2611 049c 3A68     		ldr	r2, [r7, #0]
+ 2612 049e 7B68     		ldr	r3, [r7, #4]
+ 2613 04a0 D31A     		subs	r3, r2, r3
+ 2614 04a2 BB63     		str	r3, [r7, #56]
+ 2615              	.L15:
+ 181:../src/LCD/lcd.c ****    }
+ 182:../src/LCD/lcd.c ****    int xstep = 1;
+ 2616              		.loc 1 182 0
+ 2617 04a4 4FF00103 		mov	r3, #1
+ 2618 04a8 7B63     		str	r3, [r7, #52]
+ 183:../src/LCD/lcd.c ****    if (Dx < 0) {
+ 2619              		.loc 1 183 0
+ 2620 04aa FB6B     		ldr	r3, [r7, #60]
+ 2621 04ac 002B     		cmp	r3, #0
+ 2622 04ae 06DA     		bge	.L16
+ 184:../src/LCD/lcd.c ****        xstep = -1;
+ 2623              		.loc 1 184 0
+ 2624 04b0 4FF0FF33 		mov	r3, #-1
+ 2625 04b4 7B63     		str	r3, [r7, #52]
+ 185:../src/LCD/lcd.c ****        Dx = -Dx;
+ 2626              		.loc 1 185 0
+ 2627 04b6 FB6B     		ldr	r3, [r7, #60]
+ 2628 04b8 C3F10003 		rsb	r3, r3, #0
+ 2629 04bc FB63     		str	r3, [r7, #60]
+ 2630              	.L16:
+ 186:../src/LCD/lcd.c ****    }
+ 187:../src/LCD/lcd.c ****    int ystep = 1;
+ 2631              		.loc 1 187 0
+ 2632 04be 4FF00103 		mov	r3, #1
+ 2633 04c2 3B63     		str	r3, [r7, #48]
+ 188:../src/LCD/lcd.c ****    if (Dy < 0) {
+ 2634              		.loc 1 188 0
+ 2635 04c4 BB6B     		ldr	r3, [r7, #56]
+ 2636 04c6 002B     		cmp	r3, #0
+ 2637 04c8 06DA     		bge	.L17
+ 189:../src/LCD/lcd.c ****        ystep = -1;		
+ 2638              		.loc 1 189 0
+ 2639 04ca 4FF0FF33 		mov	r3, #-1
+ 2640 04ce 3B63     		str	r3, [r7, #48]
+ 190:../src/LCD/lcd.c ****        Dy = -Dy; 
+ 2641              		.loc 1 190 0
+ 2642 04d0 BB6B     		ldr	r3, [r7, #56]
+ 2643 04d2 C3F10003 		rsb	r3, r3, #0
+ 2644 04d6 BB63     		str	r3, [r7, #56]
+ 2645              	.L17:
+ 191:../src/LCD/lcd.c ****    }
+ 192:../src/LCD/lcd.c ****    int TwoDy = 2*Dy; 
+ 2646              		.loc 1 192 0
+ 2647 04d8 BB6B     		ldr	r3, [r7, #56]
+ 2648 04da 4FEA4303 		lsl	r3, r3, #1
+ 2649 04de 7B61     		str	r3, [r7, #20]
+ 193:../src/LCD/lcd.c ****    int TwoDyTwoDx = TwoDy - 2*Dx; // 2*Dy - 2*Dx
+ 2650              		.loc 1 193 0
+ 2651 04e0 FA6B     		ldr	r2, [r7, #60]
+ 2652 04e2 1346     		mov	r3, r2
+ 2653 04e4 4FEAC373 		lsl	r3, r3, #31
+ 2654 04e8 9B1A     		subs	r3, r3, r2
+ 2655 04ea 4FEA4303 		lsl	r3, r3, #1
+ 2656 04ee 1A46     		mov	r2, r3
+ 2657 04f0 7B69     		ldr	r3, [r7, #20]
+ 2658 04f2 D318     		adds	r3, r2, r3
+ 2659 04f4 3B61     		str	r3, [r7, #16]
+ 194:../src/LCD/lcd.c ****    int E = TwoDy - Dx; //2*Dy - Dx
+ 2660              		.loc 1 194 0
+ 2661 04f6 7A69     		ldr	r2, [r7, #20]
+ 2662 04f8 FB6B     		ldr	r3, [r7, #60]
+ 2663 04fa D31A     		subs	r3, r2, r3
+ 2664 04fc FB62     		str	r3, [r7, #44]
+ 195:../src/LCD/lcd.c ****    int y = ymin;
+ 2665              		.loc 1 195 0
+ 2666 04fe 7B68     		ldr	r3, [r7, #4]
+ 2667 0500 BB62     		str	r3, [r7, #40]
+ 196:../src/LCD/lcd.c ****    int xDraw, yDraw;
+ 197:../src/LCD/lcd.c ****    int x;
+ 198:../src/LCD/lcd.c ****    for (x = xmin; x != xmax; x += xstep) {		
+ 2668              		.loc 1 198 0
+ 2669 0502 FB68     		ldr	r3, [r7, #12]
+ 2670 0504 FB61     		str	r3, [r7, #28]
+ 2671 0506 24E0     		b	.L18
+ 2672              	.L23:
+ 199:../src/LCD/lcd.c ****        if (steep) {			
+ 2673              		.loc 1 199 0
+ 2674 0508 BB69     		ldr	r3, [r7, #24]
+ 2675 050a 002B     		cmp	r3, #0
+ 2676 050c 04D0     		beq	.L19
+ 200:../src/LCD/lcd.c ****            xDraw = y;
+ 2677              		.loc 1 200 0
+ 2678 050e BB6A     		ldr	r3, [r7, #40]
+ 2679 0510 7B62     		str	r3, [r7, #36]
+ 201:../src/LCD/lcd.c ****            yDraw = x;
+ 2680              		.loc 1 201 0
+ 2681 0512 FB69     		ldr	r3, [r7, #28]
+ 2682 0514 3B62     		str	r3, [r7, #32]
+ 2683 0516 03E0     		b	.L20
+ 2684              	.L19:
+ 202:../src/LCD/lcd.c ****        } else {			
+ 203:../src/LCD/lcd.c ****            xDraw = x;
+ 2685              		.loc 1 203 0
+ 2686 0518 FB69     		ldr	r3, [r7, #28]
+ 2687 051a 7B62     		str	r3, [r7, #36]
+ 204:../src/LCD/lcd.c ****            yDraw = y;
+ 2688              		.loc 1 204 0
+ 2689 051c BB6A     		ldr	r3, [r7, #40]
+ 2690 051e 3B62     		str	r3, [r7, #32]
+ 2691              	.L20:
+ 205:../src/LCD/lcd.c ****        }
+ 206:../src/LCD/lcd.c ****        // plot
+ 207:../src/LCD/lcd.c ****        LCD_PlotPoint(xDraw, yDraw, color);
+ 2692              		.loc 1 207 0
+ 2693 0520 786A     		ldr	r0, [r7, #36]
+ 2694 0522 396A     		ldr	r1, [r7, #32]
+ 2695 0524 BA6C     		ldr	r2, [r7, #72]
+ 2696 0526 FFF7FEFF 		bl	LCD_PlotPoint
+ 208:../src/LCD/lcd.c ****        // next
+ 209:../src/LCD/lcd.c ****        if (E > 0) {
+ 2697              		.loc 1 209 0
+ 2698 052a FB6A     		ldr	r3, [r7, #44]
+ 2699 052c 002B     		cmp	r3, #0
+ 2700 052e 08DD     		ble	.L21
+ 210:../src/LCD/lcd.c ****            E += TwoDyTwoDx; //E += 2*Dy - 2*Dx;
+ 2701              		.loc 1 210 0
+ 2702 0530 FA6A     		ldr	r2, [r7, #44]
+ 2703 0532 3B69     		ldr	r3, [r7, #16]
+ 2704 0534 D318     		adds	r3, r2, r3
+ 2705 0536 FB62     		str	r3, [r7, #44]
+ 211:../src/LCD/lcd.c ****            y = y + ystep;
+ 2706              		.loc 1 211 0
+ 2707 0538 BA6A     		ldr	r2, [r7, #40]
+ 2708 053a 3B6B     		ldr	r3, [r7, #48]
+ 2709 053c D318     		adds	r3, r2, r3
+ 2710 053e BB62     		str	r3, [r7, #40]
+ 2711 0540 03E0     		b	.L22
+ 2712              	.L21:
+ 212:../src/LCD/lcd.c ****        } else {
+ 213:../src/LCD/lcd.c ****            E += TwoDy; //E += 2*Dy;
+ 2713              		.loc 1 213 0
+ 2714 0542 FA6A     		ldr	r2, [r7, #44]
+ 2715 0544 7B69     		ldr	r3, [r7, #20]
+ 2716 0546 D318     		adds	r3, r2, r3
+ 2717 0548 FB62     		str	r3, [r7, #44]
+ 2718              	.L22:
+ 198:../src/LCD/lcd.c ****    for (x = xmin; x != xmax; x += xstep) {		
+ 2719              		.loc 1 198 0
+ 2720 054a FA69     		ldr	r2, [r7, #28]
+ 2721 054c 7B6B     		ldr	r3, [r7, #52]
+ 2722 054e D318     		adds	r3, r2, r3
+ 2723 0550 FB61     		str	r3, [r7, #28]
+ 2724              	.L18:
+ 198:../src/LCD/lcd.c ****    for (x = xmin; x != xmax; x += xstep) {		
+ 2725              		.loc 1 198 0 is_stmt 0 discriminator 1
+ 2726 0552 FA69     		ldr	r2, [r7, #28]
+ 2727 0554 BB68     		ldr	r3, [r7, #8]
+ 2728 0556 9A42     		cmp	r2, r3
+ 2729 0558 D6D1     		bne	.L23
+ 214:../src/LCD/lcd.c ****        }
+ 215:../src/LCD/lcd.c ****    }
+ 216:../src/LCD/lcd.c **** }
+ 2730              		.loc 1 216 0 is_stmt 1
+ 2731 055a 07F14007 		add	r7, r7, #64
+ 2732 055e BD46     		mov	sp, r7
+ 2733 0560 80BD     		pop	{r7, pc}
+ 2734              		.cfi_endproc
+ 2735              	.LFE5:
+ 2737 0562 00BF     		.align	2
+ 2738              		.global	LCD_ClearScreen
+ 2739              		.thumb
+ 2740              		.thumb_func
+ 2742              	LCD_ClearScreen:
+ 2743              	.LFB6:
+ 217:../src/LCD/lcd.c **** 
+ 218:../src/LCD/lcd.c **** // Routine to clear the LCD.
+ 219:../src/LCD/lcd.c **** // Implemented by drawing a black rectangle across the whole screen
+ 220:../src/LCD/lcd.c **** void LCD_ClearScreen(void)
+ 221:../src/LCD/lcd.c **** {	
+ 2744              		.loc 1 221 0
+ 2745              		.cfi_startproc
+ 2746              		@ args = 0, pretend = 0, frame = 0
+ 2747              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2748 0564 80B5     		push	{r7, lr}
+ 2749              	.LCFI18:
+ 2750              		.cfi_def_cfa_offset 8
+ 2751 0566 82B0     		sub	sp, sp, #8
+ 2752              	.LCFI19:
+ 2753              		.cfi_def_cfa_offset 16
+ 2754 0568 02AF     		add	r7, sp, #8
+ 2755              		.cfi_offset 14, -4
+ 2756              		.cfi_offset 7, -8
+ 2757              	.LCFI20:
+ 2758              		.cfi_def_cfa 7, 8
+ 222:../src/LCD/lcd.c **** 	LCD_FilledRect (0,LCD_MAX_X,0 , LCD_MAX_Y, COLOR_BLACK);
+ 2759              		.loc 1 222 0
+ 2760 056a 4FF00003 		mov	r3, #0
+ 2761 056e 0093     		str	r3, [sp, #0]
+ 2762 0570 4FF00000 		mov	r0, #0
+ 2763 0574 4FF08001 		mov	r1, #128
+ 2764 0578 4FF00002 		mov	r2, #0
+ 2765 057c 4FF08003 		mov	r3, #128
+ 2766 0580 FFF7FEFF 		bl	LCD_FilledRect
+ 223:../src/LCD/lcd.c **** }
+ 2767              		.loc 1 223 0
+ 2768 0584 BD46     		mov	sp, r7
+ 2769 0586 80BD     		pop	{r7, pc}
+ 2770              		.cfi_endproc
+ 2771              	.LFE6:
+ 2773              		.align	2
+ 2774              		.global	LCD_WriteBitMap8x15
+ 2775              		.thumb
+ 2776              		.thumb_func
+ 2778              	LCD_WriteBitMap8x15:
+ 2779              	.LFB7:
+ 224:../src/LCD/lcd.c **** 
+ 225:../src/LCD/lcd.c **** 
+ 226:../src/LCD/lcd.c **** 
+ 227:../src/LCD/lcd.c **** // Routine to write a single character to screen in the font pointed
+ 228:../src/LCD/lcd.c **** // to by pBitMap.  This routine is intended to be used via the 
+ 229:../src/LCD/lcd.c **** // LCD_PrintChar() and LCD_PrintString() routines, rather than called
+ 230:../src/LCD/lcd.c **** // directly from user code.
+ 231:../src/LCD/lcd.c **** void LCD_WriteBitMap8x15(int x, int y, int height, int width, unsigned char *pBitMap, int color)
+ 232:../src/LCD/lcd.c **** {
+ 2780              		.loc 1 232 0
+ 2781              		.cfi_startproc
+ 2782              		@ args = 8, pretend = 0, frame = 40
+ 2783              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2784 0588 80B5     		push	{r7, lr}
+ 2785              	.LCFI21:
+ 2786              		.cfi_def_cfa_offset 8
+ 2787 058a 8AB0     		sub	sp, sp, #40
+ 2788              	.LCFI22:
+ 2789              		.cfi_def_cfa_offset 48
+ 2790 058c 00AF     		add	r7, sp, #0
+ 2791              		.cfi_offset 14, -4
+ 2792              		.cfi_offset 7, -8
+ 2793              	.LCFI23:
+ 2794              		.cfi_def_cfa_register 7
+ 2795 058e F860     		str	r0, [r7, #12]
+ 2796 0590 B960     		str	r1, [r7, #8]
+ 2797 0592 7A60     		str	r2, [r7, #4]
+ 2798 0594 3B60     		str	r3, [r7, #0]
+ 233:../src/LCD/lcd.c **** 	int xmax = x + width - 1;	// start at zero
+ 2799              		.loc 1 233 0
+ 2800 0596 FA68     		ldr	r2, [r7, #12]
+ 2801 0598 3B68     		ldr	r3, [r7, #0]
+ 2802 059a D318     		adds	r3, r2, r3
+ 2803 059c 03F1FF33 		add	r3, r3, #-1
+ 2804 05a0 BB61     		str	r3, [r7, #24]
+ 234:../src/LCD/lcd.c **** 	int ymax = y + height - 1;	// start at zero
+ 2805              		.loc 1 234 0
+ 2806 05a2 BA68     		ldr	r2, [r7, #8]
+ 2807 05a4 7B68     		ldr	r3, [r7, #4]
+ 2808 05a6 D318     		adds	r3, r2, r3
+ 2809 05a8 03F1FF33 		add	r3, r3, #-1
+ 2810 05ac 7B61     		str	r3, [r7, #20]
+ 235:../src/LCD/lcd.c **** 	int iRow, iCol;
+ 236:../src/LCD/lcd.c **** 	unsigned char ucRowData;
+ 237:../src/LCD/lcd.c **** 	
+ 238:../src/LCD/lcd.c ****     LCDdriver_WriteCom(DD_CASET);	// Column address set
+ 2811              		.loc 1 238 0
+ 2812 05ae 4FF02A00 		mov	r0, #42
+ 2813 05b2 FFF7FEFF 		bl	LCDdriver_WriteCom
+ 239:../src/LCD/lcd.c ****     LCDdriver_WriteData(x);		// Start column
+ 2814              		.loc 1 239 0
+ 2815 05b6 FB68     		ldr	r3, [r7, #12]
+ 2816 05b8 DBB2     		uxtb	r3, r3
+ 2817 05ba 1846     		mov	r0, r3
+ 2818 05bc FFF7FEFF 		bl	LCDdriver_WriteData
+ 240:../src/LCD/lcd.c ****     LCDdriver_WriteData(xmax);		// End column
+ 2819              		.loc 1 240 0
+ 2820 05c0 BB69     		ldr	r3, [r7, #24]
+ 2821 05c2 DBB2     		uxtb	r3, r3
+ 2822 05c4 1846     		mov	r0, r3
+ 2823 05c6 FFF7FEFF 		bl	LCDdriver_WriteData
+ 241:../src/LCD/lcd.c ****     LCDdriver_WriteCom(DD_RASET);	// Row address set
+ 2824              		.loc 1 241 0
+ 2825 05ca 4FF02B00 		mov	r0, #43
+ 2826 05ce FFF7FEFF 		bl	LCDdriver_WriteCom
+ 242:../src/LCD/lcd.c ****     LCDdriver_WriteData(y);		// Start row
+ 2827              		.loc 1 242 0
+ 2828 05d2 BB68     		ldr	r3, [r7, #8]
+ 2829 05d4 DBB2     		uxtb	r3, r3
+ 2830 05d6 1846     		mov	r0, r3
+ 2831 05d8 FFF7FEFF 		bl	LCDdriver_WriteData
+ 243:../src/LCD/lcd.c ****     LCDdriver_WriteData(ymax);		// End row
+ 2832              		.loc 1 243 0
+ 2833 05dc 7B69     		ldr	r3, [r7, #20]
+ 2834 05de DBB2     		uxtb	r3, r3
+ 2835 05e0 1846     		mov	r0, r3
+ 2836 05e2 FFF7FEFF 		bl	LCDdriver_WriteData
+ 244:../src/LCD/lcd.c ****     LCDdriver_WriteCom(DD_RAMWR);	// Memory write
+ 2837              		.loc 1 244 0
+ 2838 05e6 4FF02C00 		mov	r0, #44
+ 2839 05ea FFF7FEFF 		bl	LCDdriver_WriteCom
+ 245:../src/LCD/lcd.c ****     
+ 246:../src/LCD/lcd.c ****     
+ 247:../src/LCD/lcd.c ****     for(iRow=0;iRow<height;iRow++)
+ 2840              		.loc 1 247 0
+ 2841 05ee 4FF00003 		mov	r3, #0
+ 2842 05f2 7B62     		str	r3, [r7, #36]
+ 2843 05f4 33E0     		b	.L26
+ 2844              	.L31:
+ 248:../src/LCD/lcd.c ****     {
+ 249:../src/LCD/lcd.c ****     	ucRowData = *pBitMap++;
+ 2845              		.loc 1 249 0
+ 2846 05f6 3B6B     		ldr	r3, [r7, #48]
+ 2847 05f8 1B78     		ldrb	r3, [r3, #0]
+ 2848 05fa FB77     		strb	r3, [r7, #31]
+ 2849 05fc 3B6B     		ldr	r3, [r7, #48]
+ 2850 05fe 03F10103 		add	r3, r3, #1
+ 2851 0602 3B63     		str	r3, [r7, #48]
+ 250:../src/LCD/lcd.c ****     	
+ 251:../src/LCD/lcd.c ****     	for(iCol=0;iCol<width;iCol++)
+ 2852              		.loc 1 251 0
+ 2853 0604 4FF00003 		mov	r3, #0
+ 2854 0608 3B62     		str	r3, [r7, #32]
+ 2855 060a 20E0     		b	.L27
+ 2856              	.L30:
+ 252:../src/LCD/lcd.c ****     	{
+ 253:../src/LCD/lcd.c **** 
+ 254:../src/LCD/lcd.c ****     		// Look at each input bitmap bit
+ 255:../src/LCD/lcd.c ****     		// and write as a black-pixel or
+ 256:../src/LCD/lcd.c ****     		// a color-pixel.
+ 257:../src/LCD/lcd.c ****     		
+ 258:../src/LCD/lcd.c ****     		if(ucRowData & 0x80)  // 'color pixel'
+ 2857              		.loc 1 258 0
+ 2858 060c FB7F     		ldrb	r3, [r7, #31]	@ zero_extendqisi2
+ 2859 060e 5BB2     		sxtb	r3, r3
+ 2860 0610 002B     		cmp	r3, #0
+ 2861 0612 0CDA     		bge	.L28
+ 259:../src/LCD/lcd.c ****     		{
+ 260:../src/LCD/lcd.c ****             	LCDdriver_WriteData(color >> 8); 
+ 2862              		.loc 1 260 0
+ 2863 0614 7B6B     		ldr	r3, [r7, #52]
+ 2864 0616 4FEA2323 		asr	r3, r3, #8
+ 2865 061a DBB2     		uxtb	r3, r3
+ 2866 061c 1846     		mov	r0, r3
+ 2867 061e FFF7FEFF 		bl	LCDdriver_WriteData
+ 261:../src/LCD/lcd.c ****             	LCDdriver_WriteData(color);
+ 2868              		.loc 1 261 0
+ 2869 0622 7B6B     		ldr	r3, [r7, #52]
+ 2870 0624 DBB2     		uxtb	r3, r3
+ 2871 0626 1846     		mov	r0, r3
+ 2872 0628 FFF7FEFF 		bl	LCDdriver_WriteData
+ 2873 062c 07E0     		b	.L29
+ 2874              	.L28:
+ 262:../src/LCD/lcd.c ****     		}
+ 263:../src/LCD/lcd.c ****     		else				// black pixel
+ 264:../src/LCD/lcd.c ****     		{
+ 265:../src/LCD/lcd.c ****     			LCDdriver_WriteData(0x00);
+ 2875              		.loc 1 265 0
+ 2876 062e 4FF00000 		mov	r0, #0
+ 2877 0632 FFF7FEFF 		bl	LCDdriver_WriteData
+ 266:../src/LCD/lcd.c ****             	LCDdriver_WriteData(0x00);
+ 2878              		.loc 1 266 0
+ 2879 0636 4FF00000 		mov	r0, #0
+ 2880 063a FFF7FEFF 		bl	LCDdriver_WriteData
+ 2881              	.L29:
+ 267:../src/LCD/lcd.c ****     		}
+ 268:../src/LCD/lcd.c ****         	
+ 269:../src/LCD/lcd.c ****         	ucRowData = ucRowData<<1;
+ 2882              		.loc 1 269 0
+ 2883 063e FB7F     		ldrb	r3, [r7, #31]
+ 2884 0640 4FEA4303 		lsl	r3, r3, #1
+ 2885 0644 FB77     		strb	r3, [r7, #31]
+ 251:../src/LCD/lcd.c ****     	for(iCol=0;iCol<width;iCol++)
+ 2886              		.loc 1 251 0
+ 2887 0646 3B6A     		ldr	r3, [r7, #32]
+ 2888 0648 03F10103 		add	r3, r3, #1
+ 2889 064c 3B62     		str	r3, [r7, #32]
+ 2890              	.L27:
+ 251:../src/LCD/lcd.c ****     	for(iCol=0;iCol<width;iCol++)
+ 2891              		.loc 1 251 0 is_stmt 0 discriminator 1
+ 2892 064e 3A6A     		ldr	r2, [r7, #32]
+ 2893 0650 3B68     		ldr	r3, [r7, #0]
+ 2894 0652 9A42     		cmp	r2, r3
+ 2895 0654 DADB     		blt	.L30
+ 247:../src/LCD/lcd.c ****     for(iRow=0;iRow<height;iRow++)
+ 2896              		.loc 1 247 0 is_stmt 1
+ 2897 0656 7B6A     		ldr	r3, [r7, #36]
+ 2898 0658 03F10103 		add	r3, r3, #1
+ 2899 065c 7B62     		str	r3, [r7, #36]
+ 2900              	.L26:
+ 247:../src/LCD/lcd.c ****     for(iRow=0;iRow<height;iRow++)
+ 2901              		.loc 1 247 0 is_stmt 0 discriminator 1
+ 2902 065e 7A6A     		ldr	r2, [r7, #36]
+ 2903 0660 7B68     		ldr	r3, [r7, #4]
+ 2904 0662 9A42     		cmp	r2, r3
+ 2905 0664 C7DB     		blt	.L31
+ 270:../src/LCD/lcd.c ****     	}
+ 271:../src/LCD/lcd.c ****     }
+ 272:../src/LCD/lcd.c **** 
+ 273:../src/LCD/lcd.c **** }
+ 2906              		.loc 1 273 0 is_stmt 1
+ 2907 0666 07F12807 		add	r7, r7, #40
+ 2908 066a BD46     		mov	sp, r7
+ 2909 066c 80BD     		pop	{r7, pc}
+ 2910              		.cfi_endproc
+ 2911              	.LFE7:
+ 2913 066e 00BF     		.align	2
+ 2914              		.global	LCD_PrintChar
+ 2915              		.thumb
+ 2916              		.thumb_func
+ 2918              	LCD_PrintChar:
+ 2919              	.LFB8:
+ 274:../src/LCD/lcd.c **** 
+ 275:../src/LCD/lcd.c **** 
+ 276:../src/LCD/lcd.c **** // Prints the character 'c' to the LCD in the appropriate color.
+ 277:../src/LCD/lcd.c **** void LCD_PrintChar(int x, int y, unsigned char c, int color )
+ 278:../src/LCD/lcd.c **** {
+ 2920              		.loc 1 278 0
+ 2921              		.cfi_startproc
+ 2922              		@ args = 0, pretend = 0, frame = 32
+ 2923              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2924 0670 80B5     		push	{r7, lr}
+ 2925              	.LCFI24:
+ 2926              		.cfi_def_cfa_offset 8
+ 2927 0672 8AB0     		sub	sp, sp, #40
+ 2928              	.LCFI25:
+ 2929              		.cfi_def_cfa_offset 48
+ 2930 0674 02AF     		add	r7, sp, #8
+ 2931              		.cfi_offset 14, -4
+ 2932              		.cfi_offset 7, -8
+ 2933              	.LCFI26:
+ 2934              		.cfi_def_cfa 7, 40
+ 2935 0676 F860     		str	r0, [r7, #12]
+ 2936 0678 B960     		str	r1, [r7, #8]
+ 2937 067a 3B60     		str	r3, [r7, #0]
+ 2938 067c 1346     		mov	r3, r2
+ 2939 067e FB71     		strb	r3, [r7, #7]
+ 279:../src/LCD/lcd.c ****     const unsigned char index = font_index_table[c];
+ 2940              		.loc 1 279 0
+ 2941 0680 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 2942 0682 0E4A     		ldr	r2, .L33
+ 2943 0684 D35C     		ldrb	r3, [r2, r3]
+ 2944 0686 FB77     		strb	r3, [r7, #31]
+ 280:../src/LCD/lcd.c ****     const unsigned int offset = index * 15;
+ 2945              		.loc 1 280 0
+ 2946 0688 FA7F     		ldrb	r2, [r7, #31]	@ zero_extendqisi2
+ 2947 068a 1346     		mov	r3, r2
+ 2948 068c 4FEA0313 		lsl	r3, r3, #4
+ 2949 0690 9B1A     		subs	r3, r3, r2
+ 2950 0692 BB61     		str	r3, [r7, #24]
+ 281:../src/LCD/lcd.c ****     unsigned char *pData = (unsigned char *)&font_data_table[offset];	
+ 2951              		.loc 1 281 0
+ 2952 0694 BA69     		ldr	r2, [r7, #24]
+ 2953 0696 0A4B     		ldr	r3, .L33+4
+ 2954 0698 D318     		adds	r3, r2, r3
+ 2955 069a 7B61     		str	r3, [r7, #20]
+ 282:../src/LCD/lcd.c **** 
+ 283:../src/LCD/lcd.c ****     LCD_WriteBitMap8x15(x, y, 15, 8, pData, color);
+ 2956              		.loc 1 283 0
+ 2957 069c 7B69     		ldr	r3, [r7, #20]
+ 2958 069e 0093     		str	r3, [sp, #0]
+ 2959 06a0 3B68     		ldr	r3, [r7, #0]
+ 2960 06a2 0193     		str	r3, [sp, #4]
+ 2961 06a4 F868     		ldr	r0, [r7, #12]
+ 2962 06a6 B968     		ldr	r1, [r7, #8]
+ 2963 06a8 4FF00F02 		mov	r2, #15
+ 2964 06ac 4FF00803 		mov	r3, #8
+ 2965 06b0 FFF7FEFF 		bl	LCD_WriteBitMap8x15
+ 284:../src/LCD/lcd.c **** }
+ 2966              		.loc 1 284 0
+ 2967 06b4 07F12007 		add	r7, r7, #32
+ 2968 06b8 BD46     		mov	sp, r7
+ 2969 06ba 80BD     		pop	{r7, pc}
+ 2970              	.L34:
+ 2971              		.align	2
+ 2972              	.L33:
+ 2973 06bc 00000000 		.word	font_index_table
+ 2974 06c0 00000000 		.word	font_data_table
+ 2975              		.cfi_endproc
+ 2976              	.LFE8:
+ 2978              		.align	2
+ 2979              		.global	LCD_PrintString
+ 2980              		.thumb
+ 2981              		.thumb_func
+ 2983              	LCD_PrintString:
+ 2984              	.LFB9:
+ 285:../src/LCD/lcd.c **** 
+ 286:../src/LCD/lcd.c **** // Prints the string to the LCD in the appropriate color.
+ 287:../src/LCD/lcd.c **** void LCD_PrintString(int x, int y, char *pcString, int iStrLen, int color)
+ 288:../src/LCD/lcd.c **** {
+ 2985              		.loc 1 288 0
+ 2986              		.cfi_startproc
+ 2987              		@ args = 4, pretend = 0, frame = 32
+ 2988              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2989 06c4 80B5     		push	{r7, lr}
+ 2990              	.LCFI27:
+ 2991              		.cfi_def_cfa_offset 8
+ 2992 06c6 8AB0     		sub	sp, sp, #40
+ 2993              	.LCFI28:
+ 2994              		.cfi_def_cfa_offset 48
+ 2995 06c8 02AF     		add	r7, sp, #8
+ 2996              		.cfi_offset 14, -4
+ 2997              		.cfi_offset 7, -8
+ 2998              	.LCFI29:
+ 2999              		.cfi_def_cfa 7, 40
+ 3000 06ca F860     		str	r0, [r7, #12]
+ 3001 06cc B960     		str	r1, [r7, #8]
+ 3002 06ce 7A60     		str	r2, [r7, #4]
+ 3003 06d0 3B60     		str	r3, [r7, #0]
+ 289:../src/LCD/lcd.c ****     unsigned char index;
+ 290:../src/LCD/lcd.c ****     unsigned int offset;
+ 291:../src/LCD/lcd.c ****     unsigned char *pData;
+ 292:../src/LCD/lcd.c ****     unsigned char c;
+ 293:../src/LCD/lcd.c **** 	int i;
+ 294:../src/LCD/lcd.c **** 	
+ 295:../src/LCD/lcd.c **** 	for(i=0;i<iStrLen;i++)
+ 3004              		.loc 1 295 0
+ 3005 06d2 4FF00003 		mov	r3, #0
+ 3006 06d6 FB61     		str	r3, [r7, #28]
+ 3007 06d8 29E0     		b	.L36
+ 3008              	.L39:
+ 296:../src/LCD/lcd.c **** 	{
+ 297:../src/LCD/lcd.c **** 		c = pcString[i];
+ 3009              		.loc 1 297 0
+ 3010 06da FB69     		ldr	r3, [r7, #28]
+ 3011 06dc 7A68     		ldr	r2, [r7, #4]
+ 3012 06de D318     		adds	r3, r2, r3
+ 3013 06e0 1B78     		ldrb	r3, [r3, #0]
+ 3014 06e2 FB76     		strb	r3, [r7, #27]
+ 298:../src/LCD/lcd.c **** 		if(c==0)
+ 3015              		.loc 1 298 0
+ 3016 06e4 FB7E     		ldrb	r3, [r7, #27]	@ zero_extendqisi2
+ 3017 06e6 002B     		cmp	r3, #0
+ 3018 06e8 26D0     		beq	.L40
+ 3019              	.L37:
+ 299:../src/LCD/lcd.c **** 			break;
+ 300:../src/LCD/lcd.c **** 		index = font_index_table[c];
+ 3020              		.loc 1 300 0
+ 3021 06ea FB7E     		ldrb	r3, [r7, #27]	@ zero_extendqisi2
+ 3022 06ec 154A     		ldr	r2, .L41
+ 3023 06ee D35C     		ldrb	r3, [r2, r3]
+ 3024 06f0 BB76     		strb	r3, [r7, #26]
+ 301:../src/LCD/lcd.c **** 	    offset = index * 15;
+ 3025              		.loc 1 301 0
+ 3026 06f2 BA7E     		ldrb	r2, [r7, #26]	@ zero_extendqisi2
+ 3027 06f4 1346     		mov	r3, r2
+ 3028 06f6 4FEA0313 		lsl	r3, r3, #4
+ 3029 06fa 9B1A     		subs	r3, r3, r2
+ 3030 06fc 7B61     		str	r3, [r7, #20]
+ 302:../src/LCD/lcd.c **** 	    pData = (unsigned char *)&font_data_table[offset];
+ 3031              		.loc 1 302 0
+ 3032 06fe 7A69     		ldr	r2, [r7, #20]
+ 3033 0700 114B     		ldr	r3, .L41+4
+ 3034 0702 D318     		adds	r3, r2, r3
+ 3035 0704 3B61     		str	r3, [r7, #16]
+ 303:../src/LCD/lcd.c **** 
+ 304:../src/LCD/lcd.c **** 	    LCD_WriteBitMap8x15(x, y, 15, 8, pData, color);	
+ 3036              		.loc 1 304 0
+ 3037 0706 3B69     		ldr	r3, [r7, #16]
+ 3038 0708 0093     		str	r3, [sp, #0]
+ 3039 070a BB6A     		ldr	r3, [r7, #40]
+ 3040 070c 0193     		str	r3, [sp, #4]
+ 3041 070e F868     		ldr	r0, [r7, #12]
+ 3042 0710 B968     		ldr	r1, [r7, #8]
+ 3043 0712 4FF00F02 		mov	r2, #15
+ 3044 0716 4FF00803 		mov	r3, #8
+ 3045 071a FFF7FEFF 		bl	LCD_WriteBitMap8x15
+ 305:../src/LCD/lcd.c **** 	    x += 8;
+ 3046              		.loc 1 305 0
+ 3047 071e FB68     		ldr	r3, [r7, #12]
+ 3048 0720 03F10803 		add	r3, r3, #8
+ 3049 0724 FB60     		str	r3, [r7, #12]
+ 295:../src/LCD/lcd.c **** 	for(i=0;i<iStrLen;i++)
+ 3050              		.loc 1 295 0
+ 3051 0726 FB69     		ldr	r3, [r7, #28]
+ 3052 0728 03F10103 		add	r3, r3, #1
+ 3053 072c FB61     		str	r3, [r7, #28]
+ 3054              	.L36:
+ 295:../src/LCD/lcd.c **** 	for(i=0;i<iStrLen;i++)
+ 3055              		.loc 1 295 0 is_stmt 0 discriminator 1
+ 3056 072e FA69     		ldr	r2, [r7, #28]
+ 3057 0730 3B68     		ldr	r3, [r7, #0]
+ 3058 0732 9A42     		cmp	r2, r3
+ 3059 0734 D1DB     		blt	.L39
+ 3060 0736 00E0     		b	.L35
+ 3061              	.L40:
+ 299:../src/LCD/lcd.c **** 			break;
+ 3062              		.loc 1 299 0 is_stmt 1
+ 3063 0738 00BF     		nop
+ 3064              	.L35:
+ 306:../src/LCD/lcd.c **** 	}
+ 307:../src/LCD/lcd.c **** 	
+ 308:../src/LCD/lcd.c **** }...
+ 3065              		.loc 1 308 0
+ 3066 073a 07F12007 		add	r7, r7, #32
+ 3067 073e BD46     		mov	sp, r7
+ 3068 0740 80BD     		pop	{r7, pc}
+ 3069              	.L42:
+ 3070 0742 00BF     		.align	2
+ 3071              	.L41:
+ 3072 0744 00000000 		.word	font_index_table
+ 3073 0748 00000000 		.word	font_data_table
+ 3074              		.cfi_endproc
+ 3075              	.LFE9:
+ 3077              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 lcd.c
+     /tmp/ccJ241qj.s:1889   .text:00000000 $t
+     /tmp/ccJ241qj.s:1894   .text:00000000 LCD_FilledRect
+     /tmp/ccJ241qj.s:1993   .text:000000a4 LCD_Rect
+     /tmp/ccJ241qj.s:2058   .text:000000fc LCD_PlotPoint
+     /tmp/ccJ241qj.s:2134   .text:00000174 LCD_FilledCircle
+     /tmp/ccJ241qj.s:2318   .text:000002a8 LCD_Circle
+     /tmp/ccJ241qj.s:2531   .text:00000418 LCD_Line
+     /tmp/ccJ241qj.s:2742   .text:00000564 LCD_ClearScreen
+     /tmp/ccJ241qj.s:2778   .text:00000588 LCD_WriteBitMap8x15
+     /tmp/ccJ241qj.s:2918   .text:00000670 LCD_PrintChar
+     /tmp/ccJ241qj.s:2973   .text:000006bc $d
+     /tmp/ccJ241qj.s:2978   .text:000006c4 $t
+     /tmp/ccJ241qj.s:2983   .text:000006c4 LCD_PrintString
+     /tmp/ccJ241qj.s:3072   .text:00000744 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+LCDdriver_WriteCom
+LCDdriver_WriteData
+font_index_table
+font_data_table

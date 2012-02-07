@@ -1,0 +1,114 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 18, 4
+  12              		.thumb
+  13              		.file	"testTask.c"
+  23              	.Ltext0:
+  24              		.file 1 "../src/testTask.c"
+ 3514              		.align	2
+ 3515              		.global	vTestTask
+ 3516              		.thumb
+ 3517              		.thumb_func
+ 3519              	vTestTask:
+ 3520              	.LFB29:
+   1:../src/testTask.c **** /*
+   2:../src/testTask.c ****  * testTask.c
+   3:../src/testTask.c ****  *
+   4:../src/testTask.c ****  *  Created on: Feb 6, 2012
+   5:../src/testTask.c ****  *      Author: jenya
+   6:../src/testTask.c ****  */
+   7:../src/testTask.c **** 
+   8:../src/testTask.c **** /* Scheduler includes. */
+   9:../src/testTask.c **** #include "FreeRTOS.h"
+  10:../src/testTask.c **** #include "task.h"
+  11:../src/testTask.c **** #include "queue.h"
+  12:../src/testTask.c **** #include "semphr.h"
+  13:../src/testTask.c **** 
+  14:../src/testTask.c **** #include "testTask.h"
+  15:../src/testTask.c **** 
+  16:../src/testTask.c **** void vTestTask( void *pvParameters )
+  17:../src/testTask.c **** {
+ 3521              		.loc 1 17 0
+ 3522              		.cfi_startproc
+ 3523              		@ args = 0, pretend = 0, frame = 16
+ 3524              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3525 0000 80B5     		push	{r7, lr}
+ 3526              	.LCFI0:
+ 3527              		.cfi_def_cfa_offset 8
+ 3528 0002 84B0     		sub	sp, sp, #16
+ 3529              	.LCFI1:
+ 3530              		.cfi_def_cfa_offset 24
+ 3531 0004 00AF     		add	r7, sp, #0
+ 3532              		.cfi_offset 14, -4
+ 3533              		.cfi_offset 7, -8
+ 3534              	.LCFI2:
+ 3535              		.cfi_def_cfa_register 7
+ 3536 0006 7860     		str	r0, [r7, #4]
+  18:../src/testTask.c **** 	portTickType xLastWakeTime;
+  19:../src/testTask.c **** 
+  20:../src/testTask.c **** 	xLastWakeTime = xTaskGetTickCount();
+ 3537              		.loc 1 20 0
+ 3538 0008 FFF7FEFF 		bl	xTaskGetTickCount
+ 3539 000c 0346     		mov	r3, r0
+ 3540 000e FB60     		str	r3, [r7, #12]
+ 3541              	.L2:
+  21:../src/testTask.c **** 
+  22:../src/testTask.c **** 	for( ;; )
+  23:../src/testTask.c **** 	{
+  24:../src/testTask.c **** 		// wait for the next cycle
+  25:../src/testTask.c **** 		vTaskDelayUntil(&xLastWakeTime, DELAY_PERIOD);
+ 3542              		.loc 1 25 0 discriminator 1
+ 3543 0010 07F10C03 		add	r3, r7, #12
+ 3544 0014 1846     		mov	r0, r3
+ 3545 0016 4FF47A71 		mov	r1, #1000
+ 3546 001a FFF7FEFF 		bl	vTaskDelayUntil
+  26:../src/testTask.c **** 
+  27:../src/testTask.c **** 		// Turn the LED on
+  28:../src/testTask.c **** 		LPC_GPIO3->FIOCLR = LED;
+ 3547              		.loc 1 28 0 discriminator 1
+ 3548 001e 084B     		ldr	r3, .L3
+ 3549 0020 4FF00072 		mov	r2, #33554432
+ 3550 0024 DA61     		str	r2, [r3, #28]
+  29:../src/testTask.c **** 
+  30:../src/testTask.c **** 		// wait for the next cycle
+  31:../src/testTask.c **** 		vTaskDelayUntil(&xLastWakeTime, DELAY_PERIOD);
+ 3551              		.loc 1 31 0 discriminator 1
+ 3552 0026 07F10C03 		add	r3, r7, #12
+ 3553 002a 1846     		mov	r0, r3
+ 3554 002c 4FF47A71 		mov	r1, #1000
+ 3555 0030 FFF7FEFF 		bl	vTaskDelayUntil
+  32:../src/testTask.c **** 
+  33:../src/testTask.c **** 		// Turn the LED off
+  34:../src/testTask.c **** 		LPC_GPIO3->FIOSET = LED;
+ 3556              		.loc 1 34 0 discriminator 1
+ 3557 0034 024B     		ldr	r3, .L3
+ 3558 0036 4FF00072 		mov	r2, #33554432
+ 3559 003a 9A61     		str	r2, [r3, #24]
+  35:../src/testTask.c **** 	}
+ 3560              		.loc 1 35 0 discriminator 1
+ 3561 003c E8E7     		b	.L2
+ 3562              	.L4:
+ 3563 003e 00BF     		.align	2
+ 3564              	.L3:
+ 3565 0040 60C00920 		.word	537509984
+ 3566              		.cfi_endproc
+ 3567              	.LFE29:
+ 3569              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 testTask.c
+     /tmp/ccyYAkNp.s:3514   .text:00000000 $t
+     /tmp/ccyYAkNp.s:3519   .text:00000000 vTestTask
+     /tmp/ccyYAkNp.s:3565   .text:00000040 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+xTaskGetTickCount
+vTaskDelayUntil

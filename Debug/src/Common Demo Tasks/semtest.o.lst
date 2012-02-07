@@ -1,0 +1,863 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 18, 4
+  12              		.thumb
+  13              		.file	"semtest.c"
+  23              	.Ltext0:
+  24              		.file 1 "../src/Common Demo Tasks/semtest.c"
+ 4111              		.align	2
+ 4112              	sCheckVariables:
+ 4113 0000 00000000 		.space	8
+ 4113      00000000 
+ 4114              		.align	1
+ 4115              	sNextCheckVariable:
+ 4116 0008 0000     		.space	2
+ 4117              		.section	.rodata
+ 4118              		.align	2
+ 4119              	.LC0:
+ 4120 0000 506F6C53 		.ascii	"PolSEM1\000"
+ 4120      454D3100 
+ 4121              		.align	2
+ 4122              	.LC1:
+ 4123 0008 506F6C53 		.ascii	"PolSEM2\000"
+ 4123      454D3200 
+ 4124              		.align	2
+ 4125              	.LC2:
+ 4126 0010 426C6B53 		.ascii	"BlkSEM1\000"
+ 4126      454D3100 
+ 4127              		.align	2
+ 4128              	.LC3:
+ 4129 0018 426C6B53 		.ascii	"BlkSEM2\000"
+ 4129      454D3200 
+ 4130              		.align	2
+ 4131              	.LC4:
+ 4132 0020 436F756E 		.ascii	"Counting_Sem_1\000"
+ 4132      74696E67 
+ 4132      5F53656D 
+ 4132      5F3100
+ 4133 002f 00       		.align	2
+ 4134              	.LC5:
+ 4135 0030 436F756E 		.ascii	"Counting_Sem_2\000"
+ 4135      74696E67 
+ 4135      5F53656D 
+ 4135      5F3200
+ 4136 003f 00       		.text
+ 4137              		.align	2
+ 4138              		.global	vStartSemaphoreTasks
+ 4139              		.thumb
+ 4140              		.thumb_func
+ 4142              	vStartSemaphoreTasks:
+ 4143              	.LFB29:
+   1:../src/Common Demo Tasks/semtest.c **** /*
+   2:../src/Common Demo Tasks/semtest.c ****     FreeRTOS V7.1.0 - Copyright (C) 2011 Real Time Engineers Ltd.
+   3:../src/Common Demo Tasks/semtest.c **** 	
+   4:../src/Common Demo Tasks/semtest.c **** 
+   5:../src/Common Demo Tasks/semtest.c ****     ***************************************************************************
+   6:../src/Common Demo Tasks/semtest.c ****      *                                                                       *
+   7:../src/Common Demo Tasks/semtest.c ****      *    FreeRTOS tutorial books are available in pdf and paperback.        *
+   8:../src/Common Demo Tasks/semtest.c ****      *    Complete, revised, and edited pdf reference manuals are also       *
+   9:../src/Common Demo Tasks/semtest.c ****      *    available.                                                         *
+  10:../src/Common Demo Tasks/semtest.c ****      *                                                                       *
+  11:../src/Common Demo Tasks/semtest.c ****      *    Purchasing FreeRTOS documentation will not only help you, by       *
+  12:../src/Common Demo Tasks/semtest.c ****      *    ensuring you get running as quickly as possible and with an        *
+  13:../src/Common Demo Tasks/semtest.c ****      *    in-depth knowledge of how to use FreeRTOS, it will also help       *
+  14:../src/Common Demo Tasks/semtest.c ****      *    the FreeRTOS project to continue with its mission of providing     *
+  15:../src/Common Demo Tasks/semtest.c ****      *    professional grade, cross platform, de facto standard solutions    *
+  16:../src/Common Demo Tasks/semtest.c ****      *    for microcontrollers - completely free of charge!                  *
+  17:../src/Common Demo Tasks/semtest.c ****      *                                                                       *
+  18:../src/Common Demo Tasks/semtest.c ****      *    >>> See http://www.FreeRTOS.org/Documentation for details. <<<     *
+  19:../src/Common Demo Tasks/semtest.c ****      *                                                                       *
+  20:../src/Common Demo Tasks/semtest.c ****      *    Thank you for using FreeRTOS, and thank you for your support!      *
+  21:../src/Common Demo Tasks/semtest.c ****      *                                                                       *
+  22:../src/Common Demo Tasks/semtest.c ****     ***************************************************************************
+  23:../src/Common Demo Tasks/semtest.c **** 
+  24:../src/Common Demo Tasks/semtest.c **** 
+  25:../src/Common Demo Tasks/semtest.c ****     This file is part of the FreeRTOS distribution.
+  26:../src/Common Demo Tasks/semtest.c **** 
+  27:../src/Common Demo Tasks/semtest.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  28:../src/Common Demo Tasks/semtest.c ****     the terms of the GNU General Public License (version 2) as published by the
+  29:../src/Common Demo Tasks/semtest.c ****     Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+  30:../src/Common Demo Tasks/semtest.c ****     >>>NOTE<<< The modification to the GPL is included to allow you to
+  31:../src/Common Demo Tasks/semtest.c ****     distribute a combined work that includes FreeRTOS without being obliged to
+  32:../src/Common Demo Tasks/semtest.c ****     provide the source code for proprietary components outside of the FreeRTOS
+  33:../src/Common Demo Tasks/semtest.c ****     kernel.  FreeRTOS is distributed in the hope that it will be useful, but
+  34:../src/Common Demo Tasks/semtest.c ****     WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  35:../src/Common Demo Tasks/semtest.c ****     or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+  36:../src/Common Demo Tasks/semtest.c ****     more details. You should have received a copy of the GNU General Public
+  37:../src/Common Demo Tasks/semtest.c ****     License and the FreeRTOS license exception along with FreeRTOS; if not it
+  38:../src/Common Demo Tasks/semtest.c ****     can be viewed here: http://www.freertos.org/a00114.html and also obtained
+  39:../src/Common Demo Tasks/semtest.c ****     by writing to Richard Barry, contact details for whom are available on the
+  40:../src/Common Demo Tasks/semtest.c ****     FreeRTOS WEB site.
+  41:../src/Common Demo Tasks/semtest.c **** 
+  42:../src/Common Demo Tasks/semtest.c ****     1 tab == 4 spaces!
+  43:../src/Common Demo Tasks/semtest.c **** 
+  44:../src/Common Demo Tasks/semtest.c ****     http://www.FreeRTOS.org - Documentation, latest information, license and
+  45:../src/Common Demo Tasks/semtest.c ****     contact details.
+  46:../src/Common Demo Tasks/semtest.c **** 
+  47:../src/Common Demo Tasks/semtest.c ****     http://www.SafeRTOS.com - A version that is certified for use in safety
+  48:../src/Common Demo Tasks/semtest.c ****     critical systems.
+  49:../src/Common Demo Tasks/semtest.c **** 
+  50:../src/Common Demo Tasks/semtest.c ****     http://www.OpenRTOS.com - Commercial support, development, porting,
+  51:../src/Common Demo Tasks/semtest.c ****     licensing and training services.
+  52:../src/Common Demo Tasks/semtest.c **** */
+  53:../src/Common Demo Tasks/semtest.c **** 
+  54:../src/Common Demo Tasks/semtest.c **** /*
+  55:../src/Common Demo Tasks/semtest.c ****  * Creates two sets of two tasks.  The tasks within a set share a variable, access 
+  56:../src/Common Demo Tasks/semtest.c ****  * to which is guarded by a semaphore.
+  57:../src/Common Demo Tasks/semtest.c ****  * 
+  58:../src/Common Demo Tasks/semtest.c ****  * Each task starts by attempting to obtain the semaphore.  On obtaining a 
+  59:../src/Common Demo Tasks/semtest.c ****  * semaphore a task checks to ensure that the guarded variable has an expected 
+  60:../src/Common Demo Tasks/semtest.c ****  * value.  It then clears the variable to zero before counting it back up to the 
+  61:../src/Common Demo Tasks/semtest.c ****  * expected value in increments of 1.  After each increment the variable is checked 
+  62:../src/Common Demo Tasks/semtest.c ****  * to ensure it contains the value to which it was just set. When the starting 
+  63:../src/Common Demo Tasks/semtest.c ****  * value is again reached the task releases the semaphore giving the other task in 
+  64:../src/Common Demo Tasks/semtest.c ****  * the set a chance to do exactly the same thing.  The starting value is high 
+  65:../src/Common Demo Tasks/semtest.c ****  * enough to ensure that a tick is likely to occur during the incrementing loop.
+  66:../src/Common Demo Tasks/semtest.c ****  *
+  67:../src/Common Demo Tasks/semtest.c ****  * An error is flagged if at any time during the process a shared variable is 
+  68:../src/Common Demo Tasks/semtest.c ****  * found to have a value other than that expected.  Such an occurrence would 
+  69:../src/Common Demo Tasks/semtest.c ****  * suggest an error in the mutual exclusion mechanism by which access to the 
+  70:../src/Common Demo Tasks/semtest.c ****  * variable is restricted.
+  71:../src/Common Demo Tasks/semtest.c ****  *
+  72:../src/Common Demo Tasks/semtest.c ****  * The first set of two tasks poll their semaphore.  The second set use blocking 
+  73:../src/Common Demo Tasks/semtest.c ****  * calls.
+  74:../src/Common Demo Tasks/semtest.c ****  *
+  75:../src/Common Demo Tasks/semtest.c ****  */
+  76:../src/Common Demo Tasks/semtest.c **** 
+  77:../src/Common Demo Tasks/semtest.c **** 
+  78:../src/Common Demo Tasks/semtest.c **** #include <stdlib.h>
+  79:../src/Common Demo Tasks/semtest.c **** 
+  80:../src/Common Demo Tasks/semtest.c **** /* Scheduler include files. */
+  81:../src/Common Demo Tasks/semtest.c **** #include "FreeRTOS.h"
+  82:../src/Common Demo Tasks/semtest.c **** #include "task.h"
+  83:../src/Common Demo Tasks/semtest.c **** #include "semphr.h"
+  84:../src/Common Demo Tasks/semtest.c **** 
+  85:../src/Common Demo Tasks/semtest.c **** /* Demo app include files. */
+  86:../src/Common Demo Tasks/semtest.c **** #include "semtest.h"
+  87:../src/Common Demo Tasks/semtest.c **** 
+  88:../src/Common Demo Tasks/semtest.c **** /* The value to which the shared variables are counted. */
+  89:../src/Common Demo Tasks/semtest.c **** #define semtstBLOCKING_EXPECTED_VALUE		( ( unsigned long ) 0xfff )
+  90:../src/Common Demo Tasks/semtest.c **** #define semtstNON_BLOCKING_EXPECTED_VALUE	( ( unsigned long ) 0xff  )
+  91:../src/Common Demo Tasks/semtest.c **** 
+  92:../src/Common Demo Tasks/semtest.c **** #define semtstSTACK_SIZE			configMINIMAL_STACK_SIZE
+  93:../src/Common Demo Tasks/semtest.c **** 
+  94:../src/Common Demo Tasks/semtest.c **** #define semtstNUM_TASKS				( 4 )
+  95:../src/Common Demo Tasks/semtest.c **** 
+  96:../src/Common Demo Tasks/semtest.c **** #define semtstDELAY_FACTOR			( ( portTickType ) 10 )
+  97:../src/Common Demo Tasks/semtest.c **** 
+  98:../src/Common Demo Tasks/semtest.c **** /* The task function as described at the top of the file. */
+  99:../src/Common Demo Tasks/semtest.c **** static portTASK_FUNCTION_PROTO( prvSemaphoreTest, pvParameters );
+ 100:../src/Common Demo Tasks/semtest.c **** 
+ 101:../src/Common Demo Tasks/semtest.c **** /* Structure used to pass parameters to each task. */
+ 102:../src/Common Demo Tasks/semtest.c **** typedef struct SEMAPHORE_PARAMETERS
+ 103:../src/Common Demo Tasks/semtest.c **** {
+ 104:../src/Common Demo Tasks/semtest.c **** 	xSemaphoreHandle xSemaphore;
+ 105:../src/Common Demo Tasks/semtest.c **** 	volatile unsigned long *pulSharedVariable;
+ 106:../src/Common Demo Tasks/semtest.c **** 	portTickType xBlockTime;
+ 107:../src/Common Demo Tasks/semtest.c **** } xSemaphoreParameters;
+ 108:../src/Common Demo Tasks/semtest.c **** 
+ 109:../src/Common Demo Tasks/semtest.c **** /* Variables used to check that all the tasks are still running without errors. */
+ 110:../src/Common Demo Tasks/semtest.c **** static volatile short sCheckVariables[ semtstNUM_TASKS ] = { 0 };
+ 111:../src/Common Demo Tasks/semtest.c **** static volatile short sNextCheckVariable = 0;
+ 112:../src/Common Demo Tasks/semtest.c **** 
+ 113:../src/Common Demo Tasks/semtest.c **** /*-----------------------------------------------------------*/
+ 114:../src/Common Demo Tasks/semtest.c **** 
+ 115:../src/Common Demo Tasks/semtest.c **** void vStartSemaphoreTasks( unsigned portBASE_TYPE uxPriority )
+ 116:../src/Common Demo Tasks/semtest.c **** {
+ 4144              		.loc 1 116 0
+ 4145              		.cfi_startproc
+ 4146              		@ args = 0, pretend = 0, frame = 24
+ 4147              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4148 0000 80B5     		push	{r7, lr}
+ 4149              	.LCFI0:
+ 4150              		.cfi_def_cfa_offset 8
+ 4151 0002 8AB0     		sub	sp, sp, #40
+ 4152              	.LCFI1:
+ 4153              		.cfi_def_cfa_offset 48
+ 4154 0004 04AF     		add	r7, sp, #16
+ 4155              		.cfi_offset 14, -4
+ 4156              		.cfi_offset 7, -8
+ 4157              	.LCFI2:
+ 4158              		.cfi_def_cfa 7, 32
+ 4159 0006 7860     		str	r0, [r7, #4]
+ 117:../src/Common Demo Tasks/semtest.c **** xSemaphoreParameters *pxFirstSemaphoreParameters, *pxSecondSemaphoreParameters;
+ 118:../src/Common Demo Tasks/semtest.c **** const portTickType xBlockTime = ( portTickType ) 100;
+ 4160              		.loc 1 118 0
+ 4161 0008 4FF06403 		mov	r3, #100
+ 4162 000c 7B61     		str	r3, [r7, #20]
+ 119:../src/Common Demo Tasks/semtest.c **** 
+ 120:../src/Common Demo Tasks/semtest.c **** 	/* Create the structure used to pass parameters to the first two tasks. */
+ 121:../src/Common Demo Tasks/semtest.c **** 	pxFirstSemaphoreParameters = ( xSemaphoreParameters * ) pvPortMalloc( sizeof( xSemaphoreParameters
+ 4163              		.loc 1 121 0
+ 4164 000e 4FF00C00 		mov	r0, #12
+ 4165 0012 FFF7FEFF 		bl	pvPortMalloc
+ 4166 0016 0346     		mov	r3, r0
+ 4167 0018 3B61     		str	r3, [r7, #16]
+ 122:../src/Common Demo Tasks/semtest.c **** 
+ 123:../src/Common Demo Tasks/semtest.c **** 	if( pxFirstSemaphoreParameters != NULL )
+ 4168              		.loc 1 123 0
+ 4169 001a 3B69     		ldr	r3, [r7, #16]
+ 4170 001c 002B     		cmp	r3, #0
+ 4171 001e 56D0     		beq	.L2
+ 124:../src/Common Demo Tasks/semtest.c **** 	{
+ 125:../src/Common Demo Tasks/semtest.c **** 		/* Create the semaphore used by the first two tasks. */
+ 126:../src/Common Demo Tasks/semtest.c **** 		vSemaphoreCreateBinary( pxFirstSemaphoreParameters->xSemaphore );
+ 4172              		.loc 1 126 0
+ 4173 0020 4FF00100 		mov	r0, #1
+ 4174 0024 4FF00001 		mov	r1, #0
+ 4175 0028 4FF00302 		mov	r2, #3
+ 4176 002c FFF7FEFF 		bl	xQueueGenericCreate
+ 4177 0030 0246     		mov	r2, r0
+ 4178 0032 3B69     		ldr	r3, [r7, #16]
+ 4179 0034 1A60     		str	r2, [r3, #0]
+ 4180 0036 3B69     		ldr	r3, [r7, #16]
+ 4181 0038 1B68     		ldr	r3, [r3, #0]
+ 4182 003a 002B     		cmp	r3, #0
+ 4183 003c 0AD0     		beq	.L3
+ 4184              		.loc 1 126 0 is_stmt 0 discriminator 1
+ 4185 003e 3B69     		ldr	r3, [r7, #16]
+ 4186 0040 1B68     		ldr	r3, [r3, #0]
+ 4187 0042 1846     		mov	r0, r3
+ 4188 0044 4FF00001 		mov	r1, #0
+ 4189 0048 4FF00002 		mov	r2, #0
+ 4190 004c 4FF00003 		mov	r3, #0
+ 4191 0050 FFF7FEFF 		bl	xQueueGenericSend
+ 4192              	.L3:
+ 127:../src/Common Demo Tasks/semtest.c **** 
+ 128:../src/Common Demo Tasks/semtest.c **** 		if( pxFirstSemaphoreParameters->xSemaphore != NULL )
+ 4193              		.loc 1 128 0 is_stmt 1
+ 4194 0054 3B69     		ldr	r3, [r7, #16]
+ 4195 0056 1B68     		ldr	r3, [r3, #0]
+ 4196 0058 002B     		cmp	r3, #0
+ 4197 005a 38D0     		beq	.L2
+ 129:../src/Common Demo Tasks/semtest.c **** 		{
+ 130:../src/Common Demo Tasks/semtest.c **** 			/* Create the variable which is to be shared by the first two tasks. */
+ 131:../src/Common Demo Tasks/semtest.c **** 			pxFirstSemaphoreParameters->pulSharedVariable = ( unsigned long * ) pvPortMalloc( sizeof( unsign
+ 4198              		.loc 1 131 0
+ 4199 005c 4FF00400 		mov	r0, #4
+ 4200 0060 FFF7FEFF 		bl	pvPortMalloc
+ 4201 0064 0346     		mov	r3, r0
+ 4202 0066 1A46     		mov	r2, r3
+ 4203 0068 3B69     		ldr	r3, [r7, #16]
+ 4204 006a 5A60     		str	r2, [r3, #4]
+ 132:../src/Common Demo Tasks/semtest.c **** 
+ 133:../src/Common Demo Tasks/semtest.c **** 			/* Initialise the share variable to the value the tasks expect. */
+ 134:../src/Common Demo Tasks/semtest.c **** 			*( pxFirstSemaphoreParameters->pulSharedVariable ) = semtstNON_BLOCKING_EXPECTED_VALUE;
+ 4205              		.loc 1 134 0
+ 4206 006c 3B69     		ldr	r3, [r7, #16]
+ 4207 006e 5B68     		ldr	r3, [r3, #4]
+ 4208 0070 4FF0FF02 		mov	r2, #255
+ 4209 0074 1A60     		str	r2, [r3, #0]
+ 135:../src/Common Demo Tasks/semtest.c **** 
+ 136:../src/Common Demo Tasks/semtest.c **** 			/* The first two tasks do not block on semaphore calls. */
+ 137:../src/Common Demo Tasks/semtest.c **** 			pxFirstSemaphoreParameters->xBlockTime = ( portTickType ) 0;
+ 4210              		.loc 1 137 0
+ 4211 0076 3B69     		ldr	r3, [r7, #16]
+ 4212 0078 4FF00002 		mov	r2, #0
+ 4213 007c 9A60     		str	r2, [r3, #8]
+ 138:../src/Common Demo Tasks/semtest.c **** 
+ 139:../src/Common Demo Tasks/semtest.c **** 			/* Spawn the first two tasks.  As they poll they operate at the idle priority. */
+ 140:../src/Common Demo Tasks/semtest.c **** 			xTaskCreate( prvSemaphoreTest, ( signed char * ) "PolSEM1", semtstSTACK_SIZE, ( void * ) pxFirst
+ 4214              		.loc 1 140 0
+ 4215 007e 4B4B     		ldr	r3, .L6
+ 4216 0080 4FF00002 		mov	r2, #0
+ 4217 0084 0092     		str	r2, [sp, #0]
+ 4218 0086 4FF00002 		mov	r2, #0
+ 4219 008a 0192     		str	r2, [sp, #4]
+ 4220 008c 4FF00002 		mov	r2, #0
+ 4221 0090 0292     		str	r2, [sp, #8]
+ 4222 0092 4FF00002 		mov	r2, #0
+ 4223 0096 0392     		str	r2, [sp, #12]
+ 4224 0098 4548     		ldr	r0, .L6+4
+ 4225 009a 1946     		mov	r1, r3
+ 4226 009c 4FF05002 		mov	r2, #80
+ 4227 00a0 3B69     		ldr	r3, [r7, #16]
+ 4228 00a2 FFF7FEFF 		bl	xTaskGenericCreate
+ 141:../src/Common Demo Tasks/semtest.c **** 			xTaskCreate( prvSemaphoreTest, ( signed char * ) "PolSEM2", semtstSTACK_SIZE, ( void * ) pxFirst
+ 4229              		.loc 1 141 0
+ 4230 00a6 434B     		ldr	r3, .L6+8
+ 4231 00a8 4FF00002 		mov	r2, #0
+ 4232 00ac 0092     		str	r2, [sp, #0]
+ 4233 00ae 4FF00002 		mov	r2, #0
+ 4234 00b2 0192     		str	r2, [sp, #4]
+ 4235 00b4 4FF00002 		mov	r2, #0
+ 4236 00b8 0292     		str	r2, [sp, #8]
+ 4237 00ba 4FF00002 		mov	r2, #0
+ 4238 00be 0392     		str	r2, [sp, #12]
+ 4239 00c0 3B48     		ldr	r0, .L6+4
+ 4240 00c2 1946     		mov	r1, r3
+ 4241 00c4 4FF05002 		mov	r2, #80
+ 4242 00c8 3B69     		ldr	r3, [r7, #16]
+ 4243 00ca FFF7FEFF 		bl	xTaskGenericCreate
+ 4244              	.L2:
+ 142:../src/Common Demo Tasks/semtest.c **** 		}
+ 143:../src/Common Demo Tasks/semtest.c **** 	}
+ 144:../src/Common Demo Tasks/semtest.c **** 
+ 145:../src/Common Demo Tasks/semtest.c **** 	/* Do exactly the same to create the second set of tasks, only this time 
+ 146:../src/Common Demo Tasks/semtest.c **** 	provide a block time for the semaphore calls. */
+ 147:../src/Common Demo Tasks/semtest.c **** 	pxSecondSemaphoreParameters = ( xSemaphoreParameters * ) pvPortMalloc( sizeof( xSemaphoreParameter
+ 4245              		.loc 1 147 0
+ 4246 00ce 4FF00C00 		mov	r0, #12
+ 4247 00d2 FFF7FEFF 		bl	pvPortMalloc
+ 4248 00d6 0346     		mov	r3, r0
+ 4249 00d8 FB60     		str	r3, [r7, #12]
+ 148:../src/Common Demo Tasks/semtest.c **** 	if( pxSecondSemaphoreParameters != NULL )
+ 4250              		.loc 1 148 0
+ 4251 00da FB68     		ldr	r3, [r7, #12]
+ 4252 00dc 002B     		cmp	r3, #0
+ 4253 00de 53D0     		beq	.L4
+ 149:../src/Common Demo Tasks/semtest.c **** 	{
+ 150:../src/Common Demo Tasks/semtest.c **** 		vSemaphoreCreateBinary( pxSecondSemaphoreParameters->xSemaphore );
+ 4254              		.loc 1 150 0
+ 4255 00e0 4FF00100 		mov	r0, #1
+ 4256 00e4 4FF00001 		mov	r1, #0
+ 4257 00e8 4FF00302 		mov	r2, #3
+ 4258 00ec FFF7FEFF 		bl	xQueueGenericCreate
+ 4259 00f0 0246     		mov	r2, r0
+ 4260 00f2 FB68     		ldr	r3, [r7, #12]
+ 4261 00f4 1A60     		str	r2, [r3, #0]
+ 4262 00f6 FB68     		ldr	r3, [r7, #12]
+ 4263 00f8 1B68     		ldr	r3, [r3, #0]
+ 4264 00fa 002B     		cmp	r3, #0
+ 4265 00fc 0AD0     		beq	.L5
+ 4266              		.loc 1 150 0 is_stmt 0 discriminator 1
+ 4267 00fe FB68     		ldr	r3, [r7, #12]
+ 4268 0100 1B68     		ldr	r3, [r3, #0]
+ 4269 0102 1846     		mov	r0, r3
+ 4270 0104 4FF00001 		mov	r1, #0
+ 4271 0108 4FF00002 		mov	r2, #0
+ 4272 010c 4FF00003 		mov	r3, #0
+ 4273 0110 FFF7FEFF 		bl	xQueueGenericSend
+ 4274              	.L5:
+ 151:../src/Common Demo Tasks/semtest.c **** 
+ 152:../src/Common Demo Tasks/semtest.c **** 		if( pxSecondSemaphoreParameters->xSemaphore != NULL )
+ 4275              		.loc 1 152 0 is_stmt 1
+ 4276 0114 FB68     		ldr	r3, [r7, #12]
+ 4277 0116 1B68     		ldr	r3, [r3, #0]
+ 4278 0118 002B     		cmp	r3, #0
+ 4279 011a 35D0     		beq	.L4
+ 153:../src/Common Demo Tasks/semtest.c **** 		{
+ 154:../src/Common Demo Tasks/semtest.c **** 			pxSecondSemaphoreParameters->pulSharedVariable = ( unsigned long * ) pvPortMalloc( sizeof( unsig
+ 4280              		.loc 1 154 0
+ 4281 011c 4FF00400 		mov	r0, #4
+ 4282 0120 FFF7FEFF 		bl	pvPortMalloc
+ 4283 0124 0346     		mov	r3, r0
+ 4284 0126 1A46     		mov	r2, r3
+ 4285 0128 FB68     		ldr	r3, [r7, #12]
+ 4286 012a 5A60     		str	r2, [r3, #4]
+ 155:../src/Common Demo Tasks/semtest.c **** 			*( pxSecondSemaphoreParameters->pulSharedVariable ) = semtstBLOCKING_EXPECTED_VALUE;
+ 4287              		.loc 1 155 0
+ 4288 012c FB68     		ldr	r3, [r7, #12]
+ 4289 012e 5B68     		ldr	r3, [r3, #4]
+ 4290 0130 40F6FF72 		movw	r2, #4095
+ 4291 0134 1A60     		str	r2, [r3, #0]
+ 156:../src/Common Demo Tasks/semtest.c **** 			pxSecondSemaphoreParameters->xBlockTime = xBlockTime / portTICK_RATE_MS;
+ 4292              		.loc 1 156 0
+ 4293 0136 FB68     		ldr	r3, [r7, #12]
+ 4294 0138 7A69     		ldr	r2, [r7, #20]
+ 4295 013a 9A60     		str	r2, [r3, #8]
+ 157:../src/Common Demo Tasks/semtest.c **** 
+ 158:../src/Common Demo Tasks/semtest.c **** 			xTaskCreate( prvSemaphoreTest, ( signed char * ) "BlkSEM1", semtstSTACK_SIZE, ( void * ) pxSecon
+ 4296              		.loc 1 158 0
+ 4297 013c 1E4B     		ldr	r3, .L6+12
+ 4298 013e 7A68     		ldr	r2, [r7, #4]
+ 4299 0140 0092     		str	r2, [sp, #0]
+ 4300 0142 4FF00002 		mov	r2, #0
+ 4301 0146 0192     		str	r2, [sp, #4]
+ 4302 0148 4FF00002 		mov	r2, #0
+ 4303 014c 0292     		str	r2, [sp, #8]
+ 4304 014e 4FF00002 		mov	r2, #0
+ 4305 0152 0392     		str	r2, [sp, #12]
+ 4306 0154 1648     		ldr	r0, .L6+4
+ 4307 0156 1946     		mov	r1, r3
+ 4308 0158 4FF05002 		mov	r2, #80
+ 4309 015c FB68     		ldr	r3, [r7, #12]
+ 4310 015e FFF7FEFF 		bl	xTaskGenericCreate
+ 159:../src/Common Demo Tasks/semtest.c **** 			xTaskCreate( prvSemaphoreTest, ( signed char * ) "BlkSEM2", semtstSTACK_SIZE, ( void * ) pxSecon
+ 4311              		.loc 1 159 0
+ 4312 0162 164B     		ldr	r3, .L6+16
+ 4313 0164 7A68     		ldr	r2, [r7, #4]
+ 4314 0166 0092     		str	r2, [sp, #0]
+ 4315 0168 4FF00002 		mov	r2, #0
+ 4316 016c 0192     		str	r2, [sp, #4]
+ 4317 016e 4FF00002 		mov	r2, #0
+ 4318 0172 0292     		str	r2, [sp, #8]
+ 4319 0174 4FF00002 		mov	r2, #0
+ 4320 0178 0392     		str	r2, [sp, #12]
+ 4321 017a 0D48     		ldr	r0, .L6+4
+ 4322 017c 1946     		mov	r1, r3
+ 4323 017e 4FF05002 		mov	r2, #80
+ 4324 0182 FB68     		ldr	r3, [r7, #12]
+ 4325 0184 FFF7FEFF 		bl	xTaskGenericCreate
+ 4326              	.L4:
+ 160:../src/Common Demo Tasks/semtest.c **** 		}
+ 161:../src/Common Demo Tasks/semtest.c **** 	}
+ 162:../src/Common Demo Tasks/semtest.c **** 
+ 163:../src/Common Demo Tasks/semtest.c **** 	/* vQueueAddToRegistry() adds the semaphore to the registry, if one is
+ 164:../src/Common Demo Tasks/semtest.c **** 	in use.  The registry is provided as a means for kernel aware 
+ 165:../src/Common Demo Tasks/semtest.c **** 	debuggers to locate semaphores and has no purpose if a kernel aware debugger
+ 166:../src/Common Demo Tasks/semtest.c **** 	is not being used.  The call to vQueueAddToRegistry() will be removed
+ 167:../src/Common Demo Tasks/semtest.c **** 	by the pre-processor if configQUEUE_REGISTRY_SIZE is not defined or is 
+ 168:../src/Common Demo Tasks/semtest.c **** 	defined to be less than 1. */
+ 169:../src/Common Demo Tasks/semtest.c **** 	vQueueAddToRegistry( ( xQueueHandle ) pxFirstSemaphoreParameters->xSemaphore, ( signed char * ) "C
+ 4327              		.loc 1 169 0
+ 4328 0188 3B69     		ldr	r3, [r7, #16]
+ 4329 018a 1A68     		ldr	r2, [r3, #0]
+ 4330 018c 0C4B     		ldr	r3, .L6+20
+ 4331 018e 1046     		mov	r0, r2
+ 4332 0190 1946     		mov	r1, r3
+ 4333 0192 FFF7FEFF 		bl	vQueueAddToRegistry
+ 170:../src/Common Demo Tasks/semtest.c **** 	vQueueAddToRegistry( ( xQueueHandle ) pxSecondSemaphoreParameters->xSemaphore, ( signed char * ) "
+ 4334              		.loc 1 170 0
+ 4335 0196 FB68     		ldr	r3, [r7, #12]
+ 4336 0198 1A68     		ldr	r2, [r3, #0]
+ 4337 019a 0A4B     		ldr	r3, .L6+24
+ 4338 019c 1046     		mov	r0, r2
+ 4339 019e 1946     		mov	r1, r3
+ 4340 01a0 FFF7FEFF 		bl	vQueueAddToRegistry
+ 171:../src/Common Demo Tasks/semtest.c **** }
+ 4341              		.loc 1 171 0
+ 4342 01a4 07F11807 		add	r7, r7, #24
+ 4343 01a8 BD46     		mov	sp, r7
+ 4344 01aa 80BD     		pop	{r7, pc}
+ 4345              	.L7:
+ 4346              		.align	2
+ 4347              	.L6:
+ 4348 01ac 00000000 		.word	.LC0
+ 4349 01b0 00000000 		.word	prvSemaphoreTest
+ 4350 01b4 08000000 		.word	.LC1
+ 4351 01b8 10000000 		.word	.LC2
+ 4352 01bc 18000000 		.word	.LC3
+ 4353 01c0 20000000 		.word	.LC4
+ 4354 01c4 30000000 		.word	.LC5
+ 4355              		.cfi_endproc
+ 4356              	.LFE29:
+ 4358              		.align	2
+ 4359              		.thumb
+ 4360              		.thumb_func
+ 4362              	prvSemaphoreTest:
+ 4363              	.LFB30:
+ 172:../src/Common Demo Tasks/semtest.c **** /*-----------------------------------------------------------*/
+ 173:../src/Common Demo Tasks/semtest.c **** 
+ 174:../src/Common Demo Tasks/semtest.c **** static portTASK_FUNCTION( prvSemaphoreTest, pvParameters )
+ 175:../src/Common Demo Tasks/semtest.c **** {
+ 4364              		.loc 1 175 0
+ 4365              		.cfi_startproc
+ 4366              		@ args = 0, pretend = 0, frame = 32
+ 4367              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4368 01c8 80B5     		push	{r7, lr}
+ 4369              	.LCFI3:
+ 4370              		.cfi_def_cfa_offset 8
+ 4371 01ca 88B0     		sub	sp, sp, #32
+ 4372              	.LCFI4:
+ 4373              		.cfi_def_cfa_offset 40
+ 4374 01cc 00AF     		add	r7, sp, #0
+ 4375              		.cfi_offset 14, -4
+ 4376              		.cfi_offset 7, -8
+ 4377              	.LCFI5:
+ 4378              		.cfi_def_cfa_register 7
+ 4379 01ce 7860     		str	r0, [r7, #4]
+ 176:../src/Common Demo Tasks/semtest.c **** xSemaphoreParameters *pxParameters;
+ 177:../src/Common Demo Tasks/semtest.c **** volatile unsigned long *pulSharedVariable, ulExpectedValue;
+ 178:../src/Common Demo Tasks/semtest.c **** unsigned long ulCounter;
+ 179:../src/Common Demo Tasks/semtest.c **** short sError = pdFALSE, sCheckVariableToUse;
+ 4380              		.loc 1 179 0
+ 4381 01d0 4FF00003 		mov	r3, #0
+ 4382 01d4 7B83     		strh	r3, [r7, #26]	@ movhi
+ 180:../src/Common Demo Tasks/semtest.c **** 
+ 181:../src/Common Demo Tasks/semtest.c **** 	/* See which check variable to use.  sNextCheckVariable is not semaphore 
+ 182:../src/Common Demo Tasks/semtest.c **** 	protected! */
+ 183:../src/Common Demo Tasks/semtest.c **** 	portENTER_CRITICAL();
+ 4383              		.loc 1 183 0
+ 4384 01d6 FFF7FEFF 		bl	vPortEnterCritical
+ 184:../src/Common Demo Tasks/semtest.c **** 		sCheckVariableToUse = sNextCheckVariable;
+ 4385              		.loc 1 184 0
+ 4386 01da 424B     		ldr	r3, .L20
+ 4387 01dc 1B88     		ldrh	r3, [r3, #0]	@ movhi
+ 4388 01de 3B83     		strh	r3, [r7, #24]	@ movhi
+ 185:../src/Common Demo Tasks/semtest.c **** 		sNextCheckVariable++;
+ 4389              		.loc 1 185 0
+ 4390 01e0 404B     		ldr	r3, .L20
+ 4391 01e2 1B88     		ldrh	r3, [r3, #0]	@ movhi
+ 4392 01e4 9BB2     		uxth	r3, r3
+ 4393 01e6 03F10103 		add	r3, r3, #1
+ 4394 01ea 9AB2     		uxth	r2, r3
+ 4395 01ec 3D4B     		ldr	r3, .L20
+ 4396 01ee 1A80     		strh	r2, [r3, #0]	@ movhi
+ 186:../src/Common Demo Tasks/semtest.c **** 	portEXIT_CRITICAL();
+ 4397              		.loc 1 186 0
+ 4398 01f0 FFF7FEFF 		bl	vPortExitCritical
+ 187:../src/Common Demo Tasks/semtest.c **** 
+ 188:../src/Common Demo Tasks/semtest.c **** 	/* A structure is passed in as the parameter.  This contains the shared 
+ 189:../src/Common Demo Tasks/semtest.c **** 	variable being guarded. */
+ 190:../src/Common Demo Tasks/semtest.c **** 	pxParameters = ( xSemaphoreParameters * ) pvParameters;
+ 4399              		.loc 1 190 0
+ 4400 01f4 7B68     		ldr	r3, [r7, #4]
+ 4401 01f6 7B61     		str	r3, [r7, #20]
+ 191:../src/Common Demo Tasks/semtest.c **** 	pulSharedVariable = pxParameters->pulSharedVariable;
+ 4402              		.loc 1 191 0
+ 4403 01f8 7B69     		ldr	r3, [r7, #20]
+ 4404 01fa 5B68     		ldr	r3, [r3, #4]
+ 4405 01fc 3B61     		str	r3, [r7, #16]
+ 192:../src/Common Demo Tasks/semtest.c **** 
+ 193:../src/Common Demo Tasks/semtest.c **** 	/* If we are blocking we use a much higher count to ensure loads of context
+ 194:../src/Common Demo Tasks/semtest.c **** 	switches occur during the count. */
+ 195:../src/Common Demo Tasks/semtest.c **** 	if( pxParameters->xBlockTime > ( portTickType ) 0 )
+ 4406              		.loc 1 195 0
+ 4407 01fe 7B69     		ldr	r3, [r7, #20]
+ 4408 0200 9B68     		ldr	r3, [r3, #8]
+ 4409 0202 002B     		cmp	r3, #0
+ 4410 0204 03D0     		beq	.L9
+ 196:../src/Common Demo Tasks/semtest.c **** 	{
+ 197:../src/Common Demo Tasks/semtest.c **** 		ulExpectedValue = semtstBLOCKING_EXPECTED_VALUE;
+ 4411              		.loc 1 197 0
+ 4412 0206 40F6FF73 		movw	r3, #4095
+ 4413 020a FB60     		str	r3, [r7, #12]
+ 4414 020c 04E0     		b	.L10
+ 4415              	.L9:
+ 198:../src/Common Demo Tasks/semtest.c **** 	}
+ 199:../src/Common Demo Tasks/semtest.c **** 	else
+ 200:../src/Common Demo Tasks/semtest.c **** 	{
+ 201:../src/Common Demo Tasks/semtest.c **** 		ulExpectedValue = semtstNON_BLOCKING_EXPECTED_VALUE;
+ 4416              		.loc 1 201 0
+ 4417 020e 4FF0FF03 		mov	r3, #255
+ 4418 0212 FB60     		str	r3, [r7, #12]
+ 4419 0214 00E0     		b	.L10
+ 4420              	.L19:
+ 202:../src/Common Demo Tasks/semtest.c **** 	}
+ 203:../src/Common Demo Tasks/semtest.c **** 
+ 204:../src/Common Demo Tasks/semtest.c **** 	for( ;; )
+ 205:../src/Common Demo Tasks/semtest.c **** 	{
+ 206:../src/Common Demo Tasks/semtest.c **** 		/* Try to obtain the semaphore. */
+ 207:../src/Common Demo Tasks/semtest.c **** 		if( xSemaphoreTake( pxParameters->xSemaphore, pxParameters->xBlockTime ) == pdPASS )
+ 208:../src/Common Demo Tasks/semtest.c **** 		{
+ 209:../src/Common Demo Tasks/semtest.c **** 			/* We have the semaphore and so expect any other tasks using the
+ 210:../src/Common Demo Tasks/semtest.c **** 			shared variable to have left it in the state we expect to find
+ 211:../src/Common Demo Tasks/semtest.c **** 			it. */
+ 212:../src/Common Demo Tasks/semtest.c **** 			if( *pulSharedVariable != ulExpectedValue )
+ 213:../src/Common Demo Tasks/semtest.c **** 			{
+ 214:../src/Common Demo Tasks/semtest.c **** 				sError = pdTRUE;
+ 215:../src/Common Demo Tasks/semtest.c **** 			}
+ 216:../src/Common Demo Tasks/semtest.c **** 			
+ 217:../src/Common Demo Tasks/semtest.c **** 			/* Clear the variable, then count it back up to the expected value
+ 218:../src/Common Demo Tasks/semtest.c **** 			before releasing the semaphore.  Would expect a context switch or
+ 219:../src/Common Demo Tasks/semtest.c **** 			two during this time. */
+ 220:../src/Common Demo Tasks/semtest.c **** 			for( ulCounter = ( unsigned long ) 0; ulCounter <= ulExpectedValue; ulCounter++ )
+ 221:../src/Common Demo Tasks/semtest.c **** 			{
+ 222:../src/Common Demo Tasks/semtest.c **** 				*pulSharedVariable = ulCounter;
+ 223:../src/Common Demo Tasks/semtest.c **** 				if( *pulSharedVariable != ulCounter )
+ 224:../src/Common Demo Tasks/semtest.c **** 				{
+ 225:../src/Common Demo Tasks/semtest.c **** 					sError = pdTRUE;
+ 226:../src/Common Demo Tasks/semtest.c **** 				}
+ 227:../src/Common Demo Tasks/semtest.c **** 			}
+ 228:../src/Common Demo Tasks/semtest.c **** 
+ 229:../src/Common Demo Tasks/semtest.c **** 			/* Release the semaphore, and if no errors have occurred increment the check
+ 230:../src/Common Demo Tasks/semtest.c **** 			variable. */
+ 231:../src/Common Demo Tasks/semtest.c **** 			if(	xSemaphoreGive( pxParameters->xSemaphore ) == pdFALSE )
+ 232:../src/Common Demo Tasks/semtest.c **** 			{
+ 233:../src/Common Demo Tasks/semtest.c **** 				sError = pdTRUE;
+ 234:../src/Common Demo Tasks/semtest.c **** 			}
+ 235:../src/Common Demo Tasks/semtest.c **** 
+ 236:../src/Common Demo Tasks/semtest.c **** 			if( sError == pdFALSE )
+ 237:../src/Common Demo Tasks/semtest.c **** 			{
+ 238:../src/Common Demo Tasks/semtest.c **** 				if( sCheckVariableToUse < semtstNUM_TASKS )
+ 239:../src/Common Demo Tasks/semtest.c **** 				{
+ 240:../src/Common Demo Tasks/semtest.c **** 					( sCheckVariables[ sCheckVariableToUse ] )++;
+ 241:../src/Common Demo Tasks/semtest.c **** 				}
+ 242:../src/Common Demo Tasks/semtest.c **** 			}
+ 243:../src/Common Demo Tasks/semtest.c **** 
+ 244:../src/Common Demo Tasks/semtest.c **** 			/* If we have a block time then we are running at a priority higher
+ 245:../src/Common Demo Tasks/semtest.c **** 			than the idle priority.  This task takes a long time to complete
+ 246:../src/Common Demo Tasks/semtest.c **** 			a cycle	(deliberately so to test the guarding) so will be starving
+ 247:../src/Common Demo Tasks/semtest.c **** 			out lower priority tasks.  Block for some time to allow give lower
+ 248:../src/Common Demo Tasks/semtest.c **** 			priority tasks some processor time. */
+ 249:../src/Common Demo Tasks/semtest.c **** 			vTaskDelay( pxParameters->xBlockTime * semtstDELAY_FACTOR );
+ 250:../src/Common Demo Tasks/semtest.c **** 		}
+ 251:../src/Common Demo Tasks/semtest.c **** 		else
+ 252:../src/Common Demo Tasks/semtest.c **** 		{
+ 253:../src/Common Demo Tasks/semtest.c **** 			if( pxParameters->xBlockTime == ( portTickType ) 0 )
+ 254:../src/Common Demo Tasks/semtest.c **** 			{
+ 255:../src/Common Demo Tasks/semtest.c **** 				/* We have not got the semaphore yet, so no point using the
+ 256:../src/Common Demo Tasks/semtest.c **** 				processor.  We are not blocking when attempting to obtain the
+ 257:../src/Common Demo Tasks/semtest.c **** 				semaphore. */
+ 258:../src/Common Demo Tasks/semtest.c **** 				taskYIELD();
+ 259:../src/Common Demo Tasks/semtest.c **** 			}
+ 260:../src/Common Demo Tasks/semtest.c **** 		}
+ 261:../src/Common Demo Tasks/semtest.c **** 	}
+ 4421              		.loc 1 261 0
+ 4422 0216 00BF     		nop
+ 4423              	.L10:
+ 207:../src/Common Demo Tasks/semtest.c **** 		if( xSemaphoreTake( pxParameters->xSemaphore, pxParameters->xBlockTime ) == pdPASS )
+ 4424              		.loc 1 207 0
+ 4425 0218 7B69     		ldr	r3, [r7, #20]
+ 4426 021a 1A68     		ldr	r2, [r3, #0]
+ 4427 021c 7B69     		ldr	r3, [r7, #20]
+ 4428 021e 9B68     		ldr	r3, [r3, #8]
+ 4429 0220 1046     		mov	r0, r2
+ 4430 0222 4FF00001 		mov	r1, #0
+ 4431 0226 1A46     		mov	r2, r3
+ 4432 0228 4FF00003 		mov	r3, #0
+ 4433 022c FFF7FEFF 		bl	xQueueGenericReceive
+ 4434 0230 0346     		mov	r3, r0
+ 4435 0232 012B     		cmp	r3, #1
+ 4436 0234 4FD1     		bne	.L11
+ 212:../src/Common Demo Tasks/semtest.c **** 			if( *pulSharedVariable != ulExpectedValue )
+ 4437              		.loc 1 212 0
+ 4438 0236 3B69     		ldr	r3, [r7, #16]
+ 4439 0238 1A68     		ldr	r2, [r3, #0]
+ 4440 023a FB68     		ldr	r3, [r7, #12]
+ 4441 023c 9A42     		cmp	r2, r3
+ 4442 023e 02D0     		beq	.L12
+ 214:../src/Common Demo Tasks/semtest.c **** 				sError = pdTRUE;
+ 4443              		.loc 1 214 0
+ 4444 0240 4FF00103 		mov	r3, #1
+ 4445 0244 7B83     		strh	r3, [r7, #26]	@ movhi
+ 4446              	.L12:
+ 220:../src/Common Demo Tasks/semtest.c **** 			for( ulCounter = ( unsigned long ) 0; ulCounter <= ulExpectedValue; ulCounter++ )
+ 4447              		.loc 1 220 0
+ 4448 0246 4FF00003 		mov	r3, #0
+ 4449 024a FB61     		str	r3, [r7, #28]
+ 4450 024c 0EE0     		b	.L13
+ 4451              	.L15:
+ 222:../src/Common Demo Tasks/semtest.c **** 				*pulSharedVariable = ulCounter;
+ 4452              		.loc 1 222 0
+ 4453 024e 3B69     		ldr	r3, [r7, #16]
+ 4454 0250 FA69     		ldr	r2, [r7, #28]
+ 4455 0252 1A60     		str	r2, [r3, #0]
+ 223:../src/Common Demo Tasks/semtest.c **** 				if( *pulSharedVariable != ulCounter )
+ 4456              		.loc 1 223 0
+ 4457 0254 3B69     		ldr	r3, [r7, #16]
+ 4458 0256 1A68     		ldr	r2, [r3, #0]
+ 4459 0258 FB69     		ldr	r3, [r7, #28]
+ 4460 025a 9A42     		cmp	r2, r3
+ 4461 025c 02D0     		beq	.L14
+ 225:../src/Common Demo Tasks/semtest.c **** 					sError = pdTRUE;
+ 4462              		.loc 1 225 0
+ 4463 025e 4FF00103 		mov	r3, #1
+ 4464 0262 7B83     		strh	r3, [r7, #26]	@ movhi
+ 4465              	.L14:
+ 220:../src/Common Demo Tasks/semtest.c **** 			for( ulCounter = ( unsigned long ) 0; ulCounter <= ulExpectedValue; ulCounter++ )
+ 4466              		.loc 1 220 0
+ 4467 0264 FB69     		ldr	r3, [r7, #28]
+ 4468 0266 03F10103 		add	r3, r3, #1
+ 4469 026a FB61     		str	r3, [r7, #28]
+ 4470              	.L13:
+ 220:../src/Common Demo Tasks/semtest.c **** 			for( ulCounter = ( unsigned long ) 0; ulCounter <= ulExpectedValue; ulCounter++ )
+ 4471              		.loc 1 220 0 is_stmt 0 discriminator 1
+ 4472 026c FB68     		ldr	r3, [r7, #12]
+ 4473 026e FA69     		ldr	r2, [r7, #28]
+ 4474 0270 9A42     		cmp	r2, r3
+ 4475 0272 ECD9     		bls	.L15
+ 231:../src/Common Demo Tasks/semtest.c **** 			if(	xSemaphoreGive( pxParameters->xSemaphore ) == pdFALSE )
+ 4476              		.loc 1 231 0 is_stmt 1
+ 4477 0274 7B69     		ldr	r3, [r7, #20]
+ 4478 0276 1B68     		ldr	r3, [r3, #0]
+ 4479 0278 1846     		mov	r0, r3
+ 4480 027a 4FF00001 		mov	r1, #0
+ 4481 027e 4FF00002 		mov	r2, #0
+ 4482 0282 4FF00003 		mov	r3, #0
+ 4483 0286 FFF7FEFF 		bl	xQueueGenericSend
+ 4484 028a 0346     		mov	r3, r0
+ 4485 028c 002B     		cmp	r3, #0
+ 4486 028e 02D1     		bne	.L16
+ 233:../src/Common Demo Tasks/semtest.c **** 				sError = pdTRUE;
+ 4487              		.loc 1 233 0
+ 4488 0290 4FF00103 		mov	r3, #1
+ 4489 0294 7B83     		strh	r3, [r7, #26]	@ movhi
+ 4490              	.L16:
+ 236:../src/Common Demo Tasks/semtest.c **** 			if( sError == pdFALSE )
+ 4491              		.loc 1 236 0
+ 4492 0296 B7F91A30 		ldrsh	r3, [r7, #26]
+ 4493 029a 002B     		cmp	r3, #0
+ 4494 029c 0FD1     		bne	.L17
+ 238:../src/Common Demo Tasks/semtest.c **** 				if( sCheckVariableToUse < semtstNUM_TASKS )
+ 4495              		.loc 1 238 0
+ 4496 029e B7F91830 		ldrsh	r3, [r7, #24]
+ 4497 02a2 032B     		cmp	r3, #3
+ 4498 02a4 0BDC     		bgt	.L17
+ 240:../src/Common Demo Tasks/semtest.c **** 					( sCheckVariables[ sCheckVariableToUse ] )++;
+ 4499              		.loc 1 240 0
+ 4500 02a6 B7F91830 		ldrsh	r3, [r7, #24]
+ 4501 02aa 0F4A     		ldr	r2, .L20+4
+ 4502 02ac 32F81320 		ldrh	r2, [r2, r3, lsl #1]	@ movhi
+ 4503 02b0 92B2     		uxth	r2, r2
+ 4504 02b2 02F10102 		add	r2, r2, #1
+ 4505 02b6 91B2     		uxth	r1, r2
+ 4506 02b8 0B4A     		ldr	r2, .L20+4
+ 4507 02ba 22F81310 		strh	r1, [r2, r3, lsl #1]	@ movhi
+ 4508              	.L17:
+ 249:../src/Common Demo Tasks/semtest.c **** 			vTaskDelay( pxParameters->xBlockTime * semtstDELAY_FACTOR );
+ 4509              		.loc 1 249 0
+ 4510 02be 7B69     		ldr	r3, [r7, #20]
+ 4511 02c0 9A68     		ldr	r2, [r3, #8]
+ 4512 02c2 1346     		mov	r3, r2
+ 4513 02c4 4FEA8303 		lsl	r3, r3, #2
+ 4514 02c8 9B18     		adds	r3, r3, r2
+ 4515 02ca 4FEA4303 		lsl	r3, r3, #1
+ 4516 02ce 1846     		mov	r0, r3
+ 4517 02d0 FFF7FEFF 		bl	vTaskDelay
+ 4518              		.loc 1 261 0
+ 4519 02d4 A0E7     		b	.L10
+ 4520              	.L11:
+ 253:../src/Common Demo Tasks/semtest.c **** 			if( pxParameters->xBlockTime == ( portTickType ) 0 )
+ 4521              		.loc 1 253 0
+ 4522 02d6 7B69     		ldr	r3, [r7, #20]
+ 4523 02d8 9B68     		ldr	r3, [r3, #8]
+ 4524 02da 002B     		cmp	r3, #0
+ 4525 02dc 9BD1     		bne	.L19
+ 258:../src/Common Demo Tasks/semtest.c **** 				taskYIELD();
+ 4526              		.loc 1 258 0
+ 4527 02de FFF7FEFF 		bl	vPortYieldFromISR
+ 4528              		.loc 1 261 0
+ 4529 02e2 99E7     		b	.L10
+ 4530              	.L21:
+ 4531              		.align	2
+ 4532              	.L20:
+ 4533 02e4 08000000 		.word	sNextCheckVariable
+ 4534 02e8 00000000 		.word	sCheckVariables
+ 4535              		.cfi_endproc
+ 4536              	.LFE30:
+ 4538              		.align	2
+ 4539              		.global	xAreSemaphoreTasksStillRunning
+ 4540              		.thumb
+ 4541              		.thumb_func
+ 4543              	xAreSemaphoreTasksStillRunning:
+ 4544              	.LFB31:
+ 262:../src/Common Demo Tasks/semtest.c **** }
+ 263:../src/Common Demo Tasks/semtest.c **** /*-----------------------------------------------------------*/
+ 264:../src/Common Demo Tasks/semtest.c **** 
+ 265:../src/Common Demo Tasks/semtest.c **** /* This is called to check that all the created tasks are still running. */
+ 266:../src/Common Demo Tasks/semtest.c **** portBASE_TYPE xAreSemaphoreTasksStillRunning( void )
+ 267:../src/Common Demo Tasks/semtest.c **** {
+ 4545              		.loc 1 267 0
+ 4546              		.cfi_startproc
+ 4547              		@ args = 0, pretend = 0, frame = 8
+ 4548              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4549              		@ link register save eliminated.
+ 4550 02ec 80B4     		push	{r7}
+ 4551              	.LCFI6:
+ 4552              		.cfi_def_cfa_offset 4
+ 4553 02ee 83B0     		sub	sp, sp, #12
+ 4554              	.LCFI7:
+ 4555              		.cfi_def_cfa_offset 16
+ 4556 02f0 00AF     		add	r7, sp, #0
+ 4557              		.cfi_offset 7, -4
+ 4558              	.LCFI8:
+ 4559              		.cfi_def_cfa_register 7
+ 268:../src/Common Demo Tasks/semtest.c **** static short sLastCheckVariables[ semtstNUM_TASKS ] = { 0 };
+ 269:../src/Common Demo Tasks/semtest.c **** portBASE_TYPE xTask, xReturn = pdTRUE;
+ 4560              		.loc 1 269 0
+ 4561 02f2 4FF00103 		mov	r3, #1
+ 4562 02f6 3B60     		str	r3, [r7, #0]
+ 270:../src/Common Demo Tasks/semtest.c **** 
+ 271:../src/Common Demo Tasks/semtest.c **** 	for( xTask = 0; xTask < semtstNUM_TASKS; xTask++ )
+ 4563              		.loc 1 271 0
+ 4564 02f8 4FF00003 		mov	r3, #0
+ 4565 02fc 7B60     		str	r3, [r7, #4]
+ 4566 02fe 1CE0     		b	.L23
+ 4567              	.L25:
+ 272:../src/Common Demo Tasks/semtest.c **** 	{
+ 273:../src/Common Demo Tasks/semtest.c **** 		if( sLastCheckVariables[ xTask ] == sCheckVariables[ xTask ] )
+ 4568              		.loc 1 273 0
+ 4569 0300 134B     		ldr	r3, .L26
+ 4570 0302 7A68     		ldr	r2, [r7, #4]
+ 4571 0304 33F81220 		ldrh	r2, [r3, r2, lsl #1]
+ 4572 0308 124B     		ldr	r3, .L26+4
+ 4573 030a 7968     		ldr	r1, [r7, #4]
+ 4574 030c 33F81130 		ldrh	r3, [r3, r1, lsl #1]	@ movhi
+ 4575 0310 9BB2     		uxth	r3, r3
+ 4576 0312 12B2     		sxth	r2, r2
+ 4577 0314 1BB2     		sxth	r3, r3
+ 4578 0316 9A42     		cmp	r2, r3
+ 4579 0318 02D1     		bne	.L24
+ 274:../src/Common Demo Tasks/semtest.c **** 		{
+ 275:../src/Common Demo Tasks/semtest.c **** 			xReturn = pdFALSE;
+ 4580              		.loc 1 275 0
+ 4581 031a 4FF00003 		mov	r3, #0
+ 4582 031e 3B60     		str	r3, [r7, #0]
+ 4583              	.L24:
+ 276:../src/Common Demo Tasks/semtest.c **** 		}
+ 277:../src/Common Demo Tasks/semtest.c **** 
+ 278:../src/Common Demo Tasks/semtest.c **** 		sLastCheckVariables[ xTask ] = sCheckVariables[ xTask ];
+ 4584              		.loc 1 278 0
+ 4585 0320 0C4B     		ldr	r3, .L26+4
+ 4586 0322 7A68     		ldr	r2, [r7, #4]
+ 4587 0324 33F81230 		ldrh	r3, [r3, r2, lsl #1]	@ movhi
+ 4588 0328 99B2     		uxth	r1, r3
+ 4589 032a 094B     		ldr	r3, .L26
+ 4590 032c 7A68     		ldr	r2, [r7, #4]
+ 4591 032e 23F81210 		strh	r1, [r3, r2, lsl #1]	@ movhi
+ 271:../src/Common Demo Tasks/semtest.c **** 	for( xTask = 0; xTask < semtstNUM_TASKS; xTask++ )
+ 4592              		.loc 1 271 0
+ 4593 0332 7B68     		ldr	r3, [r7, #4]
+ 4594 0334 03F10103 		add	r3, r3, #1
+ 4595 0338 7B60     		str	r3, [r7, #4]
+ 4596              	.L23:
+ 271:../src/Common Demo Tasks/semtest.c **** 	for( xTask = 0; xTask < semtstNUM_TASKS; xTask++ )
+ 4597              		.loc 1 271 0 is_stmt 0 discriminator 1
+ 4598 033a 7B68     		ldr	r3, [r7, #4]
+ 4599 033c 032B     		cmp	r3, #3
+ 4600 033e DFDD     		ble	.L25
+ 279:../src/Common Demo Tasks/semtest.c **** 	}
+ 280:../src/Common Demo Tasks/semtest.c **** 
+ 281:../src/Common Demo Tasks/semtest.c **** 	return xReturn;
+ 4601              		.loc 1 281 0 is_stmt 1
+ 4602 0340 3B68     		ldr	r3, [r7, #0]
+ 282:../src/Common Demo Tasks/semtest.c **** }
+ 4603              		.loc 1 282 0
+ 4604 0342 1846     		mov	r0, r3
+ 4605 0344 07F10C07 		add	r7, r7, #12
+ 4606 0348 BD46     		mov	sp, r7
+ 4607 034a 80BC     		pop	{r7}
+ 4608 034c 7047     		bx	lr
+ 4609              	.L27:
+ 4610 034e 00BF     		.align	2
+ 4611              	.L26:
+ 4612 0350 0C000000 		.word	sLastCheckVariables.5823
+ 4613 0354 00000000 		.word	sCheckVariables
+ 4614              		.cfi_endproc
+ 4615              	.LFE31:
+ 4617              		.bss
+ 4618 000a 0000     		.align	2
+ 4619              	sLastCheckVariables.5823:
+ 4620 000c 00000000 		.space	8
+ 4620      00000000 
+ 4621              		.text
+ 4622              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 semtest.c
+     /tmp/ccQ8Bmge.s:4111   .bss:00000000 $d
+     /tmp/ccQ8Bmge.s:4112   .bss:00000000 sCheckVariables
+     /tmp/ccQ8Bmge.s:4115   .bss:00000008 sNextCheckVariable
+     /tmp/ccQ8Bmge.s:4118   .rodata:00000000 $d
+     /tmp/ccQ8Bmge.s:4137   .text:00000000 $t
+     /tmp/ccQ8Bmge.s:4142   .text:00000000 vStartSemaphoreTasks
+     /tmp/ccQ8Bmge.s:4348   .text:000001ac $d
+     /tmp/ccQ8Bmge.s:4362   .text:000001c8 prvSemaphoreTest
+     /tmp/ccQ8Bmge.s:4358   .text:000001c8 $t
+     /tmp/ccQ8Bmge.s:4533   .text:000002e4 $d
+     /tmp/ccQ8Bmge.s:4538   .text:000002ec $t
+     /tmp/ccQ8Bmge.s:4543   .text:000002ec xAreSemaphoreTasksStillRunning
+     /tmp/ccQ8Bmge.s:4612   .text:00000350 $d
+     /tmp/ccQ8Bmge.s:4619   .bss:0000000c sLastCheckVariables.5823
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+pvPortMalloc
+xQueueGenericCreate
+xQueueGenericSend
+xTaskGenericCreate
+vQueueAddToRegistry
+vPortEnterCritical
+vPortExitCritical
+xQueueGenericReceive
+vTaskDelay
+vPortYieldFromISR

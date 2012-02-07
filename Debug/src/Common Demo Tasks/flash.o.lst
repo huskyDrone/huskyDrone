@@ -1,0 +1,326 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 18, 4
+  12              		.thumb
+  13              		.file	"flash.c"
+  23              	.Ltext0:
+  24              		.file 1 "../src/Common Demo Tasks/flash.c"
+ 3941              		.align	2
+ 3942              	uxFlashTaskNumber:
+ 3943 0000 00000000 		.space	4
+ 3944              		.section	.rodata
+ 3945              		.align	2
+ 3946              	.LC0:
+ 3947 0000 4C454478 		.ascii	"LEDx\000"
+ 3947      00
+ 3948 0005 000000   		.text
+ 3949              		.align	2
+ 3950              		.global	vStartLEDFlashTasks
+ 3951              		.thumb
+ 3952              		.thumb_func
+ 3954              	vStartLEDFlashTasks:
+ 3955              	.LFB29:
+   1:../src/Common Demo Tasks/flash.c **** /*
+   2:../src/Common Demo Tasks/flash.c ****     FreeRTOS V7.1.0 - Copyright (C) 2011 Real Time Engineers Ltd.
+   3:../src/Common Demo Tasks/flash.c **** 	
+   4:../src/Common Demo Tasks/flash.c **** 
+   5:../src/Common Demo Tasks/flash.c ****     ***************************************************************************
+   6:../src/Common Demo Tasks/flash.c ****      *                                                                       *
+   7:../src/Common Demo Tasks/flash.c ****      *    FreeRTOS tutorial books are available in pdf and paperback.        *
+   8:../src/Common Demo Tasks/flash.c ****      *    Complete, revised, and edited pdf reference manuals are also       *
+   9:../src/Common Demo Tasks/flash.c ****      *    available.                                                         *
+  10:../src/Common Demo Tasks/flash.c ****      *                                                                       *
+  11:../src/Common Demo Tasks/flash.c ****      *    Purchasing FreeRTOS documentation will not only help you, by       *
+  12:../src/Common Demo Tasks/flash.c ****      *    ensuring you get running as quickly as possible and with an        *
+  13:../src/Common Demo Tasks/flash.c ****      *    in-depth knowledge of how to use FreeRTOS, it will also help       *
+  14:../src/Common Demo Tasks/flash.c ****      *    the FreeRTOS project to continue with its mission of providing     *
+  15:../src/Common Demo Tasks/flash.c ****      *    professional grade, cross platform, de facto standard solutions    *
+  16:../src/Common Demo Tasks/flash.c ****      *    for microcontrollers - completely free of charge!                  *
+  17:../src/Common Demo Tasks/flash.c ****      *                                                                       *
+  18:../src/Common Demo Tasks/flash.c ****      *    >>> See http://www.FreeRTOS.org/Documentation for details. <<<     *
+  19:../src/Common Demo Tasks/flash.c ****      *                                                                       *
+  20:../src/Common Demo Tasks/flash.c ****      *    Thank you for using FreeRTOS, and thank you for your support!      *
+  21:../src/Common Demo Tasks/flash.c ****      *                                                                       *
+  22:../src/Common Demo Tasks/flash.c ****     ***************************************************************************
+  23:../src/Common Demo Tasks/flash.c **** 
+  24:../src/Common Demo Tasks/flash.c **** 
+  25:../src/Common Demo Tasks/flash.c ****     This file is part of the FreeRTOS distribution.
+  26:../src/Common Demo Tasks/flash.c **** 
+  27:../src/Common Demo Tasks/flash.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  28:../src/Common Demo Tasks/flash.c ****     the terms of the GNU General Public License (version 2) as published by the
+  29:../src/Common Demo Tasks/flash.c ****     Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+  30:../src/Common Demo Tasks/flash.c ****     >>>NOTE<<< The modification to the GPL is included to allow you to
+  31:../src/Common Demo Tasks/flash.c ****     distribute a combined work that includes FreeRTOS without being obliged to
+  32:../src/Common Demo Tasks/flash.c ****     provide the source code for proprietary components outside of the FreeRTOS
+  33:../src/Common Demo Tasks/flash.c ****     kernel.  FreeRTOS is distributed in the hope that it will be useful, but
+  34:../src/Common Demo Tasks/flash.c ****     WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  35:../src/Common Demo Tasks/flash.c ****     or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+  36:../src/Common Demo Tasks/flash.c ****     more details. You should have received a copy of the GNU General Public
+  37:../src/Common Demo Tasks/flash.c ****     License and the FreeRTOS license exception along with FreeRTOS; if not it
+  38:../src/Common Demo Tasks/flash.c ****     can be viewed here: http://www.freertos.org/a00114.html and also obtained
+  39:../src/Common Demo Tasks/flash.c ****     by writing to Richard Barry, contact details for whom are available on the
+  40:../src/Common Demo Tasks/flash.c ****     FreeRTOS WEB site.
+  41:../src/Common Demo Tasks/flash.c **** 
+  42:../src/Common Demo Tasks/flash.c ****     1 tab == 4 spaces!
+  43:../src/Common Demo Tasks/flash.c **** 
+  44:../src/Common Demo Tasks/flash.c ****     http://www.FreeRTOS.org - Documentation, latest information, license and
+  45:../src/Common Demo Tasks/flash.c ****     contact details.
+  46:../src/Common Demo Tasks/flash.c **** 
+  47:../src/Common Demo Tasks/flash.c ****     http://www.SafeRTOS.com - A version that is certified for use in safety
+  48:../src/Common Demo Tasks/flash.c ****     critical systems.
+  49:../src/Common Demo Tasks/flash.c **** 
+  50:../src/Common Demo Tasks/flash.c ****     http://www.OpenRTOS.com - Commercial support, development, porting,
+  51:../src/Common Demo Tasks/flash.c ****     licensing and training services.
+  52:../src/Common Demo Tasks/flash.c **** */
+  53:../src/Common Demo Tasks/flash.c **** 
+  54:../src/Common Demo Tasks/flash.c **** /**
+  55:../src/Common Demo Tasks/flash.c ****  * This version of flash .c is for use on systems that have limited stack space
+  56:../src/Common Demo Tasks/flash.c ****  * and no display facilities.  The complete version can be found in the 
+  57:../src/Common Demo Tasks/flash.c ****  * Demo/Common/Full directory.
+  58:../src/Common Demo Tasks/flash.c ****  * 
+  59:../src/Common Demo Tasks/flash.c ****  * Three tasks are created, each of which flash an LED at a different rate.  The first 
+  60:../src/Common Demo Tasks/flash.c ****  * LED flashes every 200ms, the second every 400ms, the third every 600ms.
+  61:../src/Common Demo Tasks/flash.c ****  *
+  62:../src/Common Demo Tasks/flash.c ****  * The LED flash tasks provide instant visual feedback.  They show that the scheduler 
+  63:../src/Common Demo Tasks/flash.c ****  * is still operational.
+  64:../src/Common Demo Tasks/flash.c ****  *
+  65:../src/Common Demo Tasks/flash.c ****  */
+  66:../src/Common Demo Tasks/flash.c **** 
+  67:../src/Common Demo Tasks/flash.c **** 
+  68:../src/Common Demo Tasks/flash.c **** #include <stdlib.h>
+  69:../src/Common Demo Tasks/flash.c **** 
+  70:../src/Common Demo Tasks/flash.c **** /* Scheduler include files. */
+  71:../src/Common Demo Tasks/flash.c **** #include "FreeRTOS.h"
+  72:../src/Common Demo Tasks/flash.c **** #include "task.h"
+  73:../src/Common Demo Tasks/flash.c **** 
+  74:../src/Common Demo Tasks/flash.c **** /* Demo program include files. */
+  75:../src/Common Demo Tasks/flash.c **** #include "partest.h"
+  76:../src/Common Demo Tasks/flash.c **** #include "flash.h"
+  77:../src/Common Demo Tasks/flash.c **** 
+  78:../src/Common Demo Tasks/flash.c **** #define ledSTACK_SIZE		configMINIMAL_STACK_SIZE
+  79:../src/Common Demo Tasks/flash.c **** #define ledNUMBER_OF_LEDS	( 3 )
+  80:../src/Common Demo Tasks/flash.c **** #define ledFLASH_RATE_BASE	( ( portTickType ) 333 )
+  81:../src/Common Demo Tasks/flash.c **** 
+  82:../src/Common Demo Tasks/flash.c **** /* Variable used by the created tasks to calculate the LED number to use, and
+  83:../src/Common Demo Tasks/flash.c **** the rate at which they should flash the LED. */
+  84:../src/Common Demo Tasks/flash.c **** static volatile unsigned portBASE_TYPE uxFlashTaskNumber = 0;
+  85:../src/Common Demo Tasks/flash.c **** 
+  86:../src/Common Demo Tasks/flash.c **** /* The task that is created three times. */
+  87:../src/Common Demo Tasks/flash.c **** static portTASK_FUNCTION_PROTO( vLEDFlashTask, pvParameters );
+  88:../src/Common Demo Tasks/flash.c **** 
+  89:../src/Common Demo Tasks/flash.c **** /*-----------------------------------------------------------*/
+  90:../src/Common Demo Tasks/flash.c **** 
+  91:../src/Common Demo Tasks/flash.c **** void vStartLEDFlashTasks( unsigned portBASE_TYPE uxPriority )
+  92:../src/Common Demo Tasks/flash.c **** {
+ 3956              		.loc 1 92 0
+ 3957              		.cfi_startproc
+ 3958              		@ args = 0, pretend = 0, frame = 16
+ 3959              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3960 0000 80B5     		push	{r7, lr}
+ 3961              	.LCFI0:
+ 3962              		.cfi_def_cfa_offset 8
+ 3963 0002 88B0     		sub	sp, sp, #32
+ 3964              	.LCFI1:
+ 3965              		.cfi_def_cfa_offset 40
+ 3966 0004 04AF     		add	r7, sp, #16
+ 3967              		.cfi_offset 14, -4
+ 3968              		.cfi_offset 7, -8
+ 3969              	.LCFI2:
+ 3970              		.cfi_def_cfa 7, 24
+ 3971 0006 7860     		str	r0, [r7, #4]
+  93:../src/Common Demo Tasks/flash.c **** signed portBASE_TYPE xLEDTask;
+  94:../src/Common Demo Tasks/flash.c **** 
+  95:../src/Common Demo Tasks/flash.c **** 	/* Create the three tasks. */
+  96:../src/Common Demo Tasks/flash.c **** 	for( xLEDTask = 0; xLEDTask < ledNUMBER_OF_LEDS; ++xLEDTask )
+ 3972              		.loc 1 96 0
+ 3973 0008 4FF00003 		mov	r3, #0
+ 3974 000c FB60     		str	r3, [r7, #12]
+ 3975 000e 17E0     		b	.L2
+ 3976              	.L3:
+  97:../src/Common Demo Tasks/flash.c **** 	{
+  98:../src/Common Demo Tasks/flash.c **** 		/* Spawn the task. */
+  99:../src/Common Demo Tasks/flash.c **** 		xTaskCreate( vLEDFlashTask, ( signed char * ) "LEDx", ledSTACK_SIZE, NULL, uxPriority, ( xTaskHan
+ 3977              		.loc 1 99 0 discriminator 2
+ 3978 0010 0F4B     		ldr	r3, .L4
+ 3979 0012 7A68     		ldr	r2, [r7, #4]
+ 3980 0014 0092     		str	r2, [sp, #0]
+ 3981 0016 4FF00002 		mov	r2, #0
+ 3982 001a 0192     		str	r2, [sp, #4]
+ 3983 001c 4FF00002 		mov	r2, #0
+ 3984 0020 0292     		str	r2, [sp, #8]
+ 3985 0022 4FF00002 		mov	r2, #0
+ 3986 0026 0392     		str	r2, [sp, #12]
+ 3987 0028 0A48     		ldr	r0, .L4+4
+ 3988 002a 1946     		mov	r1, r3
+ 3989 002c 4FF05002 		mov	r2, #80
+ 3990 0030 4FF00003 		mov	r3, #0
+ 3991 0034 FFF7FEFF 		bl	xTaskGenericCreate
+  96:../src/Common Demo Tasks/flash.c **** 	for( xLEDTask = 0; xLEDTask < ledNUMBER_OF_LEDS; ++xLEDTask )
+ 3992              		.loc 1 96 0 discriminator 2
+ 3993 0038 FB68     		ldr	r3, [r7, #12]
+ 3994 003a 03F10103 		add	r3, r3, #1
+ 3995 003e FB60     		str	r3, [r7, #12]
+ 3996              	.L2:
+  96:../src/Common Demo Tasks/flash.c **** 	for( xLEDTask = 0; xLEDTask < ledNUMBER_OF_LEDS; ++xLEDTask )
+ 3997              		.loc 1 96 0 is_stmt 0 discriminator 1
+ 3998 0040 FB68     		ldr	r3, [r7, #12]
+ 3999 0042 022B     		cmp	r3, #2
+ 4000 0044 E4DD     		ble	.L3
+ 100:../src/Common Demo Tasks/flash.c **** 	}
+ 101:../src/Common Demo Tasks/flash.c **** }
+ 4001              		.loc 1 101 0 is_stmt 1
+ 4002 0046 07F11007 		add	r7, r7, #16
+ 4003 004a BD46     		mov	sp, r7
+ 4004 004c 80BD     		pop	{r7, pc}
+ 4005              	.L5:
+ 4006 004e 00BF     		.align	2
+ 4007              	.L4:
+ 4008 0050 00000000 		.word	.LC0
+ 4009 0054 00000000 		.word	vLEDFlashTask
+ 4010              		.cfi_endproc
+ 4011              	.LFE29:
+ 4013              		.align	2
+ 4014              		.thumb
+ 4015              		.thumb_func
+ 4017              	vLEDFlashTask:
+ 4018              	.LFB30:
+ 102:../src/Common Demo Tasks/flash.c **** /*-----------------------------------------------------------*/
+ 103:../src/Common Demo Tasks/flash.c **** 
+ 104:../src/Common Demo Tasks/flash.c **** static portTASK_FUNCTION( vLEDFlashTask, pvParameters )
+ 105:../src/Common Demo Tasks/flash.c **** {
+ 4019              		.loc 1 105 0
+ 4020              		.cfi_startproc
+ 4021              		@ args = 0, pretend = 0, frame = 24
+ 4022              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4023 0058 80B5     		push	{r7, lr}
+ 4024              	.LCFI3:
+ 4025              		.cfi_def_cfa_offset 8
+ 4026 005a 86B0     		sub	sp, sp, #24
+ 4027              	.LCFI4:
+ 4028              		.cfi_def_cfa_offset 32
+ 4029 005c 00AF     		add	r7, sp, #0
+ 4030              		.cfi_offset 14, -4
+ 4031              		.cfi_offset 7, -8
+ 4032              	.LCFI5:
+ 4033              		.cfi_def_cfa_register 7
+ 4034 005e 7860     		str	r0, [r7, #4]
+ 106:../src/Common Demo Tasks/flash.c **** portTickType xFlashRate, xLastFlashTime;
+ 107:../src/Common Demo Tasks/flash.c **** unsigned portBASE_TYPE uxLED;
+ 108:../src/Common Demo Tasks/flash.c **** 
+ 109:../src/Common Demo Tasks/flash.c **** 	/* The parameters are not used. */
+ 110:../src/Common Demo Tasks/flash.c **** 	( void ) pvParameters;
+ 111:../src/Common Demo Tasks/flash.c **** 
+ 112:../src/Common Demo Tasks/flash.c **** 	/* Calculate the LED and flash rate. */
+ 113:../src/Common Demo Tasks/flash.c **** 	portENTER_CRITICAL();
+ 4035              		.loc 1 113 0
+ 4036 0060 FFF7FEFF 		bl	vPortEnterCritical
+ 114:../src/Common Demo Tasks/flash.c **** 	{
+ 115:../src/Common Demo Tasks/flash.c **** 		/* See which of the eight LED's we should use. */
+ 116:../src/Common Demo Tasks/flash.c **** 		uxLED = uxFlashTaskNumber;
+ 4037              		.loc 1 116 0
+ 4038 0064 164B     		ldr	r3, .L8
+ 4039 0066 1B68     		ldr	r3, [r3, #0]
+ 4040 0068 7B61     		str	r3, [r7, #20]
+ 117:../src/Common Demo Tasks/flash.c **** 
+ 118:../src/Common Demo Tasks/flash.c **** 		/* Update so the next task uses the next LED. */
+ 119:../src/Common Demo Tasks/flash.c **** 		uxFlashTaskNumber++;
+ 4041              		.loc 1 119 0
+ 4042 006a 154B     		ldr	r3, .L8
+ 4043 006c 1B68     		ldr	r3, [r3, #0]
+ 4044 006e 03F10102 		add	r2, r3, #1
+ 4045 0072 134B     		ldr	r3, .L8
+ 4046 0074 1A60     		str	r2, [r3, #0]
+ 120:../src/Common Demo Tasks/flash.c **** 	}
+ 121:../src/Common Demo Tasks/flash.c **** 	portEXIT_CRITICAL();
+ 4047              		.loc 1 121 0
+ 4048 0076 FFF7FEFF 		bl	vPortExitCritical
+ 122:../src/Common Demo Tasks/flash.c **** 
+ 123:../src/Common Demo Tasks/flash.c **** 	xFlashRate = ledFLASH_RATE_BASE + ( ledFLASH_RATE_BASE * ( portTickType ) uxLED );
+ 4049              		.loc 1 123 0
+ 4050 007a 7B69     		ldr	r3, [r7, #20]
+ 4051 007c 03F10103 		add	r3, r3, #1
+ 4052 0080 40F24D12 		movw	r2, #333
+ 4053 0084 02FB03F3 		mul	r3, r2, r3
+ 4054 0088 3B61     		str	r3, [r7, #16]
+ 124:../src/Common Demo Tasks/flash.c **** 	xFlashRate /= portTICK_RATE_MS;
+ 125:../src/Common Demo Tasks/flash.c **** 
+ 126:../src/Common Demo Tasks/flash.c **** 	/* We will turn the LED on and off again in the delay period, so each
+ 127:../src/Common Demo Tasks/flash.c **** 	delay is only half the total period. */
+ 128:../src/Common Demo Tasks/flash.c **** 	xFlashRate /= ( portTickType ) 2;
+ 4055              		.loc 1 128 0
+ 4056 008a 3B69     		ldr	r3, [r7, #16]
+ 4057 008c 4FEA5303 		lsr	r3, r3, #1
+ 4058 0090 3B61     		str	r3, [r7, #16]
+ 129:../src/Common Demo Tasks/flash.c **** 
+ 130:../src/Common Demo Tasks/flash.c **** 	/* We need to initialise xLastFlashTime prior to the first call to 
+ 131:../src/Common Demo Tasks/flash.c **** 	vTaskDelayUntil(). */
+ 132:../src/Common Demo Tasks/flash.c **** 	xLastFlashTime = xTaskGetTickCount();
+ 4059              		.loc 1 132 0
+ 4060 0092 FFF7FEFF 		bl	xTaskGetTickCount
+ 4061 0096 0346     		mov	r3, r0
+ 4062 0098 FB60     		str	r3, [r7, #12]
+ 4063              	.L7:
+ 133:../src/Common Demo Tasks/flash.c **** 
+ 134:../src/Common Demo Tasks/flash.c **** 	for(;;)
+ 135:../src/Common Demo Tasks/flash.c **** 	{
+ 136:../src/Common Demo Tasks/flash.c **** 		/* Delay for half the flash period then turn the LED on. */
+ 137:../src/Common Demo Tasks/flash.c **** 		vTaskDelayUntil( &xLastFlashTime, xFlashRate );
+ 4064              		.loc 1 137 0 discriminator 1
+ 4065 009a 07F10C03 		add	r3, r7, #12
+ 4066 009e 1846     		mov	r0, r3
+ 4067 00a0 3969     		ldr	r1, [r7, #16]
+ 4068 00a2 FFF7FEFF 		bl	vTaskDelayUntil
+ 138:../src/Common Demo Tasks/flash.c **** 		vParTestToggleLED( uxLED );
+ 4069              		.loc 1 138 0 discriminator 1
+ 4070 00a6 7869     		ldr	r0, [r7, #20]
+ 4071 00a8 FFF7FEFF 		bl	vParTestToggleLED
+ 139:../src/Common Demo Tasks/flash.c **** 
+ 140:../src/Common Demo Tasks/flash.c **** 		/* Delay for half the flash period then turn the LED off. */
+ 141:../src/Common Demo Tasks/flash.c **** 		vTaskDelayUntil( &xLastFlashTime, xFlashRate );
+ 4072              		.loc 1 141 0 discriminator 1
+ 4073 00ac 07F10C03 		add	r3, r7, #12
+ 4074 00b0 1846     		mov	r0, r3
+ 4075 00b2 3969     		ldr	r1, [r7, #16]
+ 4076 00b4 FFF7FEFF 		bl	vTaskDelayUntil
+ 142:../src/Common Demo Tasks/flash.c **** 		vParTestToggleLED( uxLED );
+ 4077              		.loc 1 142 0 discriminator 1
+ 4078 00b8 7869     		ldr	r0, [r7, #20]
+ 4079 00ba FFF7FEFF 		bl	vParTestToggleLED
+ 143:../src/Common Demo Tasks/flash.c **** 	}
+ 4080              		.loc 1 143 0 discriminator 1
+ 4081 00be ECE7     		b	.L7
+ 4082              	.L9:
+ 4083              		.align	2
+ 4084              	.L8:
+ 4085 00c0 00000000 		.word	uxFlashTaskNumber
+ 4086              		.cfi_endproc
+ 4087              	.LFE30:
+ 4089              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 flash.c
+     /tmp/ccFA7glz.s:3941   .bss:00000000 $d
+     /tmp/ccFA7glz.s:3942   .bss:00000000 uxFlashTaskNumber
+     /tmp/ccFA7glz.s:3945   .rodata:00000000 $d
+     /tmp/ccFA7glz.s:3949   .text:00000000 $t
+     /tmp/ccFA7glz.s:3954   .text:00000000 vStartLEDFlashTasks
+     /tmp/ccFA7glz.s:4008   .text:00000050 $d
+     /tmp/ccFA7glz.s:4017   .text:00000058 vLEDFlashTask
+     /tmp/ccFA7glz.s:4013   .text:00000058 $t
+     /tmp/ccFA7glz.s:4085   .text:000000c0 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+xTaskGenericCreate
+vPortEnterCritical
+vPortExitCritical
+xTaskGetTickCount
+vTaskDelayUntil
+vParTestToggleLED

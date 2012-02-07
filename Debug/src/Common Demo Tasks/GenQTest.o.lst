@@ -1,0 +1,1653 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 18, 4
+  12              		.thumb
+  13              		.file	"GenQTest.c"
+  23              	.Ltext0:
+  24              		.file 1 "../src/Common Demo Tasks/GenQTest.c"
+ 4116              		.align	2
+ 4117              	xErrorDetected:
+ 4118 0000 00000000 		.space	4
+ 4119              		.align	2
+ 4120              	ulLoopCounter:
+ 4121 0004 00000000 		.space	4
+ 4122              		.align	2
+ 4123              	ulLoopCounter2:
+ 4124 0008 00000000 		.space	4
+ 4125              		.align	2
+ 4126              	ulGuardedVariable:
+ 4127 000c 00000000 		.space	4
+ 4128              		.align	2
+ 4129              	xHighPriorityMutexTask:
+ 4130 0010 00000000 		.space	4
+ 4131              		.align	2
+ 4132              	xMediumPriorityMutexTask:
+ 4133 0014 00000000 		.space	4
+ 4134              		.section	.rodata
+ 4135              		.align	2
+ 4136              	.LC0:
+ 4137 0000 47656E5F 		.ascii	"Gen_Queue_Test\000"
+ 4137      51756575 
+ 4137      655F5465 
+ 4137      737400
+ 4138 000f 00       		.align	2
+ 4139              	.LC1:
+ 4140 0010 47656E51 		.ascii	"GenQ\000"
+ 4140      00
+ 4141 0015 000000   		.align	2
+ 4142              	.LC2:
+ 4143 0018 47656E5F 		.ascii	"Gen_Queue_Mutex\000"
+ 4143      51756575 
+ 4143      655F4D75 
+ 4143      74657800 
+ 4144              		.align	2
+ 4145              	.LC3:
+ 4146 0028 4D754C6F 		.ascii	"MuLow\000"
+ 4146      7700
+ 4147 002e 0000     		.align	2
+ 4148              	.LC4:
+ 4149 0030 4D754D65 		.ascii	"MuMed\000"
+ 4149      6400
+ 4150 0036 0000     		.align	2
+ 4151              	.LC5:
+ 4152 0038 4D754869 		.ascii	"MuHigh\000"
+ 4152      676800
+ 4153 003f 00       		.text
+ 4154              		.align	2
+ 4155              		.global	vStartGenericQueueTasks
+ 4156              		.thumb
+ 4157              		.thumb_func
+ 4159              	vStartGenericQueueTasks:
+ 4160              	.LFB29:
+   1:../src/Common Demo Tasks/GenQTest.c **** /*
+   2:../src/Common Demo Tasks/GenQTest.c ****     FreeRTOS V7.1.0 - Copyright (C) 2011 Real Time Engineers Ltd.
+   3:../src/Common Demo Tasks/GenQTest.c **** 	
+   4:../src/Common Demo Tasks/GenQTest.c **** 
+   5:../src/Common Demo Tasks/GenQTest.c ****     ***************************************************************************
+   6:../src/Common Demo Tasks/GenQTest.c ****      *                                                                       *
+   7:../src/Common Demo Tasks/GenQTest.c ****      *    FreeRTOS tutorial books are available in pdf and paperback.        *
+   8:../src/Common Demo Tasks/GenQTest.c ****      *    Complete, revised, and edited pdf reference manuals are also       *
+   9:../src/Common Demo Tasks/GenQTest.c ****      *    available.                                                         *
+  10:../src/Common Demo Tasks/GenQTest.c ****      *                                                                       *
+  11:../src/Common Demo Tasks/GenQTest.c ****      *    Purchasing FreeRTOS documentation will not only help you, by       *
+  12:../src/Common Demo Tasks/GenQTest.c ****      *    ensuring you get running as quickly as possible and with an        *
+  13:../src/Common Demo Tasks/GenQTest.c ****      *    in-depth knowledge of how to use FreeRTOS, it will also help       *
+  14:../src/Common Demo Tasks/GenQTest.c ****      *    the FreeRTOS project to continue with its mission of providing     *
+  15:../src/Common Demo Tasks/GenQTest.c ****      *    professional grade, cross platform, de facto standard solutions    *
+  16:../src/Common Demo Tasks/GenQTest.c ****      *    for microcontrollers - completely free of charge!                  *
+  17:../src/Common Demo Tasks/GenQTest.c ****      *                                                                       *
+  18:../src/Common Demo Tasks/GenQTest.c ****      *    >>> See http://www.FreeRTOS.org/Documentation for details. <<<     *
+  19:../src/Common Demo Tasks/GenQTest.c ****      *                                                                       *
+  20:../src/Common Demo Tasks/GenQTest.c ****      *    Thank you for using FreeRTOS, and thank you for your support!      *
+  21:../src/Common Demo Tasks/GenQTest.c ****      *                                                                       *
+  22:../src/Common Demo Tasks/GenQTest.c ****     ***************************************************************************
+  23:../src/Common Demo Tasks/GenQTest.c **** 
+  24:../src/Common Demo Tasks/GenQTest.c **** 
+  25:../src/Common Demo Tasks/GenQTest.c ****     This file is part of the FreeRTOS distribution.
+  26:../src/Common Demo Tasks/GenQTest.c **** 
+  27:../src/Common Demo Tasks/GenQTest.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  28:../src/Common Demo Tasks/GenQTest.c ****     the terms of the GNU General Public License (version 2) as published by the
+  29:../src/Common Demo Tasks/GenQTest.c ****     Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+  30:../src/Common Demo Tasks/GenQTest.c ****     >>>NOTE<<< The modification to the GPL is included to allow you to
+  31:../src/Common Demo Tasks/GenQTest.c ****     distribute a combined work that includes FreeRTOS without being obliged to
+  32:../src/Common Demo Tasks/GenQTest.c ****     provide the source code for proprietary components outside of the FreeRTOS
+  33:../src/Common Demo Tasks/GenQTest.c ****     kernel.  FreeRTOS is distributed in the hope that it will be useful, but
+  34:../src/Common Demo Tasks/GenQTest.c ****     WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  35:../src/Common Demo Tasks/GenQTest.c ****     or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+  36:../src/Common Demo Tasks/GenQTest.c ****     more details. You should have received a copy of the GNU General Public
+  37:../src/Common Demo Tasks/GenQTest.c ****     License and the FreeRTOS license exception along with FreeRTOS; if not it
+  38:../src/Common Demo Tasks/GenQTest.c ****     can be viewed here: http://www.freertos.org/a00114.html and also obtained
+  39:../src/Common Demo Tasks/GenQTest.c ****     by writing to Richard Barry, contact details for whom are available on the
+  40:../src/Common Demo Tasks/GenQTest.c ****     FreeRTOS WEB site.
+  41:../src/Common Demo Tasks/GenQTest.c **** 
+  42:../src/Common Demo Tasks/GenQTest.c ****     1 tab == 4 spaces!
+  43:../src/Common Demo Tasks/GenQTest.c **** 
+  44:../src/Common Demo Tasks/GenQTest.c ****     http://www.FreeRTOS.org - Documentation, latest information, license and
+  45:../src/Common Demo Tasks/GenQTest.c ****     contact details.
+  46:../src/Common Demo Tasks/GenQTest.c **** 
+  47:../src/Common Demo Tasks/GenQTest.c ****     http://www.SafeRTOS.com - A version that is certified for use in safety
+  48:../src/Common Demo Tasks/GenQTest.c ****     critical systems.
+  49:../src/Common Demo Tasks/GenQTest.c **** 
+  50:../src/Common Demo Tasks/GenQTest.c ****     http://www.OpenRTOS.com - Commercial support, development, porting,
+  51:../src/Common Demo Tasks/GenQTest.c ****     licensing and training services.
+  52:../src/Common Demo Tasks/GenQTest.c **** */
+  53:../src/Common Demo Tasks/GenQTest.c **** 
+  54:../src/Common Demo Tasks/GenQTest.c **** 
+  55:../src/Common Demo Tasks/GenQTest.c **** /* 
+  56:../src/Common Demo Tasks/GenQTest.c ****  * Tests the extra queue functionality introduced in FreeRTOS.org V4.5.0 - 
+  57:../src/Common Demo Tasks/GenQTest.c ****  * including xQueueSendToFront(), xQueueSendToBack(), xQueuePeek() and 
+  58:../src/Common Demo Tasks/GenQTest.c ****  * mutex behaviour. 
+  59:../src/Common Demo Tasks/GenQTest.c ****  *
+  60:../src/Common Demo Tasks/GenQTest.c ****  * See the comments above the prvSendFrontAndBackTest() and 
+  61:../src/Common Demo Tasks/GenQTest.c ****  * prvLowPriorityMutexTask() prototypes below for more information.
+  62:../src/Common Demo Tasks/GenQTest.c ****  */
+  63:../src/Common Demo Tasks/GenQTest.c **** 
+  64:../src/Common Demo Tasks/GenQTest.c **** 
+  65:../src/Common Demo Tasks/GenQTest.c **** #include <stdlib.h>
+  66:../src/Common Demo Tasks/GenQTest.c **** 
+  67:../src/Common Demo Tasks/GenQTest.c **** /* Scheduler include files. */
+  68:../src/Common Demo Tasks/GenQTest.c **** #include "FreeRTOS.h"
+  69:../src/Common Demo Tasks/GenQTest.c **** #include "task.h"
+  70:../src/Common Demo Tasks/GenQTest.c **** #include "queue.h"
+  71:../src/Common Demo Tasks/GenQTest.c **** #include "semphr.h"
+  72:../src/Common Demo Tasks/GenQTest.c **** 
+  73:../src/Common Demo Tasks/GenQTest.c **** /* Demo program include files. */
+  74:../src/Common Demo Tasks/GenQTest.c **** #include "GenQTest.h"
+  75:../src/Common Demo Tasks/GenQTest.c **** 
+  76:../src/Common Demo Tasks/GenQTest.c **** #define genqQUEUE_LENGTH		( 5 )
+  77:../src/Common Demo Tasks/GenQTest.c **** #define genqNO_BLOCK			( 0 )
+  78:../src/Common Demo Tasks/GenQTest.c **** 
+  79:../src/Common Demo Tasks/GenQTest.c **** #define genqMUTEX_LOW_PRIORITY		( tskIDLE_PRIORITY )
+  80:../src/Common Demo Tasks/GenQTest.c **** #define genqMUTEX_TEST_PRIORITY		( tskIDLE_PRIORITY + 1 )
+  81:../src/Common Demo Tasks/GenQTest.c **** #define genqMUTEX_MEDIUM_PRIORITY	( tskIDLE_PRIORITY + 2 )
+  82:../src/Common Demo Tasks/GenQTest.c **** #define genqMUTEX_HIGH_PRIORITY		( tskIDLE_PRIORITY + 3 )
+  83:../src/Common Demo Tasks/GenQTest.c **** 
+  84:../src/Common Demo Tasks/GenQTest.c **** /*-----------------------------------------------------------*/
+  85:../src/Common Demo Tasks/GenQTest.c **** 
+  86:../src/Common Demo Tasks/GenQTest.c **** /*
+  87:../src/Common Demo Tasks/GenQTest.c ****  * Tests the behaviour of the xQueueSendToFront() and xQueueSendToBack()
+  88:../src/Common Demo Tasks/GenQTest.c ****  * macros by using both to fill a queue, then reading from the queue to
+  89:../src/Common Demo Tasks/GenQTest.c ****  * check the resultant queue order is as expected.  Queue data is also
+  90:../src/Common Demo Tasks/GenQTest.c ****  * peeked.
+  91:../src/Common Demo Tasks/GenQTest.c ****  */
+  92:../src/Common Demo Tasks/GenQTest.c **** static void prvSendFrontAndBackTest( void *pvParameters );
+  93:../src/Common Demo Tasks/GenQTest.c **** 
+  94:../src/Common Demo Tasks/GenQTest.c **** /*
+  95:../src/Common Demo Tasks/GenQTest.c ****  * The following three tasks are used to demonstrate the mutex behaviour.
+  96:../src/Common Demo Tasks/GenQTest.c ****  * Each task is given a different priority to demonstrate the priority
+  97:../src/Common Demo Tasks/GenQTest.c ****  * inheritance mechanism.
+  98:../src/Common Demo Tasks/GenQTest.c ****  *
+  99:../src/Common Demo Tasks/GenQTest.c ****  * The low priority task obtains a mutex.  After this a high priority task
+ 100:../src/Common Demo Tasks/GenQTest.c ****  * attempts to obtain the same mutex, causing its priority to be inherited
+ 101:../src/Common Demo Tasks/GenQTest.c ****  * by the low priority task.  The task with the inherited high priority then
+ 102:../src/Common Demo Tasks/GenQTest.c ****  * resumes a medium priority task to ensure it is not blocked by the medium
+ 103:../src/Common Demo Tasks/GenQTest.c ****  * priority task while it holds the inherited high priority.  Once the mutex
+ 104:../src/Common Demo Tasks/GenQTest.c ****  * is returned the task with the inherited priority returns to its original
+ 105:../src/Common Demo Tasks/GenQTest.c ****  * low priority, and is therefore immediately preempted by first the high
+ 106:../src/Common Demo Tasks/GenQTest.c ****  * priority task and then the medium prioroity task before it can continue.
+ 107:../src/Common Demo Tasks/GenQTest.c ****  */
+ 108:../src/Common Demo Tasks/GenQTest.c **** static void prvLowPriorityMutexTask( void *pvParameters );
+ 109:../src/Common Demo Tasks/GenQTest.c **** static void prvMediumPriorityMutexTask( void *pvParameters );
+ 110:../src/Common Demo Tasks/GenQTest.c **** static void prvHighPriorityMutexTask( void *pvParameters );
+ 111:../src/Common Demo Tasks/GenQTest.c **** 
+ 112:../src/Common Demo Tasks/GenQTest.c **** /*-----------------------------------------------------------*/
+ 113:../src/Common Demo Tasks/GenQTest.c **** 
+ 114:../src/Common Demo Tasks/GenQTest.c **** /* Flag that will be latched to pdTRUE should any unexpected behaviour be
+ 115:../src/Common Demo Tasks/GenQTest.c **** detected in any of the tasks. */
+ 116:../src/Common Demo Tasks/GenQTest.c **** static portBASE_TYPE xErrorDetected = pdFALSE;
+ 117:../src/Common Demo Tasks/GenQTest.c **** 
+ 118:../src/Common Demo Tasks/GenQTest.c **** /* Counters that are incremented on each cycle of a test.  This is used to
+ 119:../src/Common Demo Tasks/GenQTest.c **** detect a stalled task - a test that is no longer running. */
+ 120:../src/Common Demo Tasks/GenQTest.c **** static volatile unsigned portLONG ulLoopCounter = 0;
+ 121:../src/Common Demo Tasks/GenQTest.c **** static volatile unsigned portLONG ulLoopCounter2 = 0;
+ 122:../src/Common Demo Tasks/GenQTest.c **** 
+ 123:../src/Common Demo Tasks/GenQTest.c **** /* The variable that is guarded by the mutex in the mutex demo tasks. */
+ 124:../src/Common Demo Tasks/GenQTest.c **** static volatile unsigned portLONG ulGuardedVariable = 0;
+ 125:../src/Common Demo Tasks/GenQTest.c **** 
+ 126:../src/Common Demo Tasks/GenQTest.c **** /* Handles used in the mutext test to suspend and resume the high and medium
+ 127:../src/Common Demo Tasks/GenQTest.c **** priority mutex test tasks. */
+ 128:../src/Common Demo Tasks/GenQTest.c **** static xTaskHandle xHighPriorityMutexTask, xMediumPriorityMutexTask;
+ 129:../src/Common Demo Tasks/GenQTest.c **** 
+ 130:../src/Common Demo Tasks/GenQTest.c **** /*-----------------------------------------------------------*/
+ 131:../src/Common Demo Tasks/GenQTest.c **** 
+ 132:../src/Common Demo Tasks/GenQTest.c **** void vStartGenericQueueTasks( unsigned portBASE_TYPE uxPriority )
+ 133:../src/Common Demo Tasks/GenQTest.c **** {
+ 4161              		.loc 1 133 0
+ 4162              		.cfi_startproc
+ 4163              		@ args = 0, pretend = 0, frame = 16
+ 4164              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4165 0000 80B5     		push	{r7, lr}
+ 4166              	.LCFI0:
+ 4167              		.cfi_def_cfa_offset 8
+ 4168 0002 88B0     		sub	sp, sp, #32
+ 4169              	.LCFI1:
+ 4170              		.cfi_def_cfa_offset 40
+ 4171 0004 04AF     		add	r7, sp, #16
+ 4172              		.cfi_offset 14, -4
+ 4173              		.cfi_offset 7, -8
+ 4174              	.LCFI2:
+ 4175              		.cfi_def_cfa 7, 24
+ 4176 0006 7860     		str	r0, [r7, #4]
+ 134:../src/Common Demo Tasks/GenQTest.c **** xQueueHandle xQueue;
+ 135:../src/Common Demo Tasks/GenQTest.c **** xSemaphoreHandle xMutex;
+ 136:../src/Common Demo Tasks/GenQTest.c **** 
+ 137:../src/Common Demo Tasks/GenQTest.c **** 	/* Create the queue that we are going to use for the
+ 138:../src/Common Demo Tasks/GenQTest.c **** 	prvSendFrontAndBackTest demo. */
+ 139:../src/Common Demo Tasks/GenQTest.c **** 	xQueue = xQueueCreate( genqQUEUE_LENGTH, sizeof( unsigned portLONG ) );
+ 4177              		.loc 1 139 0
+ 4178 0008 4FF00500 		mov	r0, #5
+ 4179 000c 4FF00401 		mov	r1, #4
+ 4180 0010 4FF00002 		mov	r2, #0
+ 4181 0014 FFF7FEFF 		bl	xQueueGenericCreate
+ 4182 0018 F860     		str	r0, [r7, #12]
+ 140:../src/Common Demo Tasks/GenQTest.c **** 
+ 141:../src/Common Demo Tasks/GenQTest.c **** 	/* vQueueAddToRegistry() adds the queue to the queue registry, if one is
+ 142:../src/Common Demo Tasks/GenQTest.c **** 	in use.  The queue registry is provided as a means for kernel aware 
+ 143:../src/Common Demo Tasks/GenQTest.c **** 	debuggers to locate queues and has no purpose if a kernel aware debugger
+ 144:../src/Common Demo Tasks/GenQTest.c **** 	is not being used.  The call to vQueueAddToRegistry() will be removed
+ 145:../src/Common Demo Tasks/GenQTest.c **** 	by the pre-processor if configQUEUE_REGISTRY_SIZE is not defined or is 
+ 146:../src/Common Demo Tasks/GenQTest.c **** 	defined to be less than 1. */
+ 147:../src/Common Demo Tasks/GenQTest.c **** 	vQueueAddToRegistry( xQueue, ( signed portCHAR * ) "Gen_Queue_Test" );
+ 4183              		.loc 1 147 0
+ 4184 001a 304B     		ldr	r3, .L2
+ 4185 001c F868     		ldr	r0, [r7, #12]
+ 4186 001e 1946     		mov	r1, r3
+ 4187 0020 FFF7FEFF 		bl	vQueueAddToRegistry
+ 148:../src/Common Demo Tasks/GenQTest.c **** 
+ 149:../src/Common Demo Tasks/GenQTest.c **** 	/* Create the demo task and pass it the queue just created.  We are
+ 150:../src/Common Demo Tasks/GenQTest.c **** 	passing the queue handle by value so it does not matter that it is
+ 151:../src/Common Demo Tasks/GenQTest.c **** 	declared on the stack here. */
+ 152:../src/Common Demo Tasks/GenQTest.c **** 	xTaskCreate( prvSendFrontAndBackTest, ( signed portCHAR * )"GenQ", configMINIMAL_STACK_SIZE, ( voi
+ 4188              		.loc 1 152 0
+ 4189 0024 2E4B     		ldr	r3, .L2+4
+ 4190 0026 7A68     		ldr	r2, [r7, #4]
+ 4191 0028 0092     		str	r2, [sp, #0]
+ 4192 002a 4FF00002 		mov	r2, #0
+ 4193 002e 0192     		str	r2, [sp, #4]
+ 4194 0030 4FF00002 		mov	r2, #0
+ 4195 0034 0292     		str	r2, [sp, #8]
+ 4196 0036 4FF00002 		mov	r2, #0
+ 4197 003a 0392     		str	r2, [sp, #12]
+ 4198 003c 2948     		ldr	r0, .L2+8
+ 4199 003e 1946     		mov	r1, r3
+ 4200 0040 4FF05002 		mov	r2, #80
+ 4201 0044 FB68     		ldr	r3, [r7, #12]
+ 4202 0046 FFF7FEFF 		bl	xTaskGenericCreate
+ 153:../src/Common Demo Tasks/GenQTest.c **** 
+ 154:../src/Common Demo Tasks/GenQTest.c **** 	/* Create the mutex used by the prvMutexTest task. */
+ 155:../src/Common Demo Tasks/GenQTest.c **** 	xMutex = xSemaphoreCreateMutex();
+ 4203              		.loc 1 155 0
+ 4204 004a 4FF00100 		mov	r0, #1
+ 4205 004e FFF7FEFF 		bl	xQueueCreateMutex
+ 4206 0052 B860     		str	r0, [r7, #8]
+ 156:../src/Common Demo Tasks/GenQTest.c **** 
+ 157:../src/Common Demo Tasks/GenQTest.c **** 	/* vQueueAddToRegistry() adds the mutex to the registry, if one is
+ 158:../src/Common Demo Tasks/GenQTest.c **** 	in use.  The registry is provided as a means for kernel aware 
+ 159:../src/Common Demo Tasks/GenQTest.c **** 	debuggers to locate mutexes and has no purpose if a kernel aware debugger
+ 160:../src/Common Demo Tasks/GenQTest.c **** 	is not being used.  The call to vQueueAddToRegistry() will be removed
+ 161:../src/Common Demo Tasks/GenQTest.c **** 	by the pre-processor if configQUEUE_REGISTRY_SIZE is not defined or is 
+ 162:../src/Common Demo Tasks/GenQTest.c **** 	defined to be less than 1. */
+ 163:../src/Common Demo Tasks/GenQTest.c **** 	vQueueAddToRegistry( ( xQueueHandle ) xMutex, ( signed portCHAR * ) "Gen_Queue_Mutex" );
+ 4207              		.loc 1 163 0
+ 4208 0054 244B     		ldr	r3, .L2+12
+ 4209 0056 B868     		ldr	r0, [r7, #8]
+ 4210 0058 1946     		mov	r1, r3
+ 4211 005a FFF7FEFF 		bl	vQueueAddToRegistry
+ 164:../src/Common Demo Tasks/GenQTest.c **** 
+ 165:../src/Common Demo Tasks/GenQTest.c **** 	/* Create the mutex demo tasks and pass it the mutex just created.  We are
+ 166:../src/Common Demo Tasks/GenQTest.c **** 	passing the mutex handle by value so it does not matter that it is declared
+ 167:../src/Common Demo Tasks/GenQTest.c **** 	on the stack here. */
+ 168:../src/Common Demo Tasks/GenQTest.c **** 	xTaskCreate( prvLowPriorityMutexTask, ( signed portCHAR * )"MuLow", configMINIMAL_STACK_SIZE, ( vo
+ 4212              		.loc 1 168 0
+ 4213 005e 234B     		ldr	r3, .L2+16
+ 4214 0060 4FF00002 		mov	r2, #0
+ 4215 0064 0092     		str	r2, [sp, #0]
+ 4216 0066 4FF00002 		mov	r2, #0
+ 4217 006a 0192     		str	r2, [sp, #4]
+ 4218 006c 4FF00002 		mov	r2, #0
+ 4219 0070 0292     		str	r2, [sp, #8]
+ 4220 0072 4FF00002 		mov	r2, #0
+ 4221 0076 0392     		str	r2, [sp, #12]
+ 4222 0078 1D48     		ldr	r0, .L2+20
+ 4223 007a 1946     		mov	r1, r3
+ 4224 007c 4FF05002 		mov	r2, #80
+ 4225 0080 BB68     		ldr	r3, [r7, #8]
+ 4226 0082 FFF7FEFF 		bl	xTaskGenericCreate
+ 169:../src/Common Demo Tasks/GenQTest.c **** 	xTaskCreate( prvMediumPriorityMutexTask, ( signed portCHAR * )"MuMed", configMINIMAL_STACK_SIZE, N
+ 4227              		.loc 1 169 0
+ 4228 0086 1B4B     		ldr	r3, .L2+24
+ 4229 0088 4FF00202 		mov	r2, #2
+ 4230 008c 0092     		str	r2, [sp, #0]
+ 4231 008e 1A4A     		ldr	r2, .L2+28
+ 4232 0090 0192     		str	r2, [sp, #4]
+ 4233 0092 4FF00002 		mov	r2, #0
+ 4234 0096 0292     		str	r2, [sp, #8]
+ 4235 0098 4FF00002 		mov	r2, #0
+ 4236 009c 0392     		str	r2, [sp, #12]
+ 4237 009e 1748     		ldr	r0, .L2+32
+ 4238 00a0 1946     		mov	r1, r3
+ 4239 00a2 4FF05002 		mov	r2, #80
+ 4240 00a6 4FF00003 		mov	r3, #0
+ 4241 00aa FFF7FEFF 		bl	xTaskGenericCreate
+ 170:../src/Common Demo Tasks/GenQTest.c **** 	xTaskCreate( prvHighPriorityMutexTask, ( signed portCHAR * )"MuHigh", configMINIMAL_STACK_SIZE, ( 
+ 4242              		.loc 1 170 0
+ 4243 00ae 144B     		ldr	r3, .L2+36
+ 4244 00b0 4FF00302 		mov	r2, #3
+ 4245 00b4 0092     		str	r2, [sp, #0]
+ 4246 00b6 134A     		ldr	r2, .L2+40
+ 4247 00b8 0192     		str	r2, [sp, #4]
+ 4248 00ba 4FF00002 		mov	r2, #0
+ 4249 00be 0292     		str	r2, [sp, #8]
+ 4250 00c0 4FF00002 		mov	r2, #0
+ 4251 00c4 0392     		str	r2, [sp, #12]
+ 4252 00c6 1048     		ldr	r0, .L2+44
+ 4253 00c8 1946     		mov	r1, r3
+ 4254 00ca 4FF05002 		mov	r2, #80
+ 4255 00ce BB68     		ldr	r3, [r7, #8]
+ 4256 00d0 FFF7FEFF 		bl	xTaskGenericCreate
+ 171:../src/Common Demo Tasks/GenQTest.c **** }
+ 4257              		.loc 1 171 0
+ 4258 00d4 07F11007 		add	r7, r7, #16
+ 4259 00d8 BD46     		mov	sp, r7
+ 4260 00da 80BD     		pop	{r7, pc}
+ 4261              	.L3:
+ 4262              		.align	2
+ 4263              	.L2:
+ 4264 00dc 00000000 		.word	.LC0
+ 4265 00e0 10000000 		.word	.LC1
+ 4266 00e4 00000000 		.word	prvSendFrontAndBackTest
+ 4267 00e8 18000000 		.word	.LC2
+ 4268 00ec 28000000 		.word	.LC3
+ 4269 00f0 00000000 		.word	prvLowPriorityMutexTask
+ 4270 00f4 30000000 		.word	.LC4
+ 4271 00f8 14000000 		.word	xMediumPriorityMutexTask
+ 4272 00fc 00000000 		.word	prvMediumPriorityMutexTask
+ 4273 0100 38000000 		.word	.LC5
+ 4274 0104 10000000 		.word	xHighPriorityMutexTask
+ 4275 0108 00000000 		.word	prvHighPriorityMutexTask
+ 4276              		.cfi_endproc
+ 4277              	.LFE29:
+ 4279              		.align	2
+ 4280              		.thumb
+ 4281              		.thumb_func
+ 4283              	prvSendFrontAndBackTest:
+ 4284              	.LFB30:
+ 172:../src/Common Demo Tasks/GenQTest.c **** /*-----------------------------------------------------------*/
+ 173:../src/Common Demo Tasks/GenQTest.c **** 
+ 174:../src/Common Demo Tasks/GenQTest.c **** static void prvSendFrontAndBackTest( void *pvParameters )
+ 175:../src/Common Demo Tasks/GenQTest.c **** {
+ 4285              		.loc 1 175 0
+ 4286              		.cfi_startproc
+ 4287              		@ args = 0, pretend = 0, frame = 24
+ 4288              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4289 010c 80B5     		push	{r7, lr}
+ 4290              	.LCFI3:
+ 4291              		.cfi_def_cfa_offset 8
+ 4292 010e 86B0     		sub	sp, sp, #24
+ 4293              	.LCFI4:
+ 4294              		.cfi_def_cfa_offset 32
+ 4295 0110 00AF     		add	r7, sp, #0
+ 4296              		.cfi_offset 14, -4
+ 4297              		.cfi_offset 7, -8
+ 4298              	.LCFI5:
+ 4299              		.cfi_def_cfa_register 7
+ 4300 0112 7860     		str	r0, [r7, #4]
+ 176:../src/Common Demo Tasks/GenQTest.c **** unsigned portLONG ulData, ulData2;
+ 177:../src/Common Demo Tasks/GenQTest.c **** xQueueHandle xQueue;
+ 178:../src/Common Demo Tasks/GenQTest.c **** 
+ 179:../src/Common Demo Tasks/GenQTest.c **** 	#ifdef USE_STDIO
+ 180:../src/Common Demo Tasks/GenQTest.c **** 	void vPrintDisplayMessage( const portCHAR * const * ppcMessageToSend );
+ 181:../src/Common Demo Tasks/GenQTest.c **** 	
+ 182:../src/Common Demo Tasks/GenQTest.c **** 		const portCHAR * const pcTaskStartMsg = "Queue SendToFront/SendToBack/Peek test started.\r\n";
+ 183:../src/Common Demo Tasks/GenQTest.c **** 
+ 184:../src/Common Demo Tasks/GenQTest.c **** 		/* Queue a message for printing to say the task has started. */
+ 185:../src/Common Demo Tasks/GenQTest.c **** 		vPrintDisplayMessage( &pcTaskStartMsg );
+ 186:../src/Common Demo Tasks/GenQTest.c **** 	#endif
+ 187:../src/Common Demo Tasks/GenQTest.c **** 
+ 188:../src/Common Demo Tasks/GenQTest.c **** 	xQueue = ( xQueueHandle ) pvParameters;
+ 4301              		.loc 1 188 0
+ 4302 0114 7B68     		ldr	r3, [r7, #4]
+ 4303 0116 7B61     		str	r3, [r7, #20]
+ 4304              	.L40:
+ 189:../src/Common Demo Tasks/GenQTest.c **** 
+ 190:../src/Common Demo Tasks/GenQTest.c **** 	for( ;; )
+ 191:../src/Common Demo Tasks/GenQTest.c **** 	{
+ 192:../src/Common Demo Tasks/GenQTest.c **** 		/* The queue is empty, so sending an item to the back of the queue
+ 193:../src/Common Demo Tasks/GenQTest.c **** 		should have the same efect as sending it to the front of the queue.
+ 194:../src/Common Demo Tasks/GenQTest.c **** 
+ 195:../src/Common Demo Tasks/GenQTest.c **** 		First send to the front and check everything is as expected. */
+ 196:../src/Common Demo Tasks/GenQTest.c **** 		xQueueSendToFront( xQueue, ( void * ) &ulLoopCounter, genqNO_BLOCK );
+ 4305              		.loc 1 196 0
+ 4306 0118 7869     		ldr	r0, [r7, #20]
+ 4307 011a 6A49     		ldr	r1, .L41
+ 4308 011c 4FF00002 		mov	r2, #0
+ 4309 0120 4FF00103 		mov	r3, #1
+ 4310 0124 FFF7FEFF 		bl	xQueueGenericSend
+ 197:../src/Common Demo Tasks/GenQTest.c **** 
+ 198:../src/Common Demo Tasks/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 1 )
+ 4311              		.loc 1 198 0
+ 4312 0128 7869     		ldr	r0, [r7, #20]
+ 4313 012a FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 4314 012e 0346     		mov	r3, r0
+ 4315 0130 012B     		cmp	r3, #1
+ 4316 0132 03D0     		beq	.L5
+ 199:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 200:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4317              		.loc 1 200 0
+ 4318 0134 644B     		ldr	r3, .L41+4
+ 4319 0136 4FF00102 		mov	r2, #1
+ 4320 013a 1A60     		str	r2, [r3, #0]
+ 4321              	.L5:
+ 201:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 202:../src/Common Demo Tasks/GenQTest.c **** 
+ 203:../src/Common Demo Tasks/GenQTest.c **** 		if( xQueueReceive( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != pdPASS )
+ 4322              		.loc 1 203 0
+ 4323 013c 07F11003 		add	r3, r7, #16
+ 4324 0140 7869     		ldr	r0, [r7, #20]
+ 4325 0142 1946     		mov	r1, r3
+ 4326 0144 4FF00002 		mov	r2, #0
+ 4327 0148 4FF00003 		mov	r3, #0
+ 4328 014c FFF7FEFF 		bl	xQueueGenericReceive
+ 4329 0150 0346     		mov	r3, r0
+ 4330 0152 012B     		cmp	r3, #1
+ 4331 0154 03D0     		beq	.L6
+ 204:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 205:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4332              		.loc 1 205 0
+ 4333 0156 5C4B     		ldr	r3, .L41+4
+ 4334 0158 4FF00102 		mov	r2, #1
+ 4335 015c 1A60     		str	r2, [r3, #0]
+ 4336              	.L6:
+ 206:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 207:../src/Common Demo Tasks/GenQTest.c **** 
+ 208:../src/Common Demo Tasks/GenQTest.c **** 		/* The data we sent to the queue should equal the data we just received
+ 209:../src/Common Demo Tasks/GenQTest.c **** 		from the queue. */
+ 210:../src/Common Demo Tasks/GenQTest.c **** 		if( ulLoopCounter != ulData )
+ 4337              		.loc 1 210 0
+ 4338 015e 594B     		ldr	r3, .L41
+ 4339 0160 1A68     		ldr	r2, [r3, #0]
+ 4340 0162 3B69     		ldr	r3, [r7, #16]
+ 4341 0164 9A42     		cmp	r2, r3
+ 4342 0166 03D0     		beq	.L7
+ 211:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 212:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4343              		.loc 1 212 0
+ 4344 0168 574B     		ldr	r3, .L41+4
+ 4345 016a 4FF00102 		mov	r2, #1
+ 4346 016e 1A60     		str	r2, [r3, #0]
+ 4347              	.L7:
+ 213:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 214:../src/Common Demo Tasks/GenQTest.c **** 
+ 215:../src/Common Demo Tasks/GenQTest.c **** 		/* Then do the same, sending the data to the back, checking everything
+ 216:../src/Common Demo Tasks/GenQTest.c **** 		is as expected. */
+ 217:../src/Common Demo Tasks/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 0 )
+ 4348              		.loc 1 217 0
+ 4349 0170 7869     		ldr	r0, [r7, #20]
+ 4350 0172 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 4351 0176 0346     		mov	r3, r0
+ 4352 0178 002B     		cmp	r3, #0
+ 4353 017a 03D0     		beq	.L8
+ 218:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 219:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4354              		.loc 1 219 0
+ 4355 017c 524B     		ldr	r3, .L41+4
+ 4356 017e 4FF00102 		mov	r2, #1
+ 4357 0182 1A60     		str	r2, [r3, #0]
+ 4358              	.L8:
+ 220:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 221:../src/Common Demo Tasks/GenQTest.c **** 
+ 222:../src/Common Demo Tasks/GenQTest.c **** 		xQueueSendToBack( xQueue, ( void * ) &ulLoopCounter, genqNO_BLOCK );
+ 4359              		.loc 1 222 0
+ 4360 0184 7869     		ldr	r0, [r7, #20]
+ 4361 0186 4F49     		ldr	r1, .L41
+ 4362 0188 4FF00002 		mov	r2, #0
+ 4363 018c 4FF00003 		mov	r3, #0
+ 4364 0190 FFF7FEFF 		bl	xQueueGenericSend
+ 223:../src/Common Demo Tasks/GenQTest.c **** 
+ 224:../src/Common Demo Tasks/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 1 )
+ 4365              		.loc 1 224 0
+ 4366 0194 7869     		ldr	r0, [r7, #20]
+ 4367 0196 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 4368 019a 0346     		mov	r3, r0
+ 4369 019c 012B     		cmp	r3, #1
+ 4370 019e 03D0     		beq	.L9
+ 225:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 226:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4371              		.loc 1 226 0
+ 4372 01a0 494B     		ldr	r3, .L41+4
+ 4373 01a2 4FF00102 		mov	r2, #1
+ 4374 01a6 1A60     		str	r2, [r3, #0]
+ 4375              	.L9:
+ 227:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 228:../src/Common Demo Tasks/GenQTest.c **** 
+ 229:../src/Common Demo Tasks/GenQTest.c **** 		if( xQueueReceive( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != pdPASS )
+ 4376              		.loc 1 229 0
+ 4377 01a8 07F11003 		add	r3, r7, #16
+ 4378 01ac 7869     		ldr	r0, [r7, #20]
+ 4379 01ae 1946     		mov	r1, r3
+ 4380 01b0 4FF00002 		mov	r2, #0
+ 4381 01b4 4FF00003 		mov	r3, #0
+ 4382 01b8 FFF7FEFF 		bl	xQueueGenericReceive
+ 4383 01bc 0346     		mov	r3, r0
+ 4384 01be 012B     		cmp	r3, #1
+ 4385 01c0 03D0     		beq	.L10
+ 230:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 231:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4386              		.loc 1 231 0
+ 4387 01c2 414B     		ldr	r3, .L41+4
+ 4388 01c4 4FF00102 		mov	r2, #1
+ 4389 01c8 1A60     		str	r2, [r3, #0]
+ 4390              	.L10:
+ 232:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 233:../src/Common Demo Tasks/GenQTest.c **** 
+ 234:../src/Common Demo Tasks/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 0 )
+ 4391              		.loc 1 234 0
+ 4392 01ca 7869     		ldr	r0, [r7, #20]
+ 4393 01cc FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 4394 01d0 0346     		mov	r3, r0
+ 4395 01d2 002B     		cmp	r3, #0
+ 4396 01d4 03D0     		beq	.L11
+ 235:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 236:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4397              		.loc 1 236 0
+ 4398 01d6 3C4B     		ldr	r3, .L41+4
+ 4399 01d8 4FF00102 		mov	r2, #1
+ 4400 01dc 1A60     		str	r2, [r3, #0]
+ 4401              	.L11:
+ 237:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 238:../src/Common Demo Tasks/GenQTest.c **** 
+ 239:../src/Common Demo Tasks/GenQTest.c **** 		/* The data we sent to the queue should equal the data we just received
+ 240:../src/Common Demo Tasks/GenQTest.c **** 		from the queue. */
+ 241:../src/Common Demo Tasks/GenQTest.c **** 		if( ulLoopCounter != ulData )
+ 4402              		.loc 1 241 0
+ 4403 01de 394B     		ldr	r3, .L41
+ 4404 01e0 1A68     		ldr	r2, [r3, #0]
+ 4405 01e2 3B69     		ldr	r3, [r7, #16]
+ 4406 01e4 9A42     		cmp	r2, r3
+ 4407 01e6 03D0     		beq	.L12
+ 242:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 243:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4408              		.loc 1 243 0
+ 4409 01e8 374B     		ldr	r3, .L41+4
+ 4410 01ea 4FF00102 		mov	r2, #1
+ 4411 01ee 1A60     		str	r2, [r3, #0]
+ 4412              	.L12:
+ 244:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 245:../src/Common Demo Tasks/GenQTest.c **** 
+ 246:../src/Common Demo Tasks/GenQTest.c **** 		#if configUSE_PREEMPTION == 0
+ 247:../src/Common Demo Tasks/GenQTest.c **** 			taskYIELD();
+ 248:../src/Common Demo Tasks/GenQTest.c **** 		#endif
+ 249:../src/Common Demo Tasks/GenQTest.c **** 
+ 250:../src/Common Demo Tasks/GenQTest.c **** 
+ 251:../src/Common Demo Tasks/GenQTest.c **** 
+ 252:../src/Common Demo Tasks/GenQTest.c **** 		/* Place 2, 3, 4 into the queue, adding items to the back of the queue. */
+ 253:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 2; ulData < 5; ulData++ )
+ 4413              		.loc 1 253 0
+ 4414 01f0 4FF00203 		mov	r3, #2
+ 4415 01f4 3B61     		str	r3, [r7, #16]
+ 4416 01f6 0DE0     		b	.L13
+ 4417              	.L14:
+ 254:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 255:../src/Common Demo Tasks/GenQTest.c **** 			xQueueSendToBack( xQueue, ( void * ) &ulData, genqNO_BLOCK );
+ 4418              		.loc 1 255 0 discriminator 2
+ 4419 01f8 07F11003 		add	r3, r7, #16
+ 4420 01fc 7869     		ldr	r0, [r7, #20]
+ 4421 01fe 1946     		mov	r1, r3
+ 4422 0200 4FF00002 		mov	r2, #0
+ 4423 0204 4FF00003 		mov	r3, #0
+ 4424 0208 FFF7FEFF 		bl	xQueueGenericSend
+ 253:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 2; ulData < 5; ulData++ )
+ 4425              		.loc 1 253 0 discriminator 2
+ 4426 020c 3B69     		ldr	r3, [r7, #16]
+ 4427 020e 03F10103 		add	r3, r3, #1
+ 4428 0212 3B61     		str	r3, [r7, #16]
+ 4429              	.L13:
+ 253:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 2; ulData < 5; ulData++ )
+ 4430              		.loc 1 253 0 is_stmt 0 discriminator 1
+ 4431 0214 3B69     		ldr	r3, [r7, #16]
+ 4432 0216 042B     		cmp	r3, #4
+ 4433 0218 EED9     		bls	.L14
+ 256:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 257:../src/Common Demo Tasks/GenQTest.c **** 
+ 258:../src/Common Demo Tasks/GenQTest.c **** 		/* Now the order in the queue should be 2, 3, 4, with 2 being the first
+ 259:../src/Common Demo Tasks/GenQTest.c **** 		thing to be read out.  Now add 1 then 0 to the front of the queue. */
+ 260:../src/Common Demo Tasks/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 3 )
+ 4434              		.loc 1 260 0 is_stmt 1
+ 4435 021a 7869     		ldr	r0, [r7, #20]
+ 4436 021c FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 4437 0220 0346     		mov	r3, r0
+ 4438 0222 032B     		cmp	r3, #3
+ 4439 0224 03D0     		beq	.L15
+ 261:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 262:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4440              		.loc 1 262 0
+ 4441 0226 284B     		ldr	r3, .L41+4
+ 4442 0228 4FF00102 		mov	r2, #1
+ 4443 022c 1A60     		str	r2, [r3, #0]
+ 4444              	.L15:
+ 263:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 264:../src/Common Demo Tasks/GenQTest.c **** 		ulData = 1;
+ 4445              		.loc 1 264 0
+ 4446 022e 4FF00103 		mov	r3, #1
+ 4447 0232 3B61     		str	r3, [r7, #16]
+ 265:../src/Common Demo Tasks/GenQTest.c **** 		xQueueSendToFront( xQueue, ( void * ) &ulData, genqNO_BLOCK );
+ 4448              		.loc 1 265 0
+ 4449 0234 07F11003 		add	r3, r7, #16
+ 4450 0238 7869     		ldr	r0, [r7, #20]
+ 4451 023a 1946     		mov	r1, r3
+ 4452 023c 4FF00002 		mov	r2, #0
+ 4453 0240 4FF00103 		mov	r3, #1
+ 4454 0244 FFF7FEFF 		bl	xQueueGenericSend
+ 266:../src/Common Demo Tasks/GenQTest.c **** 		ulData = 0;
+ 4455              		.loc 1 266 0
+ 4456 0248 4FF00003 		mov	r3, #0
+ 4457 024c 3B61     		str	r3, [r7, #16]
+ 267:../src/Common Demo Tasks/GenQTest.c **** 		xQueueSendToFront( xQueue, ( void * ) &ulData, genqNO_BLOCK );
+ 4458              		.loc 1 267 0
+ 4459 024e 07F11003 		add	r3, r7, #16
+ 4460 0252 7869     		ldr	r0, [r7, #20]
+ 4461 0254 1946     		mov	r1, r3
+ 4462 0256 4FF00002 		mov	r2, #0
+ 4463 025a 4FF00103 		mov	r3, #1
+ 4464 025e FFF7FEFF 		bl	xQueueGenericSend
+ 268:../src/Common Demo Tasks/GenQTest.c **** 
+ 269:../src/Common Demo Tasks/GenQTest.c **** 		/* Now the queue should be full, and when we read the data out we
+ 270:../src/Common Demo Tasks/GenQTest.c **** 		should receive 0, 1, 2, 3, 4. */
+ 271:../src/Common Demo Tasks/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 5 )
+ 4465              		.loc 1 271 0
+ 4466 0262 7869     		ldr	r0, [r7, #20]
+ 4467 0264 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 4468 0268 0346     		mov	r3, r0
+ 4469 026a 052B     		cmp	r3, #5
+ 4470 026c 03D0     		beq	.L16
+ 272:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 273:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4471              		.loc 1 273 0
+ 4472 026e 164B     		ldr	r3, .L41+4
+ 4473 0270 4FF00102 		mov	r2, #1
+ 4474 0274 1A60     		str	r2, [r3, #0]
+ 4475              	.L16:
+ 274:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 275:../src/Common Demo Tasks/GenQTest.c **** 
+ 276:../src/Common Demo Tasks/GenQTest.c **** 		if( xQueueSendToFront( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != errQUEUE_FULL )
+ 4476              		.loc 1 276 0
+ 4477 0276 07F11003 		add	r3, r7, #16
+ 4478 027a 7869     		ldr	r0, [r7, #20]
+ 4479 027c 1946     		mov	r1, r3
+ 4480 027e 4FF00002 		mov	r2, #0
+ 4481 0282 4FF00103 		mov	r3, #1
+ 4482 0286 FFF7FEFF 		bl	xQueueGenericSend
+ 4483 028a 0346     		mov	r3, r0
+ 4484 028c 002B     		cmp	r3, #0
+ 4485 028e 03D0     		beq	.L17
+ 277:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 278:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4486              		.loc 1 278 0
+ 4487 0290 0D4B     		ldr	r3, .L41+4
+ 4488 0292 4FF00102 		mov	r2, #1
+ 4489 0296 1A60     		str	r2, [r3, #0]
+ 4490              	.L17:
+ 279:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 280:../src/Common Demo Tasks/GenQTest.c **** 
+ 281:../src/Common Demo Tasks/GenQTest.c **** 		if( xQueueSendToBack( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != errQUEUE_FULL )
+ 4491              		.loc 1 281 0
+ 4492 0298 07F11003 		add	r3, r7, #16
+ 4493 029c 7869     		ldr	r0, [r7, #20]
+ 4494 029e 1946     		mov	r1, r3
+ 4495 02a0 4FF00002 		mov	r2, #0
+ 4496 02a4 4FF00003 		mov	r3, #0
+ 4497 02a8 FFF7FEFF 		bl	xQueueGenericSend
+ 4498 02ac 0346     		mov	r3, r0
+ 4499 02ae 002B     		cmp	r3, #0
+ 4500 02b0 03D0     		beq	.L18
+ 282:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 283:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4501              		.loc 1 283 0
+ 4502 02b2 054B     		ldr	r3, .L41+4
+ 4503 02b4 4FF00102 		mov	r2, #1
+ 4504 02b8 1A60     		str	r2, [r3, #0]
+ 4505              	.L18:
+ 284:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 285:../src/Common Demo Tasks/GenQTest.c **** 
+ 286:../src/Common Demo Tasks/GenQTest.c **** 		#if configUSE_PREEMPTION == 0
+ 287:../src/Common Demo Tasks/GenQTest.c **** 			taskYIELD();
+ 288:../src/Common Demo Tasks/GenQTest.c **** 		#endif
+ 289:../src/Common Demo Tasks/GenQTest.c **** 
+ 290:../src/Common Demo Tasks/GenQTest.c **** 		/* Check the data we read out is in the expected order. */
+ 291:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 0; ulData < genqQUEUE_LENGTH; ulData++ )
+ 4506              		.loc 1 291 0
+ 4507 02ba 4FF00003 		mov	r3, #0
+ 4508 02be 3B61     		str	r3, [r7, #16]
+ 4509 02c0 3EE0     		b	.L19
+ 4510              	.L42:
+ 4511 02c2 00BF     		.align	2
+ 4512              	.L41:
+ 4513 02c4 04000000 		.word	ulLoopCounter
+ 4514 02c8 00000000 		.word	xErrorDetected
+ 4515              	.L24:
+ 292:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 293:../src/Common Demo Tasks/GenQTest.c **** 			/* Try peeking the data first. */
+ 294:../src/Common Demo Tasks/GenQTest.c **** 			if( xQueuePeek( xQueue, &ulData2, genqNO_BLOCK ) != pdPASS )
+ 4516              		.loc 1 294 0
+ 4517 02cc 07F10C03 		add	r3, r7, #12
+ 4518 02d0 7869     		ldr	r0, [r7, #20]
+ 4519 02d2 1946     		mov	r1, r3
+ 4520 02d4 4FF00002 		mov	r2, #0
+ 4521 02d8 4FF00103 		mov	r3, #1
+ 4522 02dc FFF7FEFF 		bl	xQueueGenericReceive
+ 4523 02e0 0346     		mov	r3, r0
+ 4524 02e2 012B     		cmp	r3, #1
+ 4525 02e4 03D0     		beq	.L20
+ 295:../src/Common Demo Tasks/GenQTest.c **** 			{
+ 296:../src/Common Demo Tasks/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 4526              		.loc 1 296 0
+ 4527 02e6 744B     		ldr	r3, .L43
+ 4528 02e8 4FF00102 		mov	r2, #1
+ 4529 02ec 1A60     		str	r2, [r3, #0]
+ 4530              	.L20:
+ 297:../src/Common Demo Tasks/GenQTest.c **** 			}
+ 298:../src/Common Demo Tasks/GenQTest.c **** 
+ 299:../src/Common Demo Tasks/GenQTest.c **** 			if( ulData != ulData2 )
+ 4531              		.loc 1 299 0
+ 4532 02ee 3A69     		ldr	r2, [r7, #16]
+ 4533 02f0 FB68     		ldr	r3, [r7, #12]
+ 4534 02f2 9A42     		cmp	r2, r3
+ 4535 02f4 03D0     		beq	.L21
+ 300:../src/Common Demo Tasks/GenQTest.c **** 			{
+ 301:../src/Common Demo Tasks/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 4536              		.loc 1 301 0
+ 4537 02f6 704B     		ldr	r3, .L43
+ 4538 02f8 4FF00102 		mov	r2, #1
+ 4539 02fc 1A60     		str	r2, [r3, #0]
+ 4540              	.L21:
+ 302:../src/Common Demo Tasks/GenQTest.c **** 			}
+ 303:../src/Common Demo Tasks/GenQTest.c **** 			
+ 304:../src/Common Demo Tasks/GenQTest.c **** 
+ 305:../src/Common Demo Tasks/GenQTest.c **** 			/* Now try receiving the data for real.  The value should be the
+ 306:../src/Common Demo Tasks/GenQTest.c **** 			same.  Clobber the value first so we know we really received it. */
+ 307:../src/Common Demo Tasks/GenQTest.c **** 			ulData2 = ~ulData2;
+ 4541              		.loc 1 307 0
+ 4542 02fe FB68     		ldr	r3, [r7, #12]
+ 4543 0300 6FEA0303 		mvn	r3, r3
+ 4544 0304 FB60     		str	r3, [r7, #12]
+ 308:../src/Common Demo Tasks/GenQTest.c **** 			if( xQueueReceive( xQueue, &ulData2, genqNO_BLOCK ) != pdPASS )
+ 4545              		.loc 1 308 0
+ 4546 0306 07F10C03 		add	r3, r7, #12
+ 4547 030a 7869     		ldr	r0, [r7, #20]
+ 4548 030c 1946     		mov	r1, r3
+ 4549 030e 4FF00002 		mov	r2, #0
+ 4550 0312 4FF00003 		mov	r3, #0
+ 4551 0316 FFF7FEFF 		bl	xQueueGenericReceive
+ 4552 031a 0346     		mov	r3, r0
+ 4553 031c 012B     		cmp	r3, #1
+ 4554 031e 03D0     		beq	.L22
+ 309:../src/Common Demo Tasks/GenQTest.c **** 			{
+ 310:../src/Common Demo Tasks/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 4555              		.loc 1 310 0
+ 4556 0320 654B     		ldr	r3, .L43
+ 4557 0322 4FF00102 		mov	r2, #1
+ 4558 0326 1A60     		str	r2, [r3, #0]
+ 4559              	.L22:
+ 311:../src/Common Demo Tasks/GenQTest.c **** 			}
+ 312:../src/Common Demo Tasks/GenQTest.c **** 
+ 313:../src/Common Demo Tasks/GenQTest.c **** 			if( ulData != ulData2 )
+ 4560              		.loc 1 313 0
+ 4561 0328 3A69     		ldr	r2, [r7, #16]
+ 4562 032a FB68     		ldr	r3, [r7, #12]
+ 4563 032c 9A42     		cmp	r2, r3
+ 4564 032e 03D0     		beq	.L23
+ 314:../src/Common Demo Tasks/GenQTest.c **** 			{
+ 315:../src/Common Demo Tasks/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 4565              		.loc 1 315 0
+ 4566 0330 614B     		ldr	r3, .L43
+ 4567 0332 4FF00102 		mov	r2, #1
+ 4568 0336 1A60     		str	r2, [r3, #0]
+ 4569              	.L23:
+ 291:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 0; ulData < genqQUEUE_LENGTH; ulData++ )
+ 4570              		.loc 1 291 0
+ 4571 0338 3B69     		ldr	r3, [r7, #16]
+ 4572 033a 03F10103 		add	r3, r3, #1
+ 4573 033e 3B61     		str	r3, [r7, #16]
+ 4574              	.L19:
+ 291:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 0; ulData < genqQUEUE_LENGTH; ulData++ )
+ 4575              		.loc 1 291 0 is_stmt 0 discriminator 1
+ 4576 0340 3B69     		ldr	r3, [r7, #16]
+ 4577 0342 042B     		cmp	r3, #4
+ 4578 0344 C2D9     		bls	.L24
+ 316:../src/Common Demo Tasks/GenQTest.c **** 			}
+ 317:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 318:../src/Common Demo Tasks/GenQTest.c **** 
+ 319:../src/Common Demo Tasks/GenQTest.c **** 		/* The queue should now be empty again. */
+ 320:../src/Common Demo Tasks/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 0 )
+ 4579              		.loc 1 320 0 is_stmt 1
+ 4580 0346 7869     		ldr	r0, [r7, #20]
+ 4581 0348 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 4582 034c 0346     		mov	r3, r0
+ 4583 034e 002B     		cmp	r3, #0
+ 4584 0350 03D0     		beq	.L25
+ 321:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 322:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4585              		.loc 1 322 0
+ 4586 0352 594B     		ldr	r3, .L43
+ 4587 0354 4FF00102 		mov	r2, #1
+ 4588 0358 1A60     		str	r2, [r3, #0]
+ 4589              	.L25:
+ 323:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 324:../src/Common Demo Tasks/GenQTest.c **** 
+ 325:../src/Common Demo Tasks/GenQTest.c **** 		#if configUSE_PREEMPTION == 0
+ 326:../src/Common Demo Tasks/GenQTest.c **** 			taskYIELD();
+ 327:../src/Common Demo Tasks/GenQTest.c **** 		#endif
+ 328:../src/Common Demo Tasks/GenQTest.c **** 
+ 329:../src/Common Demo Tasks/GenQTest.c **** 
+ 330:../src/Common Demo Tasks/GenQTest.c **** 		/* Our queue is empty once more, add 10, 11 to the back. */
+ 331:../src/Common Demo Tasks/GenQTest.c **** 		ulData = 10;
+ 4590              		.loc 1 331 0
+ 4591 035a 4FF00A03 		mov	r3, #10
+ 4592 035e 3B61     		str	r3, [r7, #16]
+ 332:../src/Common Demo Tasks/GenQTest.c **** 		if( xQueueSend( xQueue, &ulData, genqNO_BLOCK ) != pdPASS )
+ 4593              		.loc 1 332 0
+ 4594 0360 07F11003 		add	r3, r7, #16
+ 4595 0364 7869     		ldr	r0, [r7, #20]
+ 4596 0366 1946     		mov	r1, r3
+ 4597 0368 4FF00002 		mov	r2, #0
+ 4598 036c 4FF00003 		mov	r3, #0
+ 4599 0370 FFF7FEFF 		bl	xQueueGenericSend
+ 4600 0374 0346     		mov	r3, r0
+ 4601 0376 012B     		cmp	r3, #1
+ 4602 0378 03D0     		beq	.L26
+ 333:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 334:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4603              		.loc 1 334 0
+ 4604 037a 4F4B     		ldr	r3, .L43
+ 4605 037c 4FF00102 		mov	r2, #1
+ 4606 0380 1A60     		str	r2, [r3, #0]
+ 4607              	.L26:
+ 335:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 336:../src/Common Demo Tasks/GenQTest.c **** 		ulData = 11;
+ 4608              		.loc 1 336 0
+ 4609 0382 4FF00B03 		mov	r3, #11
+ 4610 0386 3B61     		str	r3, [r7, #16]
+ 337:../src/Common Demo Tasks/GenQTest.c **** 		if( xQueueSend( xQueue, &ulData, genqNO_BLOCK ) != pdPASS )
+ 4611              		.loc 1 337 0
+ 4612 0388 07F11003 		add	r3, r7, #16
+ 4613 038c 7869     		ldr	r0, [r7, #20]
+ 4614 038e 1946     		mov	r1, r3
+ 4615 0390 4FF00002 		mov	r2, #0
+ 4616 0394 4FF00003 		mov	r3, #0
+ 4617 0398 FFF7FEFF 		bl	xQueueGenericSend
+ 4618 039c 0346     		mov	r3, r0
+ 4619 039e 012B     		cmp	r3, #1
+ 4620 03a0 03D0     		beq	.L27
+ 338:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 339:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4621              		.loc 1 339 0
+ 4622 03a2 454B     		ldr	r3, .L43
+ 4623 03a4 4FF00102 		mov	r2, #1
+ 4624 03a8 1A60     		str	r2, [r3, #0]
+ 4625              	.L27:
+ 340:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 341:../src/Common Demo Tasks/GenQTest.c **** 
+ 342:../src/Common Demo Tasks/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 2 )
+ 4626              		.loc 1 342 0
+ 4627 03aa 7869     		ldr	r0, [r7, #20]
+ 4628 03ac FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 4629 03b0 0346     		mov	r3, r0
+ 4630 03b2 022B     		cmp	r3, #2
+ 4631 03b4 03D0     		beq	.L28
+ 343:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 344:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4632              		.loc 1 344 0
+ 4633 03b6 404B     		ldr	r3, .L43
+ 4634 03b8 4FF00102 		mov	r2, #1
+ 4635 03bc 1A60     		str	r2, [r3, #0]
+ 4636              	.L28:
+ 345:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 346:../src/Common Demo Tasks/GenQTest.c **** 
+ 347:../src/Common Demo Tasks/GenQTest.c **** 		/* Now we should have 10, 11 in the queue.  Add 7, 8, 9 to the
+ 348:../src/Common Demo Tasks/GenQTest.c **** 		front. */
+ 349:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 9; ulData >= 7; ulData-- )
+ 4637              		.loc 1 349 0
+ 4638 03be 4FF00903 		mov	r3, #9
+ 4639 03c2 3B61     		str	r3, [r7, #16]
+ 4640 03c4 14E0     		b	.L29
+ 4641              	.L31:
+ 350:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 351:../src/Common Demo Tasks/GenQTest.c **** 			if( xQueueSendToFront( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != pdPASS )
+ 4642              		.loc 1 351 0
+ 4643 03c6 07F11003 		add	r3, r7, #16
+ 4644 03ca 7869     		ldr	r0, [r7, #20]
+ 4645 03cc 1946     		mov	r1, r3
+ 4646 03ce 4FF00002 		mov	r2, #0
+ 4647 03d2 4FF00103 		mov	r3, #1
+ 4648 03d6 FFF7FEFF 		bl	xQueueGenericSend
+ 4649 03da 0346     		mov	r3, r0
+ 4650 03dc 012B     		cmp	r3, #1
+ 4651 03de 03D0     		beq	.L30
+ 352:../src/Common Demo Tasks/GenQTest.c **** 			{
+ 353:../src/Common Demo Tasks/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 4652              		.loc 1 353 0
+ 4653 03e0 354B     		ldr	r3, .L43
+ 4654 03e2 4FF00102 		mov	r2, #1
+ 4655 03e6 1A60     		str	r2, [r3, #0]
+ 4656              	.L30:
+ 349:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 9; ulData >= 7; ulData-- )
+ 4657              		.loc 1 349 0
+ 4658 03e8 3B69     		ldr	r3, [r7, #16]
+ 4659 03ea 03F1FF33 		add	r3, r3, #-1
+ 4660 03ee 3B61     		str	r3, [r7, #16]
+ 4661              	.L29:
+ 349:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 9; ulData >= 7; ulData-- )
+ 4662              		.loc 1 349 0 is_stmt 0 discriminator 1
+ 4663 03f0 3B69     		ldr	r3, [r7, #16]
+ 4664 03f2 062B     		cmp	r3, #6
+ 4665 03f4 E7D8     		bhi	.L31
+ 354:../src/Common Demo Tasks/GenQTest.c **** 			}
+ 355:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 356:../src/Common Demo Tasks/GenQTest.c **** 
+ 357:../src/Common Demo Tasks/GenQTest.c **** 		/* Now check that the queue is full, and that receiving data provides
+ 358:../src/Common Demo Tasks/GenQTest.c **** 		the expected sequence of 7, 8, 9, 10, 11. */
+ 359:../src/Common Demo Tasks/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 5 )
+ 4666              		.loc 1 359 0 is_stmt 1
+ 4667 03f6 7869     		ldr	r0, [r7, #20]
+ 4668 03f8 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 4669 03fc 0346     		mov	r3, r0
+ 4670 03fe 052B     		cmp	r3, #5
+ 4671 0400 03D0     		beq	.L32
+ 360:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 361:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4672              		.loc 1 361 0
+ 4673 0402 2D4B     		ldr	r3, .L43
+ 4674 0404 4FF00102 		mov	r2, #1
+ 4675 0408 1A60     		str	r2, [r3, #0]
+ 4676              	.L32:
+ 362:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 363:../src/Common Demo Tasks/GenQTest.c **** 
+ 364:../src/Common Demo Tasks/GenQTest.c **** 		if( xQueueSendToFront( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != errQUEUE_FULL )
+ 4677              		.loc 1 364 0
+ 4678 040a 07F11003 		add	r3, r7, #16
+ 4679 040e 7869     		ldr	r0, [r7, #20]
+ 4680 0410 1946     		mov	r1, r3
+ 4681 0412 4FF00002 		mov	r2, #0
+ 4682 0416 4FF00103 		mov	r3, #1
+ 4683 041a FFF7FEFF 		bl	xQueueGenericSend
+ 4684 041e 0346     		mov	r3, r0
+ 4685 0420 002B     		cmp	r3, #0
+ 4686 0422 03D0     		beq	.L33
+ 365:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 366:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4687              		.loc 1 366 0
+ 4688 0424 244B     		ldr	r3, .L43
+ 4689 0426 4FF00102 		mov	r2, #1
+ 4690 042a 1A60     		str	r2, [r3, #0]
+ 4691              	.L33:
+ 367:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 368:../src/Common Demo Tasks/GenQTest.c **** 
+ 369:../src/Common Demo Tasks/GenQTest.c **** 		if( xQueueSendToBack( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != errQUEUE_FULL )
+ 4692              		.loc 1 369 0
+ 4693 042c 07F11003 		add	r3, r7, #16
+ 4694 0430 7869     		ldr	r0, [r7, #20]
+ 4695 0432 1946     		mov	r1, r3
+ 4696 0434 4FF00002 		mov	r2, #0
+ 4697 0438 4FF00003 		mov	r3, #0
+ 4698 043c FFF7FEFF 		bl	xQueueGenericSend
+ 4699 0440 0346     		mov	r3, r0
+ 4700 0442 002B     		cmp	r3, #0
+ 4701 0444 03D0     		beq	.L34
+ 370:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 371:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4702              		.loc 1 371 0
+ 4703 0446 1C4B     		ldr	r3, .L43
+ 4704 0448 4FF00102 		mov	r2, #1
+ 4705 044c 1A60     		str	r2, [r3, #0]
+ 4706              	.L34:
+ 372:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 373:../src/Common Demo Tasks/GenQTest.c **** 
+ 374:../src/Common Demo Tasks/GenQTest.c **** 		#if configUSE_PREEMPTION == 0
+ 375:../src/Common Demo Tasks/GenQTest.c **** 			taskYIELD();
+ 376:../src/Common Demo Tasks/GenQTest.c **** 		#endif
+ 377:../src/Common Demo Tasks/GenQTest.c **** 
+ 378:../src/Common Demo Tasks/GenQTest.c **** 		/* Check the data we read out is in the expected order. */
+ 379:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 7; ulData < ( 7 + genqQUEUE_LENGTH ); ulData++ )
+ 4707              		.loc 1 379 0
+ 4708 044e 4FF00703 		mov	r3, #7
+ 4709 0452 3B61     		str	r3, [r7, #16]
+ 4710 0454 1CE0     		b	.L35
+ 4711              	.L38:
+ 380:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 381:../src/Common Demo Tasks/GenQTest.c **** 			if( xQueueReceive( xQueue, &ulData2, genqNO_BLOCK ) != pdPASS )
+ 4712              		.loc 1 381 0
+ 4713 0456 07F10C03 		add	r3, r7, #12
+ 4714 045a 7869     		ldr	r0, [r7, #20]
+ 4715 045c 1946     		mov	r1, r3
+ 4716 045e 4FF00002 		mov	r2, #0
+ 4717 0462 4FF00003 		mov	r3, #0
+ 4718 0466 FFF7FEFF 		bl	xQueueGenericReceive
+ 4719 046a 0346     		mov	r3, r0
+ 4720 046c 012B     		cmp	r3, #1
+ 4721 046e 03D0     		beq	.L36
+ 382:../src/Common Demo Tasks/GenQTest.c **** 			{
+ 383:../src/Common Demo Tasks/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 4722              		.loc 1 383 0
+ 4723 0470 114B     		ldr	r3, .L43
+ 4724 0472 4FF00102 		mov	r2, #1
+ 4725 0476 1A60     		str	r2, [r3, #0]
+ 4726              	.L36:
+ 384:../src/Common Demo Tasks/GenQTest.c **** 			}
+ 385:../src/Common Demo Tasks/GenQTest.c **** 
+ 386:../src/Common Demo Tasks/GenQTest.c **** 			if( ulData != ulData2 )
+ 4727              		.loc 1 386 0
+ 4728 0478 3A69     		ldr	r2, [r7, #16]
+ 4729 047a FB68     		ldr	r3, [r7, #12]
+ 4730 047c 9A42     		cmp	r2, r3
+ 4731 047e 03D0     		beq	.L37
+ 387:../src/Common Demo Tasks/GenQTest.c **** 			{
+ 388:../src/Common Demo Tasks/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 4732              		.loc 1 388 0
+ 4733 0480 0D4B     		ldr	r3, .L43
+ 4734 0482 4FF00102 		mov	r2, #1
+ 4735 0486 1A60     		str	r2, [r3, #0]
+ 4736              	.L37:
+ 379:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 7; ulData < ( 7 + genqQUEUE_LENGTH ); ulData++ )
+ 4737              		.loc 1 379 0
+ 4738 0488 3B69     		ldr	r3, [r7, #16]
+ 4739 048a 03F10103 		add	r3, r3, #1
+ 4740 048e 3B61     		str	r3, [r7, #16]
+ 4741              	.L35:
+ 379:../src/Common Demo Tasks/GenQTest.c **** 		for( ulData = 7; ulData < ( 7 + genqQUEUE_LENGTH ); ulData++ )
+ 4742              		.loc 1 379 0 is_stmt 0 discriminator 1
+ 4743 0490 3B69     		ldr	r3, [r7, #16]
+ 4744 0492 0B2B     		cmp	r3, #11
+ 4745 0494 DFD9     		bls	.L38
+ 389:../src/Common Demo Tasks/GenQTest.c **** 			}
+ 390:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 391:../src/Common Demo Tasks/GenQTest.c **** 
+ 392:../src/Common Demo Tasks/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 0 )
+ 4746              		.loc 1 392 0 is_stmt 1
+ 4747 0496 7869     		ldr	r0, [r7, #20]
+ 4748 0498 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 4749 049c 0346     		mov	r3, r0
+ 4750 049e 002B     		cmp	r3, #0
+ 4751 04a0 03D0     		beq	.L39
+ 393:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 394:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4752              		.loc 1 394 0
+ 4753 04a2 054B     		ldr	r3, .L43
+ 4754 04a4 4FF00102 		mov	r2, #1
+ 4755 04a8 1A60     		str	r2, [r3, #0]
+ 4756              	.L39:
+ 395:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 396:../src/Common Demo Tasks/GenQTest.c **** 
+ 397:../src/Common Demo Tasks/GenQTest.c **** 		ulLoopCounter++;
+ 4757              		.loc 1 397 0
+ 4758 04aa 044B     		ldr	r3, .L43+4
+ 4759 04ac 1B68     		ldr	r3, [r3, #0]
+ 4760 04ae 03F10102 		add	r2, r3, #1
+ 4761 04b2 024B     		ldr	r3, .L43+4
+ 4762 04b4 1A60     		str	r2, [r3, #0]
+ 398:../src/Common Demo Tasks/GenQTest.c **** 	}
+ 4763              		.loc 1 398 0
+ 4764 04b6 2FE6     		b	.L40
+ 4765              	.L44:
+ 4766              		.align	2
+ 4767              	.L43:
+ 4768 04b8 00000000 		.word	xErrorDetected
+ 4769 04bc 04000000 		.word	ulLoopCounter
+ 4770              		.cfi_endproc
+ 4771              	.LFE30:
+ 4773              		.align	2
+ 4774              		.thumb
+ 4775              		.thumb_func
+ 4777              	prvLowPriorityMutexTask:
+ 4778              	.LFB31:
+ 399:../src/Common Demo Tasks/GenQTest.c **** }
+ 400:../src/Common Demo Tasks/GenQTest.c **** /*-----------------------------------------------------------*/
+ 401:../src/Common Demo Tasks/GenQTest.c **** 
+ 402:../src/Common Demo Tasks/GenQTest.c **** static void prvLowPriorityMutexTask( void *pvParameters )
+ 403:../src/Common Demo Tasks/GenQTest.c **** {
+ 4779              		.loc 1 403 0
+ 4780              		.cfi_startproc
+ 4781              		@ args = 0, pretend = 0, frame = 16
+ 4782              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4783 04c0 80B5     		push	{r7, lr}
+ 4784              	.LCFI6:
+ 4785              		.cfi_def_cfa_offset 8
+ 4786 04c2 84B0     		sub	sp, sp, #16
+ 4787              	.LCFI7:
+ 4788              		.cfi_def_cfa_offset 24
+ 4789 04c4 00AF     		add	r7, sp, #0
+ 4790              		.cfi_offset 14, -4
+ 4791              		.cfi_offset 7, -8
+ 4792              	.LCFI8:
+ 4793              		.cfi_def_cfa_register 7
+ 4794 04c6 7860     		str	r0, [r7, #4]
+ 404:../src/Common Demo Tasks/GenQTest.c **** xSemaphoreHandle xMutex = ( xSemaphoreHandle ) pvParameters;
+ 4795              		.loc 1 404 0
+ 4796 04c8 7B68     		ldr	r3, [r7, #4]
+ 4797 04ca FB60     		str	r3, [r7, #12]
+ 4798              	.L54:
+ 405:../src/Common Demo Tasks/GenQTest.c **** 
+ 406:../src/Common Demo Tasks/GenQTest.c **** 	#ifdef USE_STDIO
+ 407:../src/Common Demo Tasks/GenQTest.c **** 	void vPrintDisplayMessage( const portCHAR * const * ppcMessageToSend );
+ 408:../src/Common Demo Tasks/GenQTest.c **** 	
+ 409:../src/Common Demo Tasks/GenQTest.c **** 		const portCHAR * const pcTaskStartMsg = "Mutex with priority inheritance test started.\r\n";
+ 410:../src/Common Demo Tasks/GenQTest.c **** 
+ 411:../src/Common Demo Tasks/GenQTest.c **** 		/* Queue a message for printing to say the task has started. */
+ 412:../src/Common Demo Tasks/GenQTest.c **** 		vPrintDisplayMessage( &pcTaskStartMsg );
+ 413:../src/Common Demo Tasks/GenQTest.c **** 	#endif
+ 414:../src/Common Demo Tasks/GenQTest.c **** 
+ 415:../src/Common Demo Tasks/GenQTest.c **** 	for( ;; )
+ 416:../src/Common Demo Tasks/GenQTest.c **** 	{
+ 417:../src/Common Demo Tasks/GenQTest.c **** 		/* Take the mutex.  It should be available now. */
+ 418:../src/Common Demo Tasks/GenQTest.c **** 		if( xSemaphoreTake( xMutex, genqNO_BLOCK ) != pdPASS )
+ 4799              		.loc 1 418 0
+ 4800 04cc F868     		ldr	r0, [r7, #12]
+ 4801 04ce 4FF00001 		mov	r1, #0
+ 4802 04d2 4FF00002 		mov	r2, #0
+ 4803 04d6 4FF00003 		mov	r3, #0
+ 4804 04da FFF7FEFF 		bl	xQueueGenericReceive
+ 4805 04de 0346     		mov	r3, r0
+ 4806 04e0 012B     		cmp	r3, #1
+ 4807 04e2 03D0     		beq	.L46
+ 419:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 420:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4808              		.loc 1 420 0
+ 4809 04e4 384B     		ldr	r3, .L55
+ 4810 04e6 4FF00102 		mov	r2, #1
+ 4811 04ea 1A60     		str	r2, [r3, #0]
+ 4812              	.L46:
+ 421:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 422:../src/Common Demo Tasks/GenQTest.c **** 
+ 423:../src/Common Demo Tasks/GenQTest.c **** 		/* Set our guarded variable to a known start value. */
+ 424:../src/Common Demo Tasks/GenQTest.c **** 		ulGuardedVariable = 0;
+ 4813              		.loc 1 424 0
+ 4814 04ec 374B     		ldr	r3, .L55+4
+ 4815 04ee 4FF00002 		mov	r2, #0
+ 4816 04f2 1A60     		str	r2, [r3, #0]
+ 425:../src/Common Demo Tasks/GenQTest.c **** 
+ 426:../src/Common Demo Tasks/GenQTest.c **** 		/* Our priority should be as per that assigned when the task was
+ 427:../src/Common Demo Tasks/GenQTest.c **** 		created. */
+ 428:../src/Common Demo Tasks/GenQTest.c **** 		if( uxTaskPriorityGet( NULL ) != genqMUTEX_LOW_PRIORITY )
+ 4817              		.loc 1 428 0
+ 4818 04f4 4FF00000 		mov	r0, #0
+ 4819 04f8 FFF7FEFF 		bl	uxTaskPriorityGet
+ 4820 04fc 0346     		mov	r3, r0
+ 4821 04fe 002B     		cmp	r3, #0
+ 4822 0500 03D0     		beq	.L47
+ 429:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 430:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4823              		.loc 1 430 0
+ 4824 0502 314B     		ldr	r3, .L55
+ 4825 0504 4FF00102 		mov	r2, #1
+ 4826 0508 1A60     		str	r2, [r3, #0]
+ 4827              	.L47:
+ 431:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 432:../src/Common Demo Tasks/GenQTest.c **** 
+ 433:../src/Common Demo Tasks/GenQTest.c **** 		/* Now unsuspend the high priority task.  This will attempt to take the
+ 434:../src/Common Demo Tasks/GenQTest.c **** 		mutex, and block when it finds it cannot obtain it. */
+ 435:../src/Common Demo Tasks/GenQTest.c **** 		vTaskResume( xHighPriorityMutexTask );
+ 4828              		.loc 1 435 0
+ 4829 050a 314B     		ldr	r3, .L55+8
+ 4830 050c 1B68     		ldr	r3, [r3, #0]
+ 4831 050e 1846     		mov	r0, r3
+ 4832 0510 FFF7FEFF 		bl	vTaskResume
+ 436:../src/Common Demo Tasks/GenQTest.c **** 
+ 437:../src/Common Demo Tasks/GenQTest.c **** 		/* We should now have inherited the prioritoy of the high priority task,
+ 438:../src/Common Demo Tasks/GenQTest.c **** 		as by now it will have attempted to get the mutex. */
+ 439:../src/Common Demo Tasks/GenQTest.c **** 		if( uxTaskPriorityGet( NULL ) != genqMUTEX_HIGH_PRIORITY )
+ 4833              		.loc 1 439 0
+ 4834 0514 4FF00000 		mov	r0, #0
+ 4835 0518 FFF7FEFF 		bl	uxTaskPriorityGet
+ 4836 051c 0346     		mov	r3, r0
+ 4837 051e 032B     		cmp	r3, #3
+ 4838 0520 03D0     		beq	.L48
+ 440:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 441:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4839              		.loc 1 441 0
+ 4840 0522 294B     		ldr	r3, .L55
+ 4841 0524 4FF00102 		mov	r2, #1
+ 4842 0528 1A60     		str	r2, [r3, #0]
+ 4843              	.L48:
+ 442:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 443:../src/Common Demo Tasks/GenQTest.c **** 
+ 444:../src/Common Demo Tasks/GenQTest.c **** 		/* We can attempt to set our priority to the test priority - between the
+ 445:../src/Common Demo Tasks/GenQTest.c **** 		idle priority and the medium/high test priorities, but our actual
+ 446:../src/Common Demo Tasks/GenQTest.c **** 		prioroity should remain at the high priority. */
+ 447:../src/Common Demo Tasks/GenQTest.c **** 		vTaskPrioritySet( NULL, genqMUTEX_TEST_PRIORITY );
+ 4844              		.loc 1 447 0
+ 4845 052a 4FF00000 		mov	r0, #0
+ 4846 052e 4FF00101 		mov	r1, #1
+ 4847 0532 FFF7FEFF 		bl	vTaskPrioritySet
+ 448:../src/Common Demo Tasks/GenQTest.c **** 		if( uxTaskPriorityGet( NULL ) != genqMUTEX_HIGH_PRIORITY )
+ 4848              		.loc 1 448 0
+ 4849 0536 4FF00000 		mov	r0, #0
+ 4850 053a FFF7FEFF 		bl	uxTaskPriorityGet
+ 4851 053e 0346     		mov	r3, r0
+ 4852 0540 032B     		cmp	r3, #3
+ 4853 0542 03D0     		beq	.L49
+ 449:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 450:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4854              		.loc 1 450 0
+ 4855 0544 204B     		ldr	r3, .L55
+ 4856 0546 4FF00102 		mov	r2, #1
+ 4857 054a 1A60     		str	r2, [r3, #0]
+ 4858              	.L49:
+ 451:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 452:../src/Common Demo Tasks/GenQTest.c **** 
+ 453:../src/Common Demo Tasks/GenQTest.c **** 		/* Now unsuspend the medium priority task.  This should not run as our
+ 454:../src/Common Demo Tasks/GenQTest.c **** 		inherited priority is above that of the medium priority task. */
+ 455:../src/Common Demo Tasks/GenQTest.c **** 		vTaskResume( xMediumPriorityMutexTask );
+ 4859              		.loc 1 455 0
+ 4860 054c 214B     		ldr	r3, .L55+12
+ 4861 054e 1B68     		ldr	r3, [r3, #0]
+ 4862 0550 1846     		mov	r0, r3
+ 4863 0552 FFF7FEFF 		bl	vTaskResume
+ 456:../src/Common Demo Tasks/GenQTest.c **** 
+ 457:../src/Common Demo Tasks/GenQTest.c **** 		/* If the did run then it will have incremented our guarded variable. */
+ 458:../src/Common Demo Tasks/GenQTest.c **** 		if( ulGuardedVariable != 0 )
+ 4864              		.loc 1 458 0
+ 4865 0556 1D4B     		ldr	r3, .L55+4
+ 4866 0558 1B68     		ldr	r3, [r3, #0]
+ 4867 055a 002B     		cmp	r3, #0
+ 4868 055c 03D0     		beq	.L50
+ 459:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 460:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4869              		.loc 1 460 0
+ 4870 055e 1A4B     		ldr	r3, .L55
+ 4871 0560 4FF00102 		mov	r2, #1
+ 4872 0564 1A60     		str	r2, [r3, #0]
+ 4873              	.L50:
+ 461:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 462:../src/Common Demo Tasks/GenQTest.c **** 
+ 463:../src/Common Demo Tasks/GenQTest.c **** 		/* When we give back the semaphore our priority should be disinherited
+ 464:../src/Common Demo Tasks/GenQTest.c **** 		back to the priority to which we attempted to set ourselves.  This means
+ 465:../src/Common Demo Tasks/GenQTest.c **** 		that when the high priority task next blocks, the medium priority task
+ 466:../src/Common Demo Tasks/GenQTest.c **** 		should execute and increment the guarded variable.   When we next run
+ 467:../src/Common Demo Tasks/GenQTest.c **** 		both the high and medium priority tasks will have been suspended again. */
+ 468:../src/Common Demo Tasks/GenQTest.c **** 		if( xSemaphoreGive( xMutex ) != pdPASS )
+ 4874              		.loc 1 468 0
+ 4875 0566 F868     		ldr	r0, [r7, #12]
+ 4876 0568 4FF00001 		mov	r1, #0
+ 4877 056c 4FF00002 		mov	r2, #0
+ 4878 0570 4FF00003 		mov	r3, #0
+ 4879 0574 FFF7FEFF 		bl	xQueueGenericSend
+ 4880 0578 0346     		mov	r3, r0
+ 4881 057a 012B     		cmp	r3, #1
+ 4882 057c 03D0     		beq	.L51
+ 469:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 470:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4883              		.loc 1 470 0
+ 4884 057e 124B     		ldr	r3, .L55
+ 4885 0580 4FF00102 		mov	r2, #1
+ 4886 0584 1A60     		str	r2, [r3, #0]
+ 4887              	.L51:
+ 471:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 472:../src/Common Demo Tasks/GenQTest.c **** 
+ 473:../src/Common Demo Tasks/GenQTest.c **** 		/* Check that the guarded variable did indeed increment... */
+ 474:../src/Common Demo Tasks/GenQTest.c **** 		if( ulGuardedVariable != 1 )
+ 4888              		.loc 1 474 0
+ 4889 0586 114B     		ldr	r3, .L55+4
+ 4890 0588 1B68     		ldr	r3, [r3, #0]
+ 4891 058a 012B     		cmp	r3, #1
+ 4892 058c 03D0     		beq	.L52
+ 475:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 476:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4893              		.loc 1 476 0
+ 4894 058e 0E4B     		ldr	r3, .L55
+ 4895 0590 4FF00102 		mov	r2, #1
+ 4896 0594 1A60     		str	r2, [r3, #0]
+ 4897              	.L52:
+ 477:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 478:../src/Common Demo Tasks/GenQTest.c **** 
+ 479:../src/Common Demo Tasks/GenQTest.c **** 		/* ... and that our priority has been disinherited to
+ 480:../src/Common Demo Tasks/GenQTest.c **** 		genqMUTEX_TEST_PRIORITY. */
+ 481:../src/Common Demo Tasks/GenQTest.c **** 		if( uxTaskPriorityGet( NULL ) != genqMUTEX_TEST_PRIORITY )
+ 4898              		.loc 1 481 0
+ 4899 0596 4FF00000 		mov	r0, #0
+ 4900 059a FFF7FEFF 		bl	uxTaskPriorityGet
+ 4901 059e 0346     		mov	r3, r0
+ 4902 05a0 012B     		cmp	r3, #1
+ 4903 05a2 03D0     		beq	.L53
+ 482:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 483:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 4904              		.loc 1 483 0
+ 4905 05a4 084B     		ldr	r3, .L55
+ 4906 05a6 4FF00102 		mov	r2, #1
+ 4907 05aa 1A60     		str	r2, [r3, #0]
+ 4908              	.L53:
+ 484:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 485:../src/Common Demo Tasks/GenQTest.c **** 
+ 486:../src/Common Demo Tasks/GenQTest.c **** 		/* Set our priority back to our original priority ready for the next
+ 487:../src/Common Demo Tasks/GenQTest.c **** 		loop around this test. */
+ 488:../src/Common Demo Tasks/GenQTest.c **** 		vTaskPrioritySet( NULL, genqMUTEX_LOW_PRIORITY );
+ 4909              		.loc 1 488 0
+ 4910 05ac 4FF00000 		mov	r0, #0
+ 4911 05b0 4FF00001 		mov	r1, #0
+ 4912 05b4 FFF7FEFF 		bl	vTaskPrioritySet
+ 489:../src/Common Demo Tasks/GenQTest.c **** 
+ 490:../src/Common Demo Tasks/GenQTest.c **** 		/* Just to show we are still running. */
+ 491:../src/Common Demo Tasks/GenQTest.c **** 		ulLoopCounter2++;
+ 4913              		.loc 1 491 0
+ 4914 05b8 074B     		ldr	r3, .L55+16
+ 4915 05ba 1B68     		ldr	r3, [r3, #0]
+ 4916 05bc 03F10102 		add	r2, r3, #1
+ 4917 05c0 054B     		ldr	r3, .L55+16
+ 4918 05c2 1A60     		str	r2, [r3, #0]
+ 492:../src/Common Demo Tasks/GenQTest.c **** 
+ 493:../src/Common Demo Tasks/GenQTest.c **** 		#if configUSE_PREEMPTION == 0
+ 494:../src/Common Demo Tasks/GenQTest.c **** 			taskYIELD();
+ 495:../src/Common Demo Tasks/GenQTest.c **** 		#endif		
+ 496:../src/Common Demo Tasks/GenQTest.c **** 	}
+ 4919              		.loc 1 496 0
+ 4920 05c4 82E7     		b	.L54
+ 4921              	.L56:
+ 4922 05c6 00BF     		.align	2
+ 4923              	.L55:
+ 4924 05c8 00000000 		.word	xErrorDetected
+ 4925 05cc 0C000000 		.word	ulGuardedVariable
+ 4926 05d0 10000000 		.word	xHighPriorityMutexTask
+ 4927 05d4 14000000 		.word	xMediumPriorityMutexTask
+ 4928 05d8 08000000 		.word	ulLoopCounter2
+ 4929              		.cfi_endproc
+ 4930              	.LFE31:
+ 4932              		.align	2
+ 4933              		.thumb
+ 4934              		.thumb_func
+ 4936              	prvMediumPriorityMutexTask:
+ 4937              	.LFB32:
+ 497:../src/Common Demo Tasks/GenQTest.c **** }
+ 498:../src/Common Demo Tasks/GenQTest.c **** /*-----------------------------------------------------------*/
+ 499:../src/Common Demo Tasks/GenQTest.c **** 
+ 500:../src/Common Demo Tasks/GenQTest.c **** static void prvMediumPriorityMutexTask( void *pvParameters )
+ 501:../src/Common Demo Tasks/GenQTest.c **** {
+ 4938              		.loc 1 501 0
+ 4939              		.cfi_startproc
+ 4940              		@ args = 0, pretend = 0, frame = 8
+ 4941              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4942 05dc 80B5     		push	{r7, lr}
+ 4943              	.LCFI9:
+ 4944              		.cfi_def_cfa_offset 8
+ 4945 05de 82B0     		sub	sp, sp, #8
+ 4946              	.LCFI10:
+ 4947              		.cfi_def_cfa_offset 16
+ 4948 05e0 00AF     		add	r7, sp, #0
+ 4949              		.cfi_offset 14, -4
+ 4950              		.cfi_offset 7, -8
+ 4951              	.LCFI11:
+ 4952              		.cfi_def_cfa_register 7
+ 4953 05e2 7860     		str	r0, [r7, #4]
+ 4954              	.L58:
+ 502:../src/Common Demo Tasks/GenQTest.c **** 	( void ) pvParameters;
+ 503:../src/Common Demo Tasks/GenQTest.c **** 
+ 504:../src/Common Demo Tasks/GenQTest.c **** 	for( ;; )
+ 505:../src/Common Demo Tasks/GenQTest.c **** 	{
+ 506:../src/Common Demo Tasks/GenQTest.c **** 		/* The medium priority task starts by suspending itself.  The low
+ 507:../src/Common Demo Tasks/GenQTest.c **** 		priority task will unsuspend this task when required. */
+ 508:../src/Common Demo Tasks/GenQTest.c **** 		vTaskSuspend( NULL );
+ 4955              		.loc 1 508 0 discriminator 1
+ 4956 05e4 4FF00000 		mov	r0, #0
+ 4957 05e8 FFF7FEFF 		bl	vTaskSuspend
+ 509:../src/Common Demo Tasks/GenQTest.c **** 
+ 510:../src/Common Demo Tasks/GenQTest.c **** 		/* When this task unsuspends all it does is increment the guarded
+ 511:../src/Common Demo Tasks/GenQTest.c **** 		variable, this is so the low priority task knows that it has
+ 512:../src/Common Demo Tasks/GenQTest.c **** 		executed. */
+ 513:../src/Common Demo Tasks/GenQTest.c **** 		ulGuardedVariable++;
+ 4958              		.loc 1 513 0 discriminator 1
+ 4959 05ec 034B     		ldr	r3, .L59
+ 4960 05ee 1B68     		ldr	r3, [r3, #0]
+ 4961 05f0 03F10102 		add	r2, r3, #1
+ 4962 05f4 014B     		ldr	r3, .L59
+ 4963 05f6 1A60     		str	r2, [r3, #0]
+ 514:../src/Common Demo Tasks/GenQTest.c **** 	}
+ 4964              		.loc 1 514 0 discriminator 1
+ 4965 05f8 F4E7     		b	.L58
+ 4966              	.L60:
+ 4967 05fa 00BF     		.align	2
+ 4968              	.L59:
+ 4969 05fc 0C000000 		.word	ulGuardedVariable
+ 4970              		.cfi_endproc
+ 4971              	.LFE32:
+ 4973              		.align	2
+ 4974              		.thumb
+ 4975              		.thumb_func
+ 4977              	prvHighPriorityMutexTask:
+ 4978              	.LFB33:
+ 515:../src/Common Demo Tasks/GenQTest.c **** }
+ 516:../src/Common Demo Tasks/GenQTest.c **** /*-----------------------------------------------------------*/
+ 517:../src/Common Demo Tasks/GenQTest.c **** 
+ 518:../src/Common Demo Tasks/GenQTest.c **** static void prvHighPriorityMutexTask( void *pvParameters )
+ 519:../src/Common Demo Tasks/GenQTest.c **** {
+ 4979              		.loc 1 519 0
+ 4980              		.cfi_startproc
+ 4981              		@ args = 0, pretend = 0, frame = 16
+ 4982              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4983 0600 80B5     		push	{r7, lr}
+ 4984              	.LCFI12:
+ 4985              		.cfi_def_cfa_offset 8
+ 4986 0602 84B0     		sub	sp, sp, #16
+ 4987              	.LCFI13:
+ 4988              		.cfi_def_cfa_offset 24
+ 4989 0604 00AF     		add	r7, sp, #0
+ 4990              		.cfi_offset 14, -4
+ 4991              		.cfi_offset 7, -8
+ 4992              	.LCFI14:
+ 4993              		.cfi_def_cfa_register 7
+ 4994 0606 7860     		str	r0, [r7, #4]
+ 520:../src/Common Demo Tasks/GenQTest.c **** xSemaphoreHandle xMutex = ( xSemaphoreHandle ) pvParameters;
+ 4995              		.loc 1 520 0
+ 4996 0608 7B68     		ldr	r3, [r7, #4]
+ 4997 060a FB60     		str	r3, [r7, #12]
+ 4998 060c 00E0     		b	.L64
+ 4999              	.L65:
+ 521:../src/Common Demo Tasks/GenQTest.c **** 
+ 522:../src/Common Demo Tasks/GenQTest.c **** 	for( ;; )
+ 523:../src/Common Demo Tasks/GenQTest.c **** 	{
+ 524:../src/Common Demo Tasks/GenQTest.c **** 		/* The high priority task starts by suspending itself.  The low
+ 525:../src/Common Demo Tasks/GenQTest.c **** 		priority task will unsuspend this task when required. */
+ 526:../src/Common Demo Tasks/GenQTest.c **** 		vTaskSuspend( NULL );
+ 527:../src/Common Demo Tasks/GenQTest.c **** 
+ 528:../src/Common Demo Tasks/GenQTest.c **** 		/* When this task unsuspends all it does is attempt to obtain
+ 529:../src/Common Demo Tasks/GenQTest.c **** 		the mutex.  It should find the mutex is not available so a
+ 530:../src/Common Demo Tasks/GenQTest.c **** 		block time is specified. */
+ 531:../src/Common Demo Tasks/GenQTest.c **** 		if( xSemaphoreTake( xMutex, portMAX_DELAY ) != pdPASS )
+ 532:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 533:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 534:../src/Common Demo Tasks/GenQTest.c **** 		}
+ 535:../src/Common Demo Tasks/GenQTest.c **** 
+ 536:../src/Common Demo Tasks/GenQTest.c **** 		/* When we eventually obtain the mutex we just give it back then
+ 537:../src/Common Demo Tasks/GenQTest.c **** 		return to suspend ready for the next test. */
+ 538:../src/Common Demo Tasks/GenQTest.c **** 		if( xSemaphoreGive( xMutex ) != pdPASS )
+ 539:../src/Common Demo Tasks/GenQTest.c **** 		{
+ 540:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 541:../src/Common Demo Tasks/GenQTest.c **** 		}		
+ 542:../src/Common Demo Tasks/GenQTest.c **** 	}
+ 5000              		.loc 1 542 0
+ 5001 060e 00BF     		nop
+ 5002              	.L64:
+ 526:../src/Common Demo Tasks/GenQTest.c **** 		vTaskSuspend( NULL );
+ 5003              		.loc 1 526 0
+ 5004 0610 4FF00000 		mov	r0, #0
+ 5005 0614 FFF7FEFF 		bl	vTaskSuspend
+ 531:../src/Common Demo Tasks/GenQTest.c **** 		if( xSemaphoreTake( xMutex, portMAX_DELAY ) != pdPASS )
+ 5006              		.loc 1 531 0
+ 5007 0618 F868     		ldr	r0, [r7, #12]
+ 5008 061a 4FF00001 		mov	r1, #0
+ 5009 061e 4FF0FF32 		mov	r2, #-1
+ 5010 0622 4FF00003 		mov	r3, #0
+ 5011 0626 FFF7FEFF 		bl	xQueueGenericReceive
+ 5012 062a 0346     		mov	r3, r0
+ 5013 062c 012B     		cmp	r3, #1
+ 5014 062e 03D0     		beq	.L62
+ 533:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 5015              		.loc 1 533 0
+ 5016 0630 0A4B     		ldr	r3, .L66
+ 5017 0632 4FF00102 		mov	r2, #1
+ 5018 0636 1A60     		str	r2, [r3, #0]
+ 5019              	.L62:
+ 538:../src/Common Demo Tasks/GenQTest.c **** 		if( xSemaphoreGive( xMutex ) != pdPASS )
+ 5020              		.loc 1 538 0
+ 5021 0638 F868     		ldr	r0, [r7, #12]
+ 5022 063a 4FF00001 		mov	r1, #0
+ 5023 063e 4FF00002 		mov	r2, #0
+ 5024 0642 4FF00003 		mov	r3, #0
+ 5025 0646 FFF7FEFF 		bl	xQueueGenericSend
+ 5026 064a 0346     		mov	r3, r0
+ 5027 064c 012B     		cmp	r3, #1
+ 5028 064e DED0     		beq	.L65
+ 540:../src/Common Demo Tasks/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 5029              		.loc 1 540 0
+ 5030 0650 024B     		ldr	r3, .L66
+ 5031 0652 4FF00102 		mov	r2, #1
+ 5032 0656 1A60     		str	r2, [r3, #0]
+ 5033              		.loc 1 542 0
+ 5034 0658 DAE7     		b	.L64
+ 5035              	.L67:
+ 5036 065a 00BF     		.align	2
+ 5037              	.L66:
+ 5038 065c 00000000 		.word	xErrorDetected
+ 5039              		.cfi_endproc
+ 5040              	.LFE33:
+ 5042              		.align	2
+ 5043              		.global	xAreGenericQueueTasksStillRunning
+ 5044              		.thumb
+ 5045              		.thumb_func
+ 5047              	xAreGenericQueueTasksStillRunning:
+ 5048              	.LFB34:
+ 543:../src/Common Demo Tasks/GenQTest.c **** }
+ 544:../src/Common Demo Tasks/GenQTest.c **** /*-----------------------------------------------------------*/
+ 545:../src/Common Demo Tasks/GenQTest.c **** 
+ 546:../src/Common Demo Tasks/GenQTest.c **** /* This is called to check that all the created tasks are still running. */
+ 547:../src/Common Demo Tasks/GenQTest.c **** portBASE_TYPE xAreGenericQueueTasksStillRunning( void )
+ 548:../src/Common Demo Tasks/GenQTest.c **** {
+ 5049              		.loc 1 548 0
+ 5050              		.cfi_startproc
+ 5051              		@ args = 0, pretend = 0, frame = 0
+ 5052              		@ frame_needed = 1, uses_anonymous_args = 0
+ 5053              		@ link register save eliminated.
+ 5054 0660 80B4     		push	{r7}
+ 5055              	.LCFI15:
+ 5056              		.cfi_def_cfa_offset 4
+ 5057 0662 00AF     		add	r7, sp, #0
+ 5058              		.cfi_offset 7, -4
+ 5059              	.LCFI16:
+ 5060              		.cfi_def_cfa_register 7
+ 549:../src/Common Demo Tasks/GenQTest.c **** static unsigned portLONG ulLastLoopCounter = 0, ulLastLoopCounter2 = 0;
+ 550:../src/Common Demo Tasks/GenQTest.c **** 
+ 551:../src/Common Demo Tasks/GenQTest.c **** 	/* If the demo task is still running then we expect the loopcounters to
+ 552:../src/Common Demo Tasks/GenQTest.c **** 	have incremented since this function was last called. */
+ 553:../src/Common Demo Tasks/GenQTest.c **** 	if( ulLastLoopCounter == ulLoopCounter )
+ 5061              		.loc 1 553 0
+ 5062 0664 124B     		ldr	r3, .L71
+ 5063 0666 1A68     		ldr	r2, [r3, #0]
+ 5064 0668 124B     		ldr	r3, .L71+4
+ 5065 066a 1B68     		ldr	r3, [r3, #0]
+ 5066 066c 9A42     		cmp	r2, r3
+ 5067 066e 03D1     		bne	.L69
+ 554:../src/Common Demo Tasks/GenQTest.c **** 	{
+ 555:../src/Common Demo Tasks/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 5068              		.loc 1 555 0
+ 5069 0670 114B     		ldr	r3, .L71+8
+ 5070 0672 4FF00102 		mov	r2, #1
+ 5071 0676 1A60     		str	r2, [r3, #0]
+ 5072              	.L69:
+ 556:../src/Common Demo Tasks/GenQTest.c **** 	}
+ 557:../src/Common Demo Tasks/GenQTest.c **** 
+ 558:../src/Common Demo Tasks/GenQTest.c **** 	if( ulLastLoopCounter2 == ulLoopCounter2 )
+ 5073              		.loc 1 558 0
+ 5074 0678 104B     		ldr	r3, .L71+12
+ 5075 067a 1A68     		ldr	r2, [r3, #0]
+ 5076 067c 104B     		ldr	r3, .L71+16
+ 5077 067e 1B68     		ldr	r3, [r3, #0]
+ 5078 0680 9A42     		cmp	r2, r3
+ 5079 0682 03D1     		bne	.L70
+ 559:../src/Common Demo Tasks/GenQTest.c **** 	{
+ 560:../src/Common Demo Tasks/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 5080              		.loc 1 560 0
+ 5081 0684 0C4B     		ldr	r3, .L71+8
+ 5082 0686 4FF00102 		mov	r2, #1
+ 5083 068a 1A60     		str	r2, [r3, #0]
+ 5084              	.L70:
+ 561:../src/Common Demo Tasks/GenQTest.c **** 	}
+ 562:../src/Common Demo Tasks/GenQTest.c **** 
+ 563:../src/Common Demo Tasks/GenQTest.c **** 	ulLastLoopCounter = ulLoopCounter;
+ 5085              		.loc 1 563 0
+ 5086 068c 094B     		ldr	r3, .L71+4
+ 5087 068e 1A68     		ldr	r2, [r3, #0]
+ 5088 0690 074B     		ldr	r3, .L71
+ 5089 0692 1A60     		str	r2, [r3, #0]
+ 564:../src/Common Demo Tasks/GenQTest.c **** 	ulLastLoopCounter2 = ulLoopCounter2;	
+ 5090              		.loc 1 564 0
+ 5091 0694 0A4B     		ldr	r3, .L71+16
+ 5092 0696 1A68     		ldr	r2, [r3, #0]
+ 5093 0698 084B     		ldr	r3, .L71+12
+ 5094 069a 1A60     		str	r2, [r3, #0]
+ 565:../src/Common Demo Tasks/GenQTest.c **** 
+ 566:../src/Common Demo Tasks/GenQTest.c **** 	/* Errors detected in the task itself will have latched xErrorDetected
+ 567:../src/Common Demo Tasks/GenQTest.c **** 	to true. */
+ 568:../src/Common Demo Tasks/GenQTest.c **** 
+ 569:../src/Common Demo Tasks/GenQTest.c **** 	return !xErrorDetected;
+ 5095              		.loc 1 569 0
+ 5096 069c 064B     		ldr	r3, .L71+8
+ 5097 069e 1B68     		ldr	r3, [r3, #0]
+ 5098 06a0 002B     		cmp	r3, #0
+ 5099 06a2 14BF     		ite	ne
+ 5100 06a4 0023     		movne	r3, #0
+ 5101 06a6 0123     		moveq	r3, #1
+ 570:../src/Common Demo Tasks/GenQTest.c **** }
+ 5102              		.loc 1 570 0
+ 5103 06a8 1846     		mov	r0, r3
+ 5104 06aa BD46     		mov	sp, r7
+ 5105 06ac 80BC     		pop	{r7}
+ 5106 06ae 7047     		bx	lr
+ 5107              	.L72:
+ 5108              		.align	2
+ 5109              	.L71:
+ 5110 06b0 18000000 		.word	ulLastLoopCounter.5847
+ 5111 06b4 04000000 		.word	ulLoopCounter
+ 5112 06b8 00000000 		.word	xErrorDetected
+ 5113 06bc 1C000000 		.word	ulLastLoopCounter2.5848
+ 5114 06c0 08000000 		.word	ulLoopCounter2
+ 5115              		.cfi_endproc
+ 5116              	.LFE34:
+ 5118              		.bss
+ 5119              		.align	2
+ 5120              	ulLastLoopCounter.5847:
+ 5121 0018 00000000 		.space	4
+ 5122              		.align	2
+ 5123              	ulLastLoopCounter2.5848:
+ 5124 001c 00000000 		.space	4
+ 5125              		.text
+ 5126              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 GenQTest.c
+     /tmp/ccUfYtAp.s:4116   .bss:00000000 $d
+     /tmp/ccUfYtAp.s:4117   .bss:00000000 xErrorDetected
+     /tmp/ccUfYtAp.s:4120   .bss:00000004 ulLoopCounter
+     /tmp/ccUfYtAp.s:4123   .bss:00000008 ulLoopCounter2
+     /tmp/ccUfYtAp.s:4126   .bss:0000000c ulGuardedVariable
+     /tmp/ccUfYtAp.s:4129   .bss:00000010 xHighPriorityMutexTask
+     /tmp/ccUfYtAp.s:4132   .bss:00000014 xMediumPriorityMutexTask
+     /tmp/ccUfYtAp.s:4135   .rodata:00000000 $d
+     /tmp/ccUfYtAp.s:4154   .text:00000000 $t
+     /tmp/ccUfYtAp.s:4159   .text:00000000 vStartGenericQueueTasks
+     /tmp/ccUfYtAp.s:4264   .text:000000dc $d
+     /tmp/ccUfYtAp.s:4283   .text:0000010c prvSendFrontAndBackTest
+     /tmp/ccUfYtAp.s:4777   .text:000004c0 prvLowPriorityMutexTask
+     /tmp/ccUfYtAp.s:4936   .text:000005dc prvMediumPriorityMutexTask
+     /tmp/ccUfYtAp.s:4977   .text:00000600 prvHighPriorityMutexTask
+     /tmp/ccUfYtAp.s:4279   .text:0000010c $t
+     /tmp/ccUfYtAp.s:4513   .text:000002c4 $d
+     /tmp/ccUfYtAp.s:4517   .text:000002cc $t
+     /tmp/ccUfYtAp.s:4768   .text:000004b8 $d
+     /tmp/ccUfYtAp.s:4773   .text:000004c0 $t
+     /tmp/ccUfYtAp.s:4924   .text:000005c8 $d
+     /tmp/ccUfYtAp.s:4932   .text:000005dc $t
+     /tmp/ccUfYtAp.s:4969   .text:000005fc $d
+     /tmp/ccUfYtAp.s:4973   .text:00000600 $t
+     /tmp/ccUfYtAp.s:5038   .text:0000065c $d
+     /tmp/ccUfYtAp.s:5042   .text:00000660 $t
+     /tmp/ccUfYtAp.s:5047   .text:00000660 xAreGenericQueueTasksStillRunning
+     /tmp/ccUfYtAp.s:5110   .text:000006b0 $d
+     /tmp/ccUfYtAp.s:5120   .bss:00000018 ulLastLoopCounter.5847
+     /tmp/ccUfYtAp.s:5123   .bss:0000001c ulLastLoopCounter2.5848
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+xQueueGenericCreate
+vQueueAddToRegistry
+xTaskGenericCreate
+xQueueCreateMutex
+xQueueGenericSend
+uxQueueMessagesWaiting
+xQueueGenericReceive
+uxTaskPriorityGet
+vTaskResume
+vTaskPrioritySet
+vTaskSuspend

@@ -1,0 +1,1094 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 18, 4
+  12              		.thumb
+  13              		.file	"recmutex.c"
+  23              	.Ltext0:
+  24              		.file 1 "../src/Common Demo Tasks/recmutex.c"
+ 3528              		.align	2
+ 3529              	xMutex:
+ 3530 0000 00000000 		.space	4
+ 3531              		.align	2
+ 3532              	xErrorOccurred:
+ 3533 0004 00000000 		.space	4
+ 3534              		.align	2
+ 3535              	xControllingIsSuspended:
+ 3536 0008 00000000 		.space	4
+ 3537              		.align	2
+ 3538              	xBlockingIsSuspended:
+ 3539 000c 00000000 		.space	4
+ 3540              		.align	2
+ 3541              	uxControllingCycles:
+ 3542 0010 00000000 		.space	4
+ 3543              		.align	2
+ 3544              	uxBlockingCycles:
+ 3545 0014 00000000 		.space	4
+ 3546              		.align	2
+ 3547              	uxPollingCycles:
+ 3548 0018 00000000 		.space	4
+ 3549              		.align	2
+ 3550              	xControllingTaskHandle:
+ 3551 001c 00000000 		.space	4
+ 3552              		.align	2
+ 3553              	xBlockingTaskHandle:
+ 3554 0020 00000000 		.space	4
+ 3555              		.section	.rodata
+ 3556              		.align	2
+ 3557              	.LC0:
+ 3558 0000 52656375 		.ascii	"Recursive_Mutex\000"
+ 3558      72736976 
+ 3558      655F4D75 
+ 3558      74657800 
+ 3559              		.align	2
+ 3560              	.LC1:
+ 3561 0010 52656331 		.ascii	"Rec1\000"
+ 3561      00
+ 3562 0015 000000   		.align	2
+ 3563              	.LC2:
+ 3564 0018 52656332 		.ascii	"Rec2\000"
+ 3564      00
+ 3565 001d 000000   		.align	2
+ 3566              	.LC3:
+ 3567 0020 52656333 		.ascii	"Rec3\000"
+ 3567      00
+ 3568 0025 000000   		.text
+ 3569              		.align	2
+ 3570              		.global	vStartRecursiveMutexTasks
+ 3571              		.thumb
+ 3572              		.thumb_func
+ 3574              	vStartRecursiveMutexTasks:
+ 3575              	.LFB29:
+   1:../src/Common Demo Tasks/recmutex.c **** /*
+   2:../src/Common Demo Tasks/recmutex.c ****     FreeRTOS V7.1.0 - Copyright (C) 2011 Real Time Engineers Ltd.
+   3:../src/Common Demo Tasks/recmutex.c **** 	
+   4:../src/Common Demo Tasks/recmutex.c **** 
+   5:../src/Common Demo Tasks/recmutex.c ****     ***************************************************************************
+   6:../src/Common Demo Tasks/recmutex.c ****      *                                                                       *
+   7:../src/Common Demo Tasks/recmutex.c ****      *    FreeRTOS tutorial books are available in pdf and paperback.        *
+   8:../src/Common Demo Tasks/recmutex.c ****      *    Complete, revised, and edited pdf reference manuals are also       *
+   9:../src/Common Demo Tasks/recmutex.c ****      *    available.                                                         *
+  10:../src/Common Demo Tasks/recmutex.c ****      *                                                                       *
+  11:../src/Common Demo Tasks/recmutex.c ****      *    Purchasing FreeRTOS documentation will not only help you, by       *
+  12:../src/Common Demo Tasks/recmutex.c ****      *    ensuring you get running as quickly as possible and with an        *
+  13:../src/Common Demo Tasks/recmutex.c ****      *    in-depth knowledge of how to use FreeRTOS, it will also help       *
+  14:../src/Common Demo Tasks/recmutex.c ****      *    the FreeRTOS project to continue with its mission of providing     *
+  15:../src/Common Demo Tasks/recmutex.c ****      *    professional grade, cross platform, de facto standard solutions    *
+  16:../src/Common Demo Tasks/recmutex.c ****      *    for microcontrollers - completely free of charge!                  *
+  17:../src/Common Demo Tasks/recmutex.c ****      *                                                                       *
+  18:../src/Common Demo Tasks/recmutex.c ****      *    >>> See http://www.FreeRTOS.org/Documentation for details. <<<     *
+  19:../src/Common Demo Tasks/recmutex.c ****      *                                                                       *
+  20:../src/Common Demo Tasks/recmutex.c ****      *    Thank you for using FreeRTOS, and thank you for your support!      *
+  21:../src/Common Demo Tasks/recmutex.c ****      *                                                                       *
+  22:../src/Common Demo Tasks/recmutex.c ****     ***************************************************************************
+  23:../src/Common Demo Tasks/recmutex.c **** 
+  24:../src/Common Demo Tasks/recmutex.c **** 
+  25:../src/Common Demo Tasks/recmutex.c ****     This file is part of the FreeRTOS distribution.
+  26:../src/Common Demo Tasks/recmutex.c **** 
+  27:../src/Common Demo Tasks/recmutex.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  28:../src/Common Demo Tasks/recmutex.c ****     the terms of the GNU General Public License (version 2) as published by the
+  29:../src/Common Demo Tasks/recmutex.c ****     Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+  30:../src/Common Demo Tasks/recmutex.c ****     >>>NOTE<<< The modification to the GPL is included to allow you to
+  31:../src/Common Demo Tasks/recmutex.c ****     distribute a combined work that includes FreeRTOS without being obliged to
+  32:../src/Common Demo Tasks/recmutex.c ****     provide the source code for proprietary components outside of the FreeRTOS
+  33:../src/Common Demo Tasks/recmutex.c ****     kernel.  FreeRTOS is distributed in the hope that it will be useful, but
+  34:../src/Common Demo Tasks/recmutex.c ****     WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  35:../src/Common Demo Tasks/recmutex.c ****     or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+  36:../src/Common Demo Tasks/recmutex.c ****     more details. You should have received a copy of the GNU General Public
+  37:../src/Common Demo Tasks/recmutex.c ****     License and the FreeRTOS license exception along with FreeRTOS; if not it
+  38:../src/Common Demo Tasks/recmutex.c ****     can be viewed here: http://www.freertos.org/a00114.html and also obtained
+  39:../src/Common Demo Tasks/recmutex.c ****     by writing to Richard Barry, contact details for whom are available on the
+  40:../src/Common Demo Tasks/recmutex.c ****     FreeRTOS WEB site.
+  41:../src/Common Demo Tasks/recmutex.c **** 
+  42:../src/Common Demo Tasks/recmutex.c ****     1 tab == 4 spaces!
+  43:../src/Common Demo Tasks/recmutex.c **** 
+  44:../src/Common Demo Tasks/recmutex.c ****     http://www.FreeRTOS.org - Documentation, latest information, license and
+  45:../src/Common Demo Tasks/recmutex.c ****     contact details.
+  46:../src/Common Demo Tasks/recmutex.c **** 
+  47:../src/Common Demo Tasks/recmutex.c ****     http://www.SafeRTOS.com - A version that is certified for use in safety
+  48:../src/Common Demo Tasks/recmutex.c ****     critical systems.
+  49:../src/Common Demo Tasks/recmutex.c **** 
+  50:../src/Common Demo Tasks/recmutex.c ****     http://www.OpenRTOS.com - Commercial support, development, porting,
+  51:../src/Common Demo Tasks/recmutex.c ****     licensing and training services.
+  52:../src/Common Demo Tasks/recmutex.c **** */
+  53:../src/Common Demo Tasks/recmutex.c **** 
+  54:../src/Common Demo Tasks/recmutex.c **** /*
+  55:../src/Common Demo Tasks/recmutex.c **** 	The tasks defined on this page demonstrate the use of recursive mutexes.
+  56:../src/Common Demo Tasks/recmutex.c **** 
+  57:../src/Common Demo Tasks/recmutex.c **** 	For recursive mutex functionality the created mutex should be created using
+  58:../src/Common Demo Tasks/recmutex.c **** 	xSemaphoreCreateRecursiveMutex(), then be manipulated
+  59:../src/Common Demo Tasks/recmutex.c **** 	using the xSemaphoreTakeRecursive() and xSemaphoreGiveRecursive() API
+  60:../src/Common Demo Tasks/recmutex.c **** 	functions.
+  61:../src/Common Demo Tasks/recmutex.c **** 
+  62:../src/Common Demo Tasks/recmutex.c **** 	This demo creates three tasks all of which access the same recursive mutex:
+  63:../src/Common Demo Tasks/recmutex.c **** 
+  64:../src/Common Demo Tasks/recmutex.c **** 	prvRecursiveMutexControllingTask() has the highest priority so executes 
+  65:../src/Common Demo Tasks/recmutex.c **** 	first and grabs the mutex.  It then performs some recursive accesses - 
+  66:../src/Common Demo Tasks/recmutex.c **** 	between each of which it sleeps for a short period to let the lower 
+  67:../src/Common Demo Tasks/recmutex.c **** 	priority tasks execute.  When it has completed its demo functionality
+  68:../src/Common Demo Tasks/recmutex.c **** 	it gives the mutex back before suspending itself.
+  69:../src/Common Demo Tasks/recmutex.c **** 
+  70:../src/Common Demo Tasks/recmutex.c **** 	prvRecursiveMutexBlockingTask() attempts to access the mutex by performing
+  71:../src/Common Demo Tasks/recmutex.c **** 	a blocking 'take'.  The blocking task has a lower priority than the 
+  72:../src/Common Demo Tasks/recmutex.c **** 	controlling	task so by the time it executes the mutex has already been
+  73:../src/Common Demo Tasks/recmutex.c **** 	taken by the controlling task,  causing the blocking task to block.  It 
+  74:../src/Common Demo Tasks/recmutex.c **** 	does not unblock until the controlling task has given the mutex back, 
+  75:../src/Common Demo Tasks/recmutex.c **** 	and it does not actually run until the controlling task has suspended 
+  76:../src/Common Demo Tasks/recmutex.c **** 	itself (due to the relative priorities).  When it eventually does obtain
+  77:../src/Common Demo Tasks/recmutex.c **** 	the mutex all it does is give the mutex back prior to also suspending 
+  78:../src/Common Demo Tasks/recmutex.c **** 	itself.  At this point both the controlling task and the blocking task are 
+  79:../src/Common Demo Tasks/recmutex.c **** 	suspended.
+  80:../src/Common Demo Tasks/recmutex.c **** 
+  81:../src/Common Demo Tasks/recmutex.c **** 	prvRecursiveMutexPollingTask() runs at the idle priority.  It spins round
+  82:../src/Common Demo Tasks/recmutex.c **** 	a tight loop attempting to obtain the mutex with a non-blocking call.  As
+  83:../src/Common Demo Tasks/recmutex.c **** 	the lowest priority task it will not successfully obtain the mutex until
+  84:../src/Common Demo Tasks/recmutex.c **** 	both the controlling and blocking tasks are suspended.  Once it eventually 
+  85:../src/Common Demo Tasks/recmutex.c **** 	does obtain the mutex it first unsuspends both the controlling task and
+  86:../src/Common Demo Tasks/recmutex.c **** 	blocking task prior to giving the mutex back - resulting in the polling
+  87:../src/Common Demo Tasks/recmutex.c **** 	task temporarily inheriting the controlling tasks priority.
+  88:../src/Common Demo Tasks/recmutex.c **** */
+  89:../src/Common Demo Tasks/recmutex.c **** 
+  90:../src/Common Demo Tasks/recmutex.c **** /* Scheduler include files. */
+  91:../src/Common Demo Tasks/recmutex.c **** #include "FreeRTOS.h"
+  92:../src/Common Demo Tasks/recmutex.c **** #include "task.h"
+  93:../src/Common Demo Tasks/recmutex.c **** #include "semphr.h"
+  94:../src/Common Demo Tasks/recmutex.c **** 
+  95:../src/Common Demo Tasks/recmutex.c **** /* Demo app include files. */
+  96:../src/Common Demo Tasks/recmutex.c **** #include "recmutex.h"
+  97:../src/Common Demo Tasks/recmutex.c **** 
+  98:../src/Common Demo Tasks/recmutex.c **** /* Priorities assigned to the three tasks. */
+  99:../src/Common Demo Tasks/recmutex.c **** #define recmuCONTROLLING_TASK_PRIORITY	( tskIDLE_PRIORITY + 2 )
+ 100:../src/Common Demo Tasks/recmutex.c **** #define recmuBLOCKING_TASK_PRIORITY		( tskIDLE_PRIORITY + 1 )
+ 101:../src/Common Demo Tasks/recmutex.c **** #define recmuPOLLING_TASK_PRIORITY		( tskIDLE_PRIORITY + 0 )
+ 102:../src/Common Demo Tasks/recmutex.c **** 
+ 103:../src/Common Demo Tasks/recmutex.c **** /* The recursive call depth. */
+ 104:../src/Common Demo Tasks/recmutex.c **** #define recmuMAX_COUNT					( 10 )
+ 105:../src/Common Demo Tasks/recmutex.c **** 
+ 106:../src/Common Demo Tasks/recmutex.c **** /* Misc. */
+ 107:../src/Common Demo Tasks/recmutex.c **** #define recmuSHORT_DELAY				( 20 / portTICK_RATE_MS )
+ 108:../src/Common Demo Tasks/recmutex.c **** #define recmuNO_DELAY					( ( portTickType ) 0 )
+ 109:../src/Common Demo Tasks/recmutex.c **** #define recmuTWO_TICK_DELAY				( ( portTickType ) 2 )
+ 110:../src/Common Demo Tasks/recmutex.c **** 
+ 111:../src/Common Demo Tasks/recmutex.c **** /* The three tasks as described at the top of this file. */
+ 112:../src/Common Demo Tasks/recmutex.c **** static void prvRecursiveMutexControllingTask( void *pvParameters );
+ 113:../src/Common Demo Tasks/recmutex.c **** static void prvRecursiveMutexBlockingTask( void *pvParameters );
+ 114:../src/Common Demo Tasks/recmutex.c **** static void prvRecursiveMutexPollingTask( void *pvParameters );
+ 115:../src/Common Demo Tasks/recmutex.c **** 
+ 116:../src/Common Demo Tasks/recmutex.c **** /* The mutex used by the demo. */
+ 117:../src/Common Demo Tasks/recmutex.c **** static xSemaphoreHandle xMutex;
+ 118:../src/Common Demo Tasks/recmutex.c **** 
+ 119:../src/Common Demo Tasks/recmutex.c **** /* Variables used to detect and latch errors. */
+ 120:../src/Common Demo Tasks/recmutex.c **** static volatile portBASE_TYPE xErrorOccurred = pdFALSE, xControllingIsSuspended = pdFALSE, xBlockin
+ 121:../src/Common Demo Tasks/recmutex.c **** static volatile unsigned portBASE_TYPE uxControllingCycles = 0, uxBlockingCycles = 0, uxPollingCycl
+ 122:../src/Common Demo Tasks/recmutex.c **** 
+ 123:../src/Common Demo Tasks/recmutex.c **** /* Handles of the two higher priority tasks, required so they can be resumed 
+ 124:../src/Common Demo Tasks/recmutex.c **** (unsuspended). */
+ 125:../src/Common Demo Tasks/recmutex.c **** static xTaskHandle xControllingTaskHandle, xBlockingTaskHandle;
+ 126:../src/Common Demo Tasks/recmutex.c **** 
+ 127:../src/Common Demo Tasks/recmutex.c **** /*-----------------------------------------------------------*/
+ 128:../src/Common Demo Tasks/recmutex.c **** 
+ 129:../src/Common Demo Tasks/recmutex.c **** void vStartRecursiveMutexTasks( void )
+ 130:../src/Common Demo Tasks/recmutex.c **** {
+ 3576              		.loc 1 130 0
+ 3577              		.cfi_startproc
+ 3578              		@ args = 0, pretend = 0, frame = 0
+ 3579              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3580 0000 80B5     		push	{r7, lr}
+ 3581              	.LCFI0:
+ 3582              		.cfi_def_cfa_offset 8
+ 3583 0002 84B0     		sub	sp, sp, #16
+ 3584              	.LCFI1:
+ 3585              		.cfi_def_cfa_offset 24
+ 3586 0004 04AF     		add	r7, sp, #16
+ 3587              		.cfi_offset 14, -4
+ 3588              		.cfi_offset 7, -8
+ 3589              	.LCFI2:
+ 3590              		.cfi_def_cfa 7, 8
+ 131:../src/Common Demo Tasks/recmutex.c **** 	/* Just creates the mutex and the three tasks. */
+ 132:../src/Common Demo Tasks/recmutex.c **** 
+ 133:../src/Common Demo Tasks/recmutex.c **** 	xMutex = xSemaphoreCreateRecursiveMutex();
+ 3591              		.loc 1 133 0
+ 3592 0006 4FF00400 		mov	r0, #4
+ 3593 000a FFF7FEFF 		bl	xQueueCreateMutex
+ 3594 000e 0246     		mov	r2, r0
+ 3595 0010 254B     		ldr	r3, .L3
+ 3596 0012 1A60     		str	r2, [r3, #0]
+ 134:../src/Common Demo Tasks/recmutex.c **** 
+ 135:../src/Common Demo Tasks/recmutex.c **** 	/* vQueueAddToRegistry() adds the mutex to the registry, if one is
+ 136:../src/Common Demo Tasks/recmutex.c **** 	in use.  The registry is provided as a means for kernel aware 
+ 137:../src/Common Demo Tasks/recmutex.c **** 	debuggers to locate mutex and has no purpose if a kernel aware debugger
+ 138:../src/Common Demo Tasks/recmutex.c **** 	is not being used.  The call to vQueueAddToRegistry() will be removed
+ 139:../src/Common Demo Tasks/recmutex.c **** 	by the pre-processor if configQUEUE_REGISTRY_SIZE is not defined or is 
+ 140:../src/Common Demo Tasks/recmutex.c **** 	defined to be less than 1. */
+ 141:../src/Common Demo Tasks/recmutex.c **** 	vQueueAddToRegistry( ( xQueueHandle ) xMutex, ( signed portCHAR * ) "Recursive_Mutex" );
+ 3597              		.loc 1 141 0
+ 3598 0014 244B     		ldr	r3, .L3
+ 3599 0016 1A68     		ldr	r2, [r3, #0]
+ 3600 0018 244B     		ldr	r3, .L3+4
+ 3601 001a 1046     		mov	r0, r2
+ 3602 001c 1946     		mov	r1, r3
+ 3603 001e FFF7FEFF 		bl	vQueueAddToRegistry
+ 142:../src/Common Demo Tasks/recmutex.c **** 
+ 143:../src/Common Demo Tasks/recmutex.c **** 
+ 144:../src/Common Demo Tasks/recmutex.c **** 	if( xMutex != NULL )
+ 3604              		.loc 1 144 0
+ 3605 0022 214B     		ldr	r3, .L3
+ 3606 0024 1B68     		ldr	r3, [r3, #0]
+ 3607 0026 002B     		cmp	r3, #0
+ 3608 0028 3CD0     		beq	.L1
+ 145:../src/Common Demo Tasks/recmutex.c **** 	{
+ 146:../src/Common Demo Tasks/recmutex.c **** 		xTaskCreate( prvRecursiveMutexControllingTask, ( signed portCHAR * ) "Rec1", configMINIMAL_STACK_
+ 3609              		.loc 1 146 0
+ 3610 002a 214B     		ldr	r3, .L3+8
+ 3611 002c 4FF00202 		mov	r2, #2
+ 3612 0030 0092     		str	r2, [sp, #0]
+ 3613 0032 204A     		ldr	r2, .L3+12
+ 3614 0034 0192     		str	r2, [sp, #4]
+ 3615 0036 4FF00002 		mov	r2, #0
+ 3616 003a 0292     		str	r2, [sp, #8]
+ 3617 003c 4FF00002 		mov	r2, #0
+ 3618 0040 0392     		str	r2, [sp, #12]
+ 3619 0042 1D48     		ldr	r0, .L3+16
+ 3620 0044 1946     		mov	r1, r3
+ 3621 0046 4FF05002 		mov	r2, #80
+ 3622 004a 4FF00003 		mov	r3, #0
+ 3623 004e FFF7FEFF 		bl	xTaskGenericCreate
+ 147:../src/Common Demo Tasks/recmutex.c ****         xTaskCreate( prvRecursiveMutexBlockingTask, ( signed portCHAR * ) "Rec2", configMINIMAL_STA
+ 3624              		.loc 1 147 0
+ 3625 0052 1A4B     		ldr	r3, .L3+20
+ 3626 0054 4FF00102 		mov	r2, #1
+ 3627 0058 0092     		str	r2, [sp, #0]
+ 3628 005a 194A     		ldr	r2, .L3+24
+ 3629 005c 0192     		str	r2, [sp, #4]
+ 3630 005e 4FF00002 		mov	r2, #0
+ 3631 0062 0292     		str	r2, [sp, #8]
+ 3632 0064 4FF00002 		mov	r2, #0
+ 3633 0068 0392     		str	r2, [sp, #12]
+ 3634 006a 1648     		ldr	r0, .L3+28
+ 3635 006c 1946     		mov	r1, r3
+ 3636 006e 4FF05002 		mov	r2, #80
+ 3637 0072 4FF00003 		mov	r3, #0
+ 3638 0076 FFF7FEFF 		bl	xTaskGenericCreate
+ 148:../src/Common Demo Tasks/recmutex.c ****         xTaskCreate( prvRecursiveMutexPollingTask, ( signed portCHAR * ) "Rec3", configMINIMAL_STAC
+ 3639              		.loc 1 148 0
+ 3640 007a 134B     		ldr	r3, .L3+32
+ 3641 007c 4FF00002 		mov	r2, #0
+ 3642 0080 0092     		str	r2, [sp, #0]
+ 3643 0082 4FF00002 		mov	r2, #0
+ 3644 0086 0192     		str	r2, [sp, #4]
+ 3645 0088 4FF00002 		mov	r2, #0
+ 3646 008c 0292     		str	r2, [sp, #8]
+ 3647 008e 4FF00002 		mov	r2, #0
+ 3648 0092 0392     		str	r2, [sp, #12]
+ 3649 0094 0D48     		ldr	r0, .L3+36
+ 3650 0096 1946     		mov	r1, r3
+ 3651 0098 4FF05002 		mov	r2, #80
+ 3652 009c 4FF00003 		mov	r3, #0
+ 3653 00a0 FFF7FEFF 		bl	xTaskGenericCreate
+ 3654              	.L1:
+ 149:../src/Common Demo Tasks/recmutex.c **** 	}
+ 150:../src/Common Demo Tasks/recmutex.c **** }
+ 3655              		.loc 1 150 0
+ 3656 00a4 BD46     		mov	sp, r7
+ 3657 00a6 80BD     		pop	{r7, pc}
+ 3658              	.L4:
+ 3659              		.align	2
+ 3660              	.L3:
+ 3661 00a8 00000000 		.word	xMutex
+ 3662 00ac 00000000 		.word	.LC0
+ 3663 00b0 10000000 		.word	.LC1
+ 3664 00b4 1C000000 		.word	xControllingTaskHandle
+ 3665 00b8 00000000 		.word	prvRecursiveMutexControllingTask
+ 3666 00bc 18000000 		.word	.LC2
+ 3667 00c0 20000000 		.word	xBlockingTaskHandle
+ 3668 00c4 00000000 		.word	prvRecursiveMutexBlockingTask
+ 3669 00c8 20000000 		.word	.LC3
+ 3670 00cc 00000000 		.word	prvRecursiveMutexPollingTask
+ 3671              		.cfi_endproc
+ 3672              	.LFE29:
+ 3674              		.align	2
+ 3675              		.thumb
+ 3676              		.thumb_func
+ 3678              	prvRecursiveMutexControllingTask:
+ 3679              	.LFB30:
+ 151:../src/Common Demo Tasks/recmutex.c **** /*-----------------------------------------------------------*/
+ 152:../src/Common Demo Tasks/recmutex.c **** 
+ 153:../src/Common Demo Tasks/recmutex.c **** static void prvRecursiveMutexControllingTask( void *pvParameters )
+ 154:../src/Common Demo Tasks/recmutex.c **** {
+ 3680              		.loc 1 154 0
+ 3681              		.cfi_startproc
+ 3682              		@ args = 0, pretend = 0, frame = 16
+ 3683              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3684 00d0 80B5     		push	{r7, lr}
+ 3685              	.LCFI3:
+ 3686              		.cfi_def_cfa_offset 8
+ 3687 00d2 84B0     		sub	sp, sp, #16
+ 3688              	.LCFI4:
+ 3689              		.cfi_def_cfa_offset 24
+ 3690 00d4 00AF     		add	r7, sp, #0
+ 3691              		.cfi_offset 14, -4
+ 3692              		.cfi_offset 7, -8
+ 3693              	.LCFI5:
+ 3694              		.cfi_def_cfa_register 7
+ 3695 00d6 7860     		str	r0, [r7, #4]
+ 3696              	.L14:
+ 155:../src/Common Demo Tasks/recmutex.c **** unsigned portBASE_TYPE ux;
+ 156:../src/Common Demo Tasks/recmutex.c **** 
+ 157:../src/Common Demo Tasks/recmutex.c **** 	/* Just to remove compiler warning. */
+ 158:../src/Common Demo Tasks/recmutex.c **** 	( void ) pvParameters;
+ 159:../src/Common Demo Tasks/recmutex.c **** 
+ 160:../src/Common Demo Tasks/recmutex.c **** 	for( ;; )
+ 161:../src/Common Demo Tasks/recmutex.c **** 	{
+ 162:../src/Common Demo Tasks/recmutex.c **** 		/* Should not be able to 'give' the mutex, as we have not yet 'taken'
+ 163:../src/Common Demo Tasks/recmutex.c **** 		it.   The first time through, the mutex will not have been used yet,
+ 164:../src/Common Demo Tasks/recmutex.c **** 		subsequent times through, at this point the mutex will be held by the
+ 165:../src/Common Demo Tasks/recmutex.c **** 		polling task. */
+ 166:../src/Common Demo Tasks/recmutex.c **** 		if( xSemaphoreGiveRecursive( xMutex ) == pdPASS )
+ 3697              		.loc 1 166 0
+ 3698 00d8 314B     		ldr	r3, .L15
+ 3699 00da 1B68     		ldr	r3, [r3, #0]
+ 3700 00dc 1846     		mov	r0, r3
+ 3701 00de FFF7FEFF 		bl	xQueueGiveMutexRecursive
+ 3702 00e2 0346     		mov	r3, r0
+ 3703 00e4 012B     		cmp	r3, #1
+ 3704 00e6 03D1     		bne	.L6
+ 167:../src/Common Demo Tasks/recmutex.c **** 		{
+ 168:../src/Common Demo Tasks/recmutex.c **** 			xErrorOccurred = pdTRUE;
+ 3705              		.loc 1 168 0
+ 3706 00e8 2E4B     		ldr	r3, .L15+4
+ 3707 00ea 4FF00102 		mov	r2, #1
+ 3708 00ee 1A60     		str	r2, [r3, #0]
+ 3709              	.L6:
+ 169:../src/Common Demo Tasks/recmutex.c **** 		}
+ 170:../src/Common Demo Tasks/recmutex.c **** 
+ 171:../src/Common Demo Tasks/recmutex.c **** 		for( ux = 0; ux < recmuMAX_COUNT; ux++ )
+ 3710              		.loc 1 171 0
+ 3711 00f0 4FF00003 		mov	r3, #0
+ 3712 00f4 FB60     		str	r3, [r7, #12]
+ 3713 00f6 15E0     		b	.L7
+ 3714              	.L9:
+ 172:../src/Common Demo Tasks/recmutex.c **** 		{
+ 173:../src/Common Demo Tasks/recmutex.c **** 			/* We should now be able to take the mutex as many times as
+ 174:../src/Common Demo Tasks/recmutex.c **** 			we like.
+ 175:../src/Common Demo Tasks/recmutex.c **** 			
+ 176:../src/Common Demo Tasks/recmutex.c **** 			The first time through the mutex will be immediately available, on
+ 177:../src/Common Demo Tasks/recmutex.c **** 			subsequent times through the mutex will be held by the polling task
+ 178:../src/Common Demo Tasks/recmutex.c **** 			at this point and this Take will cause the polling task to inherit
+ 179:../src/Common Demo Tasks/recmutex.c **** 			the priority of this task.  In this case the block time must be
+ 180:../src/Common Demo Tasks/recmutex.c **** 			long enough to ensure the polling task will execute again before the
+ 181:../src/Common Demo Tasks/recmutex.c **** 			block time expires.  If the block time does expire then the error
+ 182:../src/Common Demo Tasks/recmutex.c **** 			flag will be set here. */
+ 183:../src/Common Demo Tasks/recmutex.c **** 			if( xSemaphoreTakeRecursive( xMutex, recmuTWO_TICK_DELAY ) != pdPASS )
+ 3715              		.loc 1 183 0
+ 3716 00f8 294B     		ldr	r3, .L15
+ 3717 00fa 1B68     		ldr	r3, [r3, #0]
+ 3718 00fc 1846     		mov	r0, r3
+ 3719 00fe 4FF00201 		mov	r1, #2
+ 3720 0102 FFF7FEFF 		bl	xQueueTakeMutexRecursive
+ 3721 0106 0346     		mov	r3, r0
+ 3722 0108 012B     		cmp	r3, #1
+ 3723 010a 03D0     		beq	.L8
+ 184:../src/Common Demo Tasks/recmutex.c **** 			{
+ 185:../src/Common Demo Tasks/recmutex.c **** 				xErrorOccurred = pdTRUE;
+ 3724              		.loc 1 185 0
+ 3725 010c 254B     		ldr	r3, .L15+4
+ 3726 010e 4FF00102 		mov	r2, #1
+ 3727 0112 1A60     		str	r2, [r3, #0]
+ 3728              	.L8:
+ 186:../src/Common Demo Tasks/recmutex.c **** 			}
+ 187:../src/Common Demo Tasks/recmutex.c **** 
+ 188:../src/Common Demo Tasks/recmutex.c **** 			/* Ensure the other task attempting to access the mutex (and the
+ 189:../src/Common Demo Tasks/recmutex.c **** 			other demo tasks) are able to execute to ensure they either block
+ 190:../src/Common Demo Tasks/recmutex.c **** 			(where a block time is specified) or return an error (where no 
+ 191:../src/Common Demo Tasks/recmutex.c **** 			block time is specified) as the mutex is held by this task. */
+ 192:../src/Common Demo Tasks/recmutex.c **** 			vTaskDelay( recmuSHORT_DELAY );
+ 3729              		.loc 1 192 0
+ 3730 0114 4FF01400 		mov	r0, #20
+ 3731 0118 FFF7FEFF 		bl	vTaskDelay
+ 171:../src/Common Demo Tasks/recmutex.c **** 		for( ux = 0; ux < recmuMAX_COUNT; ux++ )
+ 3732              		.loc 1 171 0
+ 3733 011c FB68     		ldr	r3, [r7, #12]
+ 3734 011e 03F10103 		add	r3, r3, #1
+ 3735 0122 FB60     		str	r3, [r7, #12]
+ 3736              	.L7:
+ 171:../src/Common Demo Tasks/recmutex.c **** 		for( ux = 0; ux < recmuMAX_COUNT; ux++ )
+ 3737              		.loc 1 171 0 is_stmt 0 discriminator 1
+ 3738 0124 FB68     		ldr	r3, [r7, #12]
+ 3739 0126 092B     		cmp	r3, #9
+ 3740 0128 E6D9     		bls	.L9
+ 193:../src/Common Demo Tasks/recmutex.c **** 		}
+ 194:../src/Common Demo Tasks/recmutex.c **** 
+ 195:../src/Common Demo Tasks/recmutex.c **** 		/* For each time we took the mutex, give it back. */
+ 196:../src/Common Demo Tasks/recmutex.c **** 		for( ux = 0; ux < recmuMAX_COUNT; ux++ )
+ 3741              		.loc 1 196 0 is_stmt 1
+ 3742 012a 4FF00003 		mov	r3, #0
+ 3743 012e FB60     		str	r3, [r7, #12]
+ 3744 0130 13E0     		b	.L10
+ 3745              	.L12:
+ 197:../src/Common Demo Tasks/recmutex.c **** 		{
+ 198:../src/Common Demo Tasks/recmutex.c **** 			/* Ensure the other task attempting to access the mutex (and the
+ 199:../src/Common Demo Tasks/recmutex.c **** 			other demo tasks) are able to execute. */
+ 200:../src/Common Demo Tasks/recmutex.c **** 			vTaskDelay( recmuSHORT_DELAY );
+ 3746              		.loc 1 200 0
+ 3747 0132 4FF01400 		mov	r0, #20
+ 3748 0136 FFF7FEFF 		bl	vTaskDelay
+ 201:../src/Common Demo Tasks/recmutex.c **** 
+ 202:../src/Common Demo Tasks/recmutex.c **** 			/* We should now be able to give the mutex as many times as we
+ 203:../src/Common Demo Tasks/recmutex.c **** 			took it.  When the mutex is available again the Blocking task
+ 204:../src/Common Demo Tasks/recmutex.c **** 			should be unblocked but not run because it has a lower priority
+ 205:../src/Common Demo Tasks/recmutex.c **** 			than this task.  The polling task should also not run at this point
+ 206:../src/Common Demo Tasks/recmutex.c **** 			as it too has a lower priority than this task. */
+ 207:../src/Common Demo Tasks/recmutex.c **** 			if( xSemaphoreGiveRecursive( xMutex ) != pdPASS )
+ 3749              		.loc 1 207 0
+ 3750 013a 194B     		ldr	r3, .L15
+ 3751 013c 1B68     		ldr	r3, [r3, #0]
+ 3752 013e 1846     		mov	r0, r3
+ 3753 0140 FFF7FEFF 		bl	xQueueGiveMutexRecursive
+ 3754 0144 0346     		mov	r3, r0
+ 3755 0146 012B     		cmp	r3, #1
+ 3756 0148 03D0     		beq	.L11
+ 208:../src/Common Demo Tasks/recmutex.c **** 			{
+ 209:../src/Common Demo Tasks/recmutex.c **** 				xErrorOccurred = pdTRUE;
+ 3757              		.loc 1 209 0
+ 3758 014a 164B     		ldr	r3, .L15+4
+ 3759 014c 4FF00102 		mov	r2, #1
+ 3760 0150 1A60     		str	r2, [r3, #0]
+ 3761              	.L11:
+ 196:../src/Common Demo Tasks/recmutex.c **** 		for( ux = 0; ux < recmuMAX_COUNT; ux++ )
+ 3762              		.loc 1 196 0
+ 3763 0152 FB68     		ldr	r3, [r7, #12]
+ 3764 0154 03F10103 		add	r3, r3, #1
+ 3765 0158 FB60     		str	r3, [r7, #12]
+ 3766              	.L10:
+ 196:../src/Common Demo Tasks/recmutex.c **** 		for( ux = 0; ux < recmuMAX_COUNT; ux++ )
+ 3767              		.loc 1 196 0 is_stmt 0 discriminator 1
+ 3768 015a FB68     		ldr	r3, [r7, #12]
+ 3769 015c 092B     		cmp	r3, #9
+ 3770 015e E8D9     		bls	.L12
+ 210:../src/Common Demo Tasks/recmutex.c **** 			}
+ 211:../src/Common Demo Tasks/recmutex.c **** 		}
+ 212:../src/Common Demo Tasks/recmutex.c **** 
+ 213:../src/Common Demo Tasks/recmutex.c **** 		/* Having given it back the same number of times as it was taken, we
+ 214:../src/Common Demo Tasks/recmutex.c **** 		should no longer be the mutex owner, so the next give sh ould fail. */
+ 215:../src/Common Demo Tasks/recmutex.c **** 		if( xSemaphoreGiveRecursive( xMutex ) == pdPASS )
+ 3771              		.loc 1 215 0 is_stmt 1
+ 3772 0160 0F4B     		ldr	r3, .L15
+ 3773 0162 1B68     		ldr	r3, [r3, #0]
+ 3774 0164 1846     		mov	r0, r3
+ 3775 0166 FFF7FEFF 		bl	xQueueGiveMutexRecursive
+ 3776 016a 0346     		mov	r3, r0
+ 3777 016c 012B     		cmp	r3, #1
+ 3778 016e 03D1     		bne	.L13
+ 216:../src/Common Demo Tasks/recmutex.c **** 		{
+ 217:../src/Common Demo Tasks/recmutex.c **** 			xErrorOccurred = pdTRUE;
+ 3779              		.loc 1 217 0
+ 3780 0170 0C4B     		ldr	r3, .L15+4
+ 3781 0172 4FF00102 		mov	r2, #1
+ 3782 0176 1A60     		str	r2, [r3, #0]
+ 3783              	.L13:
+ 218:../src/Common Demo Tasks/recmutex.c **** 		}
+ 219:../src/Common Demo Tasks/recmutex.c **** 
+ 220:../src/Common Demo Tasks/recmutex.c **** 		/* Keep count of the number of cycles this task has performed so a 
+ 221:../src/Common Demo Tasks/recmutex.c **** 		stall can be detected. */
+ 222:../src/Common Demo Tasks/recmutex.c **** 		uxControllingCycles++;
+ 3784              		.loc 1 222 0
+ 3785 0178 0B4B     		ldr	r3, .L15+8
+ 3786 017a 1B68     		ldr	r3, [r3, #0]
+ 3787 017c 03F10102 		add	r2, r3, #1
+ 3788 0180 094B     		ldr	r3, .L15+8
+ 3789 0182 1A60     		str	r2, [r3, #0]
+ 223:../src/Common Demo Tasks/recmutex.c **** 
+ 224:../src/Common Demo Tasks/recmutex.c **** 		/* Suspend ourselves to the blocking task can execute. */
+ 225:../src/Common Demo Tasks/recmutex.c **** 		xControllingIsSuspended = pdTRUE;
+ 3790              		.loc 1 225 0
+ 3791 0184 094B     		ldr	r3, .L15+12
+ 3792 0186 4FF00102 		mov	r2, #1
+ 3793 018a 1A60     		str	r2, [r3, #0]
+ 226:../src/Common Demo Tasks/recmutex.c **** 		vTaskSuspend( NULL );
+ 3794              		.loc 1 226 0
+ 3795 018c 4FF00000 		mov	r0, #0
+ 3796 0190 FFF7FEFF 		bl	vTaskSuspend
+ 227:../src/Common Demo Tasks/recmutex.c **** 		xControllingIsSuspended = pdFALSE;
+ 3797              		.loc 1 227 0
+ 3798 0194 054B     		ldr	r3, .L15+12
+ 3799 0196 4FF00002 		mov	r2, #0
+ 3800 019a 1A60     		str	r2, [r3, #0]
+ 228:../src/Common Demo Tasks/recmutex.c **** 	}
+ 3801              		.loc 1 228 0
+ 3802 019c 9CE7     		b	.L14
+ 3803              	.L16:
+ 3804 019e 00BF     		.align	2
+ 3805              	.L15:
+ 3806 01a0 00000000 		.word	xMutex
+ 3807 01a4 04000000 		.word	xErrorOccurred
+ 3808 01a8 10000000 		.word	uxControllingCycles
+ 3809 01ac 08000000 		.word	xControllingIsSuspended
+ 3810              		.cfi_endproc
+ 3811              	.LFE30:
+ 3813              		.align	2
+ 3814              		.thumb
+ 3815              		.thumb_func
+ 3817              	prvRecursiveMutexBlockingTask:
+ 3818              	.LFB31:
+ 229:../src/Common Demo Tasks/recmutex.c **** }
+ 230:../src/Common Demo Tasks/recmutex.c **** /*-----------------------------------------------------------*/
+ 231:../src/Common Demo Tasks/recmutex.c **** 
+ 232:../src/Common Demo Tasks/recmutex.c **** static void prvRecursiveMutexBlockingTask( void *pvParameters )
+ 233:../src/Common Demo Tasks/recmutex.c **** {
+ 3819              		.loc 1 233 0
+ 3820              		.cfi_startproc
+ 3821              		@ args = 0, pretend = 0, frame = 8
+ 3822              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3823 01b0 80B5     		push	{r7, lr}
+ 3824              	.LCFI6:
+ 3825              		.cfi_def_cfa_offset 8
+ 3826 01b2 82B0     		sub	sp, sp, #8
+ 3827              	.LCFI7:
+ 3828              		.cfi_def_cfa_offset 16
+ 3829 01b4 00AF     		add	r7, sp, #0
+ 3830              		.cfi_offset 14, -4
+ 3831              		.cfi_offset 7, -8
+ 3832              	.LCFI8:
+ 3833              		.cfi_def_cfa_register 7
+ 3834 01b6 7860     		str	r0, [r7, #4]
+ 3835              	.L23:
+ 234:../src/Common Demo Tasks/recmutex.c **** 	/* Just to remove compiler warning. */
+ 235:../src/Common Demo Tasks/recmutex.c **** 	( void ) pvParameters;
+ 236:../src/Common Demo Tasks/recmutex.c **** 
+ 237:../src/Common Demo Tasks/recmutex.c **** 	for( ;; )
+ 238:../src/Common Demo Tasks/recmutex.c **** 	{
+ 239:../src/Common Demo Tasks/recmutex.c **** 		/* This task will run while the controlling task is blocked, and the
+ 240:../src/Common Demo Tasks/recmutex.c **** 		controlling task will block only once it has the mutex - therefore
+ 241:../src/Common Demo Tasks/recmutex.c **** 		this call should block until the controlling task has given up the 
+ 242:../src/Common Demo Tasks/recmutex.c **** 		mutex, and not actually execute	past this call until the controlling 
+ 243:../src/Common Demo Tasks/recmutex.c **** 		task is suspended. */
+ 244:../src/Common Demo Tasks/recmutex.c **** 		if( xSemaphoreTakeRecursive( xMutex, portMAX_DELAY ) == pdPASS )
+ 3836              		.loc 1 244 0
+ 3837 01b8 214B     		ldr	r3, .L24
+ 3838 01ba 1B68     		ldr	r3, [r3, #0]
+ 3839 01bc 1846     		mov	r0, r3
+ 3840 01be 4FF0FF31 		mov	r1, #-1
+ 3841 01c2 FFF7FEFF 		bl	xQueueTakeMutexRecursive
+ 3842 01c6 0346     		mov	r3, r0
+ 3843 01c8 012B     		cmp	r3, #1
+ 3844 01ca 21D1     		bne	.L18
+ 245:../src/Common Demo Tasks/recmutex.c **** 		{
+ 246:../src/Common Demo Tasks/recmutex.c **** 			if( xControllingIsSuspended != pdTRUE )
+ 3845              		.loc 1 246 0
+ 3846 01cc 1D4B     		ldr	r3, .L24+4
+ 3847 01ce 1B68     		ldr	r3, [r3, #0]
+ 3848 01d0 012B     		cmp	r3, #1
+ 3849 01d2 04D0     		beq	.L19
+ 247:../src/Common Demo Tasks/recmutex.c **** 			{
+ 248:../src/Common Demo Tasks/recmutex.c **** 				/* Did not expect to execute until the controlling task was
+ 249:../src/Common Demo Tasks/recmutex.c **** 				suspended. */
+ 250:../src/Common Demo Tasks/recmutex.c **** 				xErrorOccurred = pdTRUE;
+ 3850              		.loc 1 250 0
+ 3851 01d4 1C4B     		ldr	r3, .L24+8
+ 3852 01d6 4FF00102 		mov	r2, #1
+ 3853 01da 1A60     		str	r2, [r3, #0]
+ 3854 01dc 1CE0     		b	.L20
+ 3855              	.L19:
+ 251:../src/Common Demo Tasks/recmutex.c **** 			}
+ 252:../src/Common Demo Tasks/recmutex.c **** 			else
+ 253:../src/Common Demo Tasks/recmutex.c **** 			{
+ 254:../src/Common Demo Tasks/recmutex.c **** 				/* Give the mutex back before suspending ourselves to allow
+ 255:../src/Common Demo Tasks/recmutex.c **** 				the polling task to obtain the mutex. */
+ 256:../src/Common Demo Tasks/recmutex.c **** 				if( xSemaphoreGiveRecursive( xMutex ) != pdPASS )
+ 3856              		.loc 1 256 0
+ 3857 01de 184B     		ldr	r3, .L24
+ 3858 01e0 1B68     		ldr	r3, [r3, #0]
+ 3859 01e2 1846     		mov	r0, r3
+ 3860 01e4 FFF7FEFF 		bl	xQueueGiveMutexRecursive
+ 3861 01e8 0346     		mov	r3, r0
+ 3862 01ea 012B     		cmp	r3, #1
+ 3863 01ec 03D0     		beq	.L21
+ 257:../src/Common Demo Tasks/recmutex.c **** 				{
+ 258:../src/Common Demo Tasks/recmutex.c **** 					xErrorOccurred = pdTRUE;
+ 3864              		.loc 1 258 0
+ 3865 01ee 164B     		ldr	r3, .L24+8
+ 3866 01f0 4FF00102 		mov	r2, #1
+ 3867 01f4 1A60     		str	r2, [r3, #0]
+ 3868              	.L21:
+ 259:../src/Common Demo Tasks/recmutex.c **** 				}
+ 260:../src/Common Demo Tasks/recmutex.c **** 
+ 261:../src/Common Demo Tasks/recmutex.c **** 				xBlockingIsSuspended = pdTRUE;
+ 3869              		.loc 1 261 0
+ 3870 01f6 154B     		ldr	r3, .L24+12
+ 3871 01f8 4FF00102 		mov	r2, #1
+ 3872 01fc 1A60     		str	r2, [r3, #0]
+ 262:../src/Common Demo Tasks/recmutex.c **** 				vTaskSuspend( NULL );
+ 3873              		.loc 1 262 0
+ 3874 01fe 4FF00000 		mov	r0, #0
+ 3875 0202 FFF7FEFF 		bl	vTaskSuspend
+ 263:../src/Common Demo Tasks/recmutex.c **** 				xBlockingIsSuspended = pdFALSE;
+ 3876              		.loc 1 263 0
+ 3877 0206 114B     		ldr	r3, .L24+12
+ 3878 0208 4FF00002 		mov	r2, #0
+ 3879 020c 1A60     		str	r2, [r3, #0]
+ 3880 020e 03E0     		b	.L20
+ 3881              	.L18:
+ 264:../src/Common Demo Tasks/recmutex.c **** 			}
+ 265:../src/Common Demo Tasks/recmutex.c **** 		}
+ 266:../src/Common Demo Tasks/recmutex.c **** 		else
+ 267:../src/Common Demo Tasks/recmutex.c **** 		{
+ 268:../src/Common Demo Tasks/recmutex.c **** 			/* We should not leave the xSemaphoreTakeRecursive() function
+ 269:../src/Common Demo Tasks/recmutex.c **** 			until the mutex was obtained. */
+ 270:../src/Common Demo Tasks/recmutex.c **** 			xErrorOccurred = pdTRUE;
+ 3882              		.loc 1 270 0
+ 3883 0210 0D4B     		ldr	r3, .L24+8
+ 3884 0212 4FF00102 		mov	r2, #1
+ 3885 0216 1A60     		str	r2, [r3, #0]
+ 3886              	.L20:
+ 271:../src/Common Demo Tasks/recmutex.c **** 		}
+ 272:../src/Common Demo Tasks/recmutex.c **** 
+ 273:../src/Common Demo Tasks/recmutex.c **** 		/* The controlling and blocking tasks should be in lock step. */
+ 274:../src/Common Demo Tasks/recmutex.c **** 		if( uxControllingCycles != ( uxBlockingCycles + 1 ) )
+ 3887              		.loc 1 274 0
+ 3888 0218 0D4B     		ldr	r3, .L24+16
+ 3889 021a 1B68     		ldr	r3, [r3, #0]
+ 3890 021c 03F10102 		add	r2, r3, #1
+ 3891 0220 0C4B     		ldr	r3, .L24+20
+ 3892 0222 1B68     		ldr	r3, [r3, #0]
+ 3893 0224 9A42     		cmp	r2, r3
+ 3894 0226 03D0     		beq	.L22
+ 275:../src/Common Demo Tasks/recmutex.c **** 		{
+ 276:../src/Common Demo Tasks/recmutex.c **** 			xErrorOccurred = pdTRUE;
+ 3895              		.loc 1 276 0
+ 3896 0228 074B     		ldr	r3, .L24+8
+ 3897 022a 4FF00102 		mov	r2, #1
+ 3898 022e 1A60     		str	r2, [r3, #0]
+ 3899              	.L22:
+ 277:../src/Common Demo Tasks/recmutex.c **** 		}
+ 278:../src/Common Demo Tasks/recmutex.c **** 
+ 279:../src/Common Demo Tasks/recmutex.c **** 		/* Keep count of the number of cycles this task has performed so a 
+ 280:../src/Common Demo Tasks/recmutex.c **** 		stall can be detected. */
+ 281:../src/Common Demo Tasks/recmutex.c **** 		uxBlockingCycles++;
+ 3900              		.loc 1 281 0
+ 3901 0230 074B     		ldr	r3, .L24+16
+ 3902 0232 1B68     		ldr	r3, [r3, #0]
+ 3903 0234 03F10102 		add	r2, r3, #1
+ 3904 0238 054B     		ldr	r3, .L24+16
+ 3905 023a 1A60     		str	r2, [r3, #0]
+ 282:../src/Common Demo Tasks/recmutex.c **** 	}
+ 3906              		.loc 1 282 0
+ 3907 023c BCE7     		b	.L23
+ 3908              	.L25:
+ 3909 023e 00BF     		.align	2
+ 3910              	.L24:
+ 3911 0240 00000000 		.word	xMutex
+ 3912 0244 08000000 		.word	xControllingIsSuspended
+ 3913 0248 04000000 		.word	xErrorOccurred
+ 3914 024c 0C000000 		.word	xBlockingIsSuspended
+ 3915 0250 14000000 		.word	uxBlockingCycles
+ 3916 0254 10000000 		.word	uxControllingCycles
+ 3917              		.cfi_endproc
+ 3918              	.LFE31:
+ 3920              		.align	2
+ 3921              		.thumb
+ 3922              		.thumb_func
+ 3924              	prvRecursiveMutexPollingTask:
+ 3925              	.LFB32:
+ 283:../src/Common Demo Tasks/recmutex.c **** }
+ 284:../src/Common Demo Tasks/recmutex.c **** /*-----------------------------------------------------------*/
+ 285:../src/Common Demo Tasks/recmutex.c **** 
+ 286:../src/Common Demo Tasks/recmutex.c **** static void prvRecursiveMutexPollingTask( void *pvParameters )
+ 287:../src/Common Demo Tasks/recmutex.c **** {
+ 3926              		.loc 1 287 0
+ 3927              		.cfi_startproc
+ 3928              		@ args = 0, pretend = 0, frame = 8
+ 3929              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3930 0258 80B5     		push	{r7, lr}
+ 3931              	.LCFI9:
+ 3932              		.cfi_def_cfa_offset 8
+ 3933 025a 82B0     		sub	sp, sp, #8
+ 3934              	.LCFI10:
+ 3935              		.cfi_def_cfa_offset 16
+ 3936 025c 00AF     		add	r7, sp, #0
+ 3937              		.cfi_offset 14, -4
+ 3938              		.cfi_offset 7, -8
+ 3939              	.LCFI11:
+ 3940              		.cfi_def_cfa_register 7
+ 3941 025e 7860     		str	r0, [r7, #4]
+ 3942 0260 02E0     		b	.L32
+ 3943              	.L33:
+ 288:../src/Common Demo Tasks/recmutex.c **** 	/* Just to remove compiler warning. */
+ 289:../src/Common Demo Tasks/recmutex.c **** 	( void ) pvParameters;
+ 290:../src/Common Demo Tasks/recmutex.c **** 
+ 291:../src/Common Demo Tasks/recmutex.c **** 	for( ;; )
+ 292:../src/Common Demo Tasks/recmutex.c **** 	{
+ 293:../src/Common Demo Tasks/recmutex.c **** 		/* Keep attempting to obtain the mutex.  We should only obtain it when
+ 294:../src/Common Demo Tasks/recmutex.c **** 		the blocking task has suspended itself, which in turn should only
+ 295:../src/Common Demo Tasks/recmutex.c **** 		happen when the controlling task is also suspended. */
+ 296:../src/Common Demo Tasks/recmutex.c **** 		if( xSemaphoreTakeRecursive( xMutex, recmuNO_DELAY ) == pdPASS )
+ 297:../src/Common Demo Tasks/recmutex.c **** 		{
+ 298:../src/Common Demo Tasks/recmutex.c **** 			/* Is the blocking task suspended? */
+ 299:../src/Common Demo Tasks/recmutex.c **** 			if( ( xBlockingIsSuspended != pdTRUE ) || ( xControllingIsSuspended != pdTRUE ) )
+ 300:../src/Common Demo Tasks/recmutex.c **** 			{
+ 301:../src/Common Demo Tasks/recmutex.c **** 				xErrorOccurred = pdTRUE;
+ 302:../src/Common Demo Tasks/recmutex.c **** 			}
+ 303:../src/Common Demo Tasks/recmutex.c **** 			else
+ 304:../src/Common Demo Tasks/recmutex.c **** 			{
+ 305:../src/Common Demo Tasks/recmutex.c **** 				/* Keep count of the number of cycles this task has performed 
+ 306:../src/Common Demo Tasks/recmutex.c **** 				so a stall can be detected. */
+ 307:../src/Common Demo Tasks/recmutex.c **** 				uxPollingCycles++;
+ 308:../src/Common Demo Tasks/recmutex.c **** 
+ 309:../src/Common Demo Tasks/recmutex.c **** 				/* We can resume the other tasks here even though they have a
+ 310:../src/Common Demo Tasks/recmutex.c **** 				higher priority than the polling task.  When they execute they
+ 311:../src/Common Demo Tasks/recmutex.c **** 				will attempt to obtain the mutex but fail because the polling
+ 312:../src/Common Demo Tasks/recmutex.c **** 				task is still the mutex holder.  The polling task (this task)
+ 313:../src/Common Demo Tasks/recmutex.c **** 				will then inherit the higher priority.  The Blocking task will
+ 314:../src/Common Demo Tasks/recmutex.c **** 				block indefinitely when it attempts to obtain the mutex, the
+ 315:../src/Common Demo Tasks/recmutex.c **** 				Controlling task will only block for a fixed period and an
+ 316:../src/Common Demo Tasks/recmutex.c **** 				error will be latched if the polling task has not returned the
+ 317:../src/Common Demo Tasks/recmutex.c **** 				mutex by the time this fixed period has expired. */
+ 318:../src/Common Demo Tasks/recmutex.c **** 				vTaskResume( xBlockingTaskHandle );
+ 319:../src/Common Demo Tasks/recmutex.c ****                 vTaskResume( xControllingTaskHandle );
+ 320:../src/Common Demo Tasks/recmutex.c **** 			
+ 321:../src/Common Demo Tasks/recmutex.c **** 				/* The other two tasks should now have executed and no longer
+ 322:../src/Common Demo Tasks/recmutex.c **** 				be suspended. */
+ 323:../src/Common Demo Tasks/recmutex.c **** 				if( ( xBlockingIsSuspended == pdTRUE ) || ( xControllingIsSuspended == pdTRUE ) )
+ 324:../src/Common Demo Tasks/recmutex.c **** 				{
+ 325:../src/Common Demo Tasks/recmutex.c **** 					xErrorOccurred = pdTRUE;
+ 326:../src/Common Demo Tasks/recmutex.c **** 				}				
+ 327:../src/Common Demo Tasks/recmutex.c **** 			
+ 328:../src/Common Demo Tasks/recmutex.c **** 				/* Release the mutex, disinheriting the higher priority again. */
+ 329:../src/Common Demo Tasks/recmutex.c **** 				if( xSemaphoreGiveRecursive( xMutex ) != pdPASS )
+ 330:../src/Common Demo Tasks/recmutex.c **** 				{
+ 331:../src/Common Demo Tasks/recmutex.c **** 					xErrorOccurred = pdTRUE;
+ 332:../src/Common Demo Tasks/recmutex.c **** 				}
+ 333:../src/Common Demo Tasks/recmutex.c **** 			}
+ 334:../src/Common Demo Tasks/recmutex.c **** 		}
+ 335:../src/Common Demo Tasks/recmutex.c **** 
+ 336:../src/Common Demo Tasks/recmutex.c **** 		#if configUSE_PREEMPTION == 0
+ 337:../src/Common Demo Tasks/recmutex.c **** 		{
+ 338:../src/Common Demo Tasks/recmutex.c **** 			taskYIELD();
+ 339:../src/Common Demo Tasks/recmutex.c **** 		}
+ 340:../src/Common Demo Tasks/recmutex.c **** 		#endif
+ 341:../src/Common Demo Tasks/recmutex.c **** 	}
+ 3944              		.loc 1 341 0
+ 3945 0262 00BF     		nop
+ 3946 0264 00E0     		b	.L32
+ 3947              	.L34:
+ 3948 0266 00BF     		nop
+ 3949              	.L32:
+ 296:../src/Common Demo Tasks/recmutex.c **** 		if( xSemaphoreTakeRecursive( xMutex, recmuNO_DELAY ) == pdPASS )
+ 3950              		.loc 1 296 0
+ 3951 0268 1F4B     		ldr	r3, .L35
+ 3952 026a 1B68     		ldr	r3, [r3, #0]
+ 3953 026c 1846     		mov	r0, r3
+ 3954 026e 4FF00001 		mov	r1, #0
+ 3955 0272 FFF7FEFF 		bl	xQueueTakeMutexRecursive
+ 3956 0276 0346     		mov	r3, r0
+ 3957 0278 012B     		cmp	r3, #1
+ 3958 027a F2D1     		bne	.L33
+ 299:../src/Common Demo Tasks/recmutex.c **** 			if( ( xBlockingIsSuspended != pdTRUE ) || ( xControllingIsSuspended != pdTRUE ) )
+ 3959              		.loc 1 299 0
+ 3960 027c 1B4B     		ldr	r3, .L35+4
+ 3961 027e 1B68     		ldr	r3, [r3, #0]
+ 3962 0280 012B     		cmp	r3, #1
+ 3963 0282 03D1     		bne	.L28
+ 299:../src/Common Demo Tasks/recmutex.c **** 			if( ( xBlockingIsSuspended != pdTRUE ) || ( xControllingIsSuspended != pdTRUE ) )
+ 3964              		.loc 1 299 0 is_stmt 0 discriminator 1
+ 3965 0284 1A4B     		ldr	r3, .L35+8
+ 3966 0286 1B68     		ldr	r3, [r3, #0]
+ 3967 0288 012B     		cmp	r3, #1
+ 3968 028a 04D0     		beq	.L29
+ 3969              	.L28:
+ 301:../src/Common Demo Tasks/recmutex.c **** 				xErrorOccurred = pdTRUE;
+ 3970              		.loc 1 301 0 is_stmt 1
+ 3971 028c 194B     		ldr	r3, .L35+12
+ 3972 028e 4FF00102 		mov	r2, #1
+ 3973 0292 1A60     		str	r2, [r3, #0]
+ 3974              		.loc 1 341 0
+ 3975 0294 E8E7     		b	.L32
+ 3976              	.L29:
+ 307:../src/Common Demo Tasks/recmutex.c **** 				uxPollingCycles++;
+ 3977              		.loc 1 307 0
+ 3978 0296 184B     		ldr	r3, .L35+16
+ 3979 0298 1B68     		ldr	r3, [r3, #0]
+ 3980 029a 03F10102 		add	r2, r3, #1
+ 3981 029e 164B     		ldr	r3, .L35+16
+ 3982 02a0 1A60     		str	r2, [r3, #0]
+ 318:../src/Common Demo Tasks/recmutex.c **** 				vTaskResume( xBlockingTaskHandle );
+ 3983              		.loc 1 318 0
+ 3984 02a2 164B     		ldr	r3, .L35+20
+ 3985 02a4 1B68     		ldr	r3, [r3, #0]
+ 3986 02a6 1846     		mov	r0, r3
+ 3987 02a8 FFF7FEFF 		bl	vTaskResume
+ 319:../src/Common Demo Tasks/recmutex.c ****                 vTaskResume( xControllingTaskHandle );
+ 3988              		.loc 1 319 0
+ 3989 02ac 144B     		ldr	r3, .L35+24
+ 3990 02ae 1B68     		ldr	r3, [r3, #0]
+ 3991 02b0 1846     		mov	r0, r3
+ 3992 02b2 FFF7FEFF 		bl	vTaskResume
+ 323:../src/Common Demo Tasks/recmutex.c **** 				if( ( xBlockingIsSuspended == pdTRUE ) || ( xControllingIsSuspended == pdTRUE ) )
+ 3993              		.loc 1 323 0
+ 3994 02b6 0D4B     		ldr	r3, .L35+4
+ 3995 02b8 1B68     		ldr	r3, [r3, #0]
+ 3996 02ba 012B     		cmp	r3, #1
+ 3997 02bc 03D0     		beq	.L30
+ 323:../src/Common Demo Tasks/recmutex.c **** 				if( ( xBlockingIsSuspended == pdTRUE ) || ( xControllingIsSuspended == pdTRUE ) )
+ 3998              		.loc 1 323 0 is_stmt 0 discriminator 1
+ 3999 02be 0C4B     		ldr	r3, .L35+8
+ 4000 02c0 1B68     		ldr	r3, [r3, #0]
+ 4001 02c2 012B     		cmp	r3, #1
+ 4002 02c4 03D1     		bne	.L31
+ 4003              	.L30:
+ 325:../src/Common Demo Tasks/recmutex.c **** 					xErrorOccurred = pdTRUE;
+ 4004              		.loc 1 325 0 is_stmt 1
+ 4005 02c6 0B4B     		ldr	r3, .L35+12
+ 4006 02c8 4FF00102 		mov	r2, #1
+ 4007 02cc 1A60     		str	r2, [r3, #0]
+ 4008              	.L31:
+ 329:../src/Common Demo Tasks/recmutex.c **** 				if( xSemaphoreGiveRecursive( xMutex ) != pdPASS )
+ 4009              		.loc 1 329 0
+ 4010 02ce 064B     		ldr	r3, .L35
+ 4011 02d0 1B68     		ldr	r3, [r3, #0]
+ 4012 02d2 1846     		mov	r0, r3
+ 4013 02d4 FFF7FEFF 		bl	xQueueGiveMutexRecursive
+ 4014 02d8 0346     		mov	r3, r0
+ 4015 02da 012B     		cmp	r3, #1
+ 4016 02dc C3D0     		beq	.L34
+ 331:../src/Common Demo Tasks/recmutex.c **** 					xErrorOccurred = pdTRUE;
+ 4017              		.loc 1 331 0
+ 4018 02de 054B     		ldr	r3, .L35+12
+ 4019 02e0 4FF00102 		mov	r2, #1
+ 4020 02e4 1A60     		str	r2, [r3, #0]
+ 4021              		.loc 1 341 0
+ 4022 02e6 BFE7     		b	.L32
+ 4023              	.L36:
+ 4024              		.align	2
+ 4025              	.L35:
+ 4026 02e8 00000000 		.word	xMutex
+ 4027 02ec 0C000000 		.word	xBlockingIsSuspended
+ 4028 02f0 08000000 		.word	xControllingIsSuspended
+ 4029 02f4 04000000 		.word	xErrorOccurred
+ 4030 02f8 18000000 		.word	uxPollingCycles
+ 4031 02fc 20000000 		.word	xBlockingTaskHandle
+ 4032 0300 1C000000 		.word	xControllingTaskHandle
+ 4033              		.cfi_endproc
+ 4034              	.LFE32:
+ 4036              		.align	2
+ 4037              		.global	xAreRecursiveMutexTasksStillRunning
+ 4038              		.thumb
+ 4039              		.thumb_func
+ 4041              	xAreRecursiveMutexTasksStillRunning:
+ 4042              	.LFB33:
+ 342:../src/Common Demo Tasks/recmutex.c **** }
+ 343:../src/Common Demo Tasks/recmutex.c **** /*-----------------------------------------------------------*/
+ 344:../src/Common Demo Tasks/recmutex.c **** 
+ 345:../src/Common Demo Tasks/recmutex.c **** /* This is called to check that all the created tasks are still running. */
+ 346:../src/Common Demo Tasks/recmutex.c **** portBASE_TYPE xAreRecursiveMutexTasksStillRunning( void )
+ 347:../src/Common Demo Tasks/recmutex.c **** {
+ 4043              		.loc 1 347 0
+ 4044              		.cfi_startproc
+ 4045              		@ args = 0, pretend = 0, frame = 8
+ 4046              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4047              		@ link register save eliminated.
+ 4048 0304 80B4     		push	{r7}
+ 4049              	.LCFI12:
+ 4050              		.cfi_def_cfa_offset 4
+ 4051 0306 83B0     		sub	sp, sp, #12
+ 4052              	.LCFI13:
+ 4053              		.cfi_def_cfa_offset 16
+ 4054 0308 00AF     		add	r7, sp, #0
+ 4055              		.cfi_offset 7, -4
+ 4056              	.LCFI14:
+ 4057              		.cfi_def_cfa_register 7
+ 348:../src/Common Demo Tasks/recmutex.c **** portBASE_TYPE xReturn;
+ 349:../src/Common Demo Tasks/recmutex.c **** static unsigned portBASE_TYPE uxLastControllingCycles = 0, uxLastBlockingCycles = 0, uxLastPollingC
+ 350:../src/Common Demo Tasks/recmutex.c **** 
+ 351:../src/Common Demo Tasks/recmutex.c **** 	/* Is the controlling task still cycling? */
+ 352:../src/Common Demo Tasks/recmutex.c **** 	if( uxLastControllingCycles == uxControllingCycles )
+ 4058              		.loc 1 352 0
+ 4059 030a 1F4B     		ldr	r3, .L46
+ 4060 030c 1A68     		ldr	r2, [r3, #0]
+ 4061 030e 1F4B     		ldr	r3, .L46+4
+ 4062 0310 1B68     		ldr	r3, [r3, #0]
+ 4063 0312 9A42     		cmp	r2, r3
+ 4064 0314 04D1     		bne	.L38
+ 353:../src/Common Demo Tasks/recmutex.c **** 	{
+ 354:../src/Common Demo Tasks/recmutex.c **** 		xErrorOccurred = pdTRUE;
+ 4065              		.loc 1 354 0
+ 4066 0316 1E4B     		ldr	r3, .L46+8
+ 4067 0318 4FF00102 		mov	r2, #1
+ 4068 031c 1A60     		str	r2, [r3, #0]
+ 4069 031e 03E0     		b	.L39
+ 4070              	.L38:
+ 355:../src/Common Demo Tasks/recmutex.c **** 	}
+ 356:../src/Common Demo Tasks/recmutex.c **** 	else
+ 357:../src/Common Demo Tasks/recmutex.c **** 	{
+ 358:../src/Common Demo Tasks/recmutex.c **** 		uxLastControllingCycles = uxControllingCycles;
+ 4071              		.loc 1 358 0
+ 4072 0320 1A4B     		ldr	r3, .L46+4
+ 4073 0322 1A68     		ldr	r2, [r3, #0]
+ 4074 0324 184B     		ldr	r3, .L46
+ 4075 0326 1A60     		str	r2, [r3, #0]
+ 4076              	.L39:
+ 359:../src/Common Demo Tasks/recmutex.c **** 	}
+ 360:../src/Common Demo Tasks/recmutex.c **** 
+ 361:../src/Common Demo Tasks/recmutex.c **** 	/* Is the blocking task still cycling? */
+ 362:../src/Common Demo Tasks/recmutex.c **** 	if( uxLastBlockingCycles == uxBlockingCycles )
+ 4077              		.loc 1 362 0
+ 4078 0328 1A4B     		ldr	r3, .L46+12
+ 4079 032a 1A68     		ldr	r2, [r3, #0]
+ 4080 032c 1A4B     		ldr	r3, .L46+16
+ 4081 032e 1B68     		ldr	r3, [r3, #0]
+ 4082 0330 9A42     		cmp	r2, r3
+ 4083 0332 04D1     		bne	.L40
+ 363:../src/Common Demo Tasks/recmutex.c **** 	{
+ 364:../src/Common Demo Tasks/recmutex.c **** 		xErrorOccurred = pdTRUE;
+ 4084              		.loc 1 364 0
+ 4085 0334 164B     		ldr	r3, .L46+8
+ 4086 0336 4FF00102 		mov	r2, #1
+ 4087 033a 1A60     		str	r2, [r3, #0]
+ 4088 033c 03E0     		b	.L41
+ 4089              	.L40:
+ 365:../src/Common Demo Tasks/recmutex.c **** 	}
+ 366:../src/Common Demo Tasks/recmutex.c **** 	else
+ 367:../src/Common Demo Tasks/recmutex.c **** 	{
+ 368:../src/Common Demo Tasks/recmutex.c **** 		uxLastBlockingCycles = uxBlockingCycles;
+ 4090              		.loc 1 368 0
+ 4091 033e 164B     		ldr	r3, .L46+16
+ 4092 0340 1A68     		ldr	r2, [r3, #0]
+ 4093 0342 144B     		ldr	r3, .L46+12
+ 4094 0344 1A60     		str	r2, [r3, #0]
+ 4095              	.L41:
+ 369:../src/Common Demo Tasks/recmutex.c **** 	}
+ 370:../src/Common Demo Tasks/recmutex.c **** 
+ 371:../src/Common Demo Tasks/recmutex.c **** 	/* Is the polling task still cycling? */
+ 372:../src/Common Demo Tasks/recmutex.c **** 	if( uxLastPollingCycles == uxPollingCycles )
+ 4096              		.loc 1 372 0
+ 4097 0346 154B     		ldr	r3, .L46+20
+ 4098 0348 1A68     		ldr	r2, [r3, #0]
+ 4099 034a 154B     		ldr	r3, .L46+24
+ 4100 034c 1B68     		ldr	r3, [r3, #0]
+ 4101 034e 9A42     		cmp	r2, r3
+ 4102 0350 04D1     		bne	.L42
+ 373:../src/Common Demo Tasks/recmutex.c **** 	{
+ 374:../src/Common Demo Tasks/recmutex.c **** 		xErrorOccurred = pdTRUE;
+ 4103              		.loc 1 374 0
+ 4104 0352 0F4B     		ldr	r3, .L46+8
+ 4105 0354 4FF00102 		mov	r2, #1
+ 4106 0358 1A60     		str	r2, [r3, #0]
+ 4107 035a 03E0     		b	.L43
+ 4108              	.L42:
+ 375:../src/Common Demo Tasks/recmutex.c **** 	}
+ 376:../src/Common Demo Tasks/recmutex.c **** 	else
+ 377:../src/Common Demo Tasks/recmutex.c **** 	{
+ 378:../src/Common Demo Tasks/recmutex.c **** 		uxLastPollingCycles = uxPollingCycles;
+ 4109              		.loc 1 378 0
+ 4110 035c 104B     		ldr	r3, .L46+24
+ 4111 035e 1A68     		ldr	r2, [r3, #0]
+ 4112 0360 0E4B     		ldr	r3, .L46+20
+ 4113 0362 1A60     		str	r2, [r3, #0]
+ 4114              	.L43:
+ 379:../src/Common Demo Tasks/recmutex.c **** 	}
+ 380:../src/Common Demo Tasks/recmutex.c **** 
+ 381:../src/Common Demo Tasks/recmutex.c **** 	if( xErrorOccurred == pdTRUE )
+ 4115              		.loc 1 381 0
+ 4116 0364 0A4B     		ldr	r3, .L46+8
+ 4117 0366 1B68     		ldr	r3, [r3, #0]
+ 4118 0368 012B     		cmp	r3, #1
+ 4119 036a 03D1     		bne	.L44
+ 382:../src/Common Demo Tasks/recmutex.c **** 	{
+ 383:../src/Common Demo Tasks/recmutex.c **** 		xReturn = pdFAIL;
+ 4120              		.loc 1 383 0
+ 4121 036c 4FF00003 		mov	r3, #0
+ 4122 0370 7B60     		str	r3, [r7, #4]
+ 4123 0372 02E0     		b	.L45
+ 4124              	.L44:
+ 384:../src/Common Demo Tasks/recmutex.c **** 	}
+ 385:../src/Common Demo Tasks/recmutex.c **** 	else
+ 386:../src/Common Demo Tasks/recmutex.c **** 	{
+ 387:../src/Common Demo Tasks/recmutex.c **** 		xReturn = pdTRUE;
+ 4125              		.loc 1 387 0
+ 4126 0374 4FF00103 		mov	r3, #1
+ 4127 0378 7B60     		str	r3, [r7, #4]
+ 4128              	.L45:
+ 388:../src/Common Demo Tasks/recmutex.c **** 	}
+ 389:../src/Common Demo Tasks/recmutex.c **** 
+ 390:../src/Common Demo Tasks/recmutex.c **** 	return xReturn;
+ 4129              		.loc 1 390 0
+ 4130 037a 7B68     		ldr	r3, [r7, #4]
+ 391:../src/Common Demo Tasks/recmutex.c **** }
+ 4131              		.loc 1 391 0
+ 4132 037c 1846     		mov	r0, r3
+ 4133 037e 07F10C07 		add	r7, r7, #12
+ 4134 0382 BD46     		mov	sp, r7
+ 4135 0384 80BC     		pop	{r7}
+ 4136 0386 7047     		bx	lr
+ 4137              	.L47:
+ 4138              		.align	2
+ 4139              	.L46:
+ 4140 0388 24000000 		.word	uxLastControllingCycles.5254
+ 4141 038c 10000000 		.word	uxControllingCycles
+ 4142 0390 04000000 		.word	xErrorOccurred
+ 4143 0394 28000000 		.word	uxLastBlockingCycles.5255
+ 4144 0398 14000000 		.word	uxBlockingCycles
+ 4145 039c 2C000000 		.word	uxLastPollingCycles.5256
+ 4146 03a0 18000000 		.word	uxPollingCycles
+ 4147              		.cfi_endproc
+ 4148              	.LFE33:
+ 4150              		.bss
+ 4151              		.align	2
+ 4152              	uxLastControllingCycles.5254:
+ 4153 0024 00000000 		.space	4
+ 4154              		.align	2
+ 4155              	uxLastBlockingCycles.5255:
+ 4156 0028 00000000 		.space	4
+ 4157              		.align	2
+ 4158              	uxLastPollingCycles.5256:
+ 4159 002c 00000000 		.space	4
+ 4160              		.text
+ 4161              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 recmutex.c
+     /tmp/ccBCdNT3.s:3528   .bss:00000000 $d
+     /tmp/ccBCdNT3.s:3529   .bss:00000000 xMutex
+     /tmp/ccBCdNT3.s:3532   .bss:00000004 xErrorOccurred
+     /tmp/ccBCdNT3.s:3535   .bss:00000008 xControllingIsSuspended
+     /tmp/ccBCdNT3.s:3538   .bss:0000000c xBlockingIsSuspended
+     /tmp/ccBCdNT3.s:3541   .bss:00000010 uxControllingCycles
+     /tmp/ccBCdNT3.s:3544   .bss:00000014 uxBlockingCycles
+     /tmp/ccBCdNT3.s:3547   .bss:00000018 uxPollingCycles
+     /tmp/ccBCdNT3.s:3550   .bss:0000001c xControllingTaskHandle
+     /tmp/ccBCdNT3.s:3553   .bss:00000020 xBlockingTaskHandle
+     /tmp/ccBCdNT3.s:3556   .rodata:00000000 $d
+     /tmp/ccBCdNT3.s:3569   .text:00000000 $t
+     /tmp/ccBCdNT3.s:3574   .text:00000000 vStartRecursiveMutexTasks
+     /tmp/ccBCdNT3.s:3661   .text:000000a8 $d
+     /tmp/ccBCdNT3.s:3678   .text:000000d0 prvRecursiveMutexControllingTask
+     /tmp/ccBCdNT3.s:3817   .text:000001b0 prvRecursiveMutexBlockingTask
+     /tmp/ccBCdNT3.s:3924   .text:00000258 prvRecursiveMutexPollingTask
+     /tmp/ccBCdNT3.s:3674   .text:000000d0 $t
+     /tmp/ccBCdNT3.s:3806   .text:000001a0 $d
+     /tmp/ccBCdNT3.s:3813   .text:000001b0 $t
+     /tmp/ccBCdNT3.s:3911   .text:00000240 $d
+     /tmp/ccBCdNT3.s:3920   .text:00000258 $t
+     /tmp/ccBCdNT3.s:4026   .text:000002e8 $d
+     /tmp/ccBCdNT3.s:4036   .text:00000304 $t
+     /tmp/ccBCdNT3.s:4041   .text:00000304 xAreRecursiveMutexTasksStillRunning
+     /tmp/ccBCdNT3.s:4140   .text:00000388 $d
+     /tmp/ccBCdNT3.s:4152   .bss:00000024 uxLastControllingCycles.5254
+     /tmp/ccBCdNT3.s:4155   .bss:00000028 uxLastBlockingCycles.5255
+     /tmp/ccBCdNT3.s:4158   .bss:0000002c uxLastPollingCycles.5256
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+xQueueCreateMutex
+vQueueAddToRegistry
+xTaskGenericCreate
+xQueueGiveMutexRecursive
+xQueueTakeMutexRecursive
+vTaskDelay
+vTaskSuspend
+vTaskResume

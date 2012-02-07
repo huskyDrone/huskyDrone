@@ -1,0 +1,376 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 18, 4
+  12              		.thumb
+  13              		.file	"ParTest.c"
+  23              	.Ltext0:
+  24              		.file 1 "../src/ParTest.c"
+ 3239              		.align	2
+ 3242              	ulLEDs:
+ 3243 0000 00000002 		.word	33554432
+ 3244 0004 00000001 		.word	16777216
+ 3245 0008 00000020 		.word	536870912
+ 3246 000c 00000010 		.word	268435456
+ 3247              		.text
+ 3248              		.align	2
+ 3249              		.global	vParTestInitialise
+ 3250              		.thumb
+ 3251              		.thumb_func
+ 3253              	vParTestInitialise:
+ 3254              	.LFB29:
+   1:../src/ParTest.c **** /*
+   2:../src/ParTest.c ****     FreeRTOS V7.1.0 - Copyright (C) 2011 Real Time Engineers Ltd.
+   3:../src/ParTest.c **** 	
+   4:../src/ParTest.c **** 
+   5:../src/ParTest.c ****     ***************************************************************************
+   6:../src/ParTest.c ****      *                                                                       *
+   7:../src/ParTest.c ****      *    FreeRTOS tutorial books are available in pdf and paperback.        *
+   8:../src/ParTest.c ****      *    Complete, revised, and edited pdf reference manuals are also       *
+   9:../src/ParTest.c ****      *    available.                                                         *
+  10:../src/ParTest.c ****      *                                                                       *
+  11:../src/ParTest.c ****      *    Purchasing FreeRTOS documentation will not only help you, by       *
+  12:../src/ParTest.c ****      *    ensuring you get running as quickly as possible and with an        *
+  13:../src/ParTest.c ****      *    in-depth knowledge of how to use FreeRTOS, it will also help       *
+  14:../src/ParTest.c ****      *    the FreeRTOS project to continue with its mission of providing     *
+  15:../src/ParTest.c ****      *    professional grade, cross platform, de facto standard solutions    *
+  16:../src/ParTest.c ****      *    for microcontrollers - completely free of charge!                  *
+  17:../src/ParTest.c ****      *                                                                       *
+  18:../src/ParTest.c ****      *    >>> See http://www.FreeRTOS.org/Documentation for details. <<<     *
+  19:../src/ParTest.c ****      *                                                                       *
+  20:../src/ParTest.c ****      *    Thank you for using FreeRTOS, and thank you for your support!      *
+  21:../src/ParTest.c ****      *                                                                       *
+  22:../src/ParTest.c ****     ***************************************************************************
+  23:../src/ParTest.c **** 
+  24:../src/ParTest.c **** 
+  25:../src/ParTest.c ****     This file is part of the FreeRTOS distribution.
+  26:../src/ParTest.c **** 
+  27:../src/ParTest.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  28:../src/ParTest.c ****     the terms of the GNU General Public License (version 2) as published by the
+  29:../src/ParTest.c ****     Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+  30:../src/ParTest.c ****     >>>NOTE<<< The modification to the GPL is included to allow you to
+  31:../src/ParTest.c ****     distribute a combined work that includes FreeRTOS without being obliged to
+  32:../src/ParTest.c ****     provide the source code for proprietary components outside of the FreeRTOS
+  33:../src/ParTest.c ****     kernel.  FreeRTOS is distributed in the hope that it will be useful, but
+  34:../src/ParTest.c ****     WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  35:../src/ParTest.c ****     or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+  36:../src/ParTest.c ****     more details. You should have received a copy of the GNU General Public
+  37:../src/ParTest.c ****     License and the FreeRTOS license exception along with FreeRTOS; if not it
+  38:../src/ParTest.c ****     can be viewed here: http://www.freertos.org/a00114.html and also obtained
+  39:../src/ParTest.c ****     by writing to Richard Barry, contact details for whom are available on the
+  40:../src/ParTest.c ****     FreeRTOS WEB site.
+  41:../src/ParTest.c **** 
+  42:../src/ParTest.c ****     1 tab == 4 spaces!
+  43:../src/ParTest.c **** 
+  44:../src/ParTest.c ****     http://www.FreeRTOS.org - Documentation, latest information, license and
+  45:../src/ParTest.c ****     contact details.
+  46:../src/ParTest.c **** 
+  47:../src/ParTest.c ****     http://www.SafeRTOS.com - A version that is certified for use in safety
+  48:../src/ParTest.c ****     critical systems.
+  49:../src/ParTest.c **** 
+  50:../src/ParTest.c ****     http://www.OpenRTOS.com - Commercial support, development, porting,
+  51:../src/ParTest.c ****     licensing and training services.
+  52:../src/ParTest.c **** */
+  53:../src/ParTest.c **** 
+  54:../src/ParTest.c **** /* FreeRTOS.org includes. */
+  55:../src/ParTest.c **** #include "FreeRTOS.h"
+  56:../src/ParTest.c **** 
+  57:../src/ParTest.c **** /* Demo application includes. */
+  58:../src/ParTest.c **** //#include "partest.h"
+  59:../src/ParTest.c **** 
+  60:../src/ParTest.c **** #define LED_2 ( 1UL << 24UL )
+  61:../src/ParTest.c **** #define LED_3 ( 1UL << 25UL )
+  62:../src/ParTest.c **** #define LED_4 ( 1UL << 28UL )
+  63:../src/ParTest.c **** #define LED_5 ( 1UL << 29UL )
+  64:../src/ParTest.c **** 
+  65:../src/ParTest.c **** #define partstFIO1_BITS			( LED_2 | LED_3 | LED_4 | LED_5 )
+  66:../src/ParTest.c **** #define partstNUM_LEDS			( 4 )
+  67:../src/ParTest.c **** 
+  68:../src/ParTest.c **** static unsigned long ulLEDs[] = { LED_3, LED_2, LED_5, LED_4 };
+  69:../src/ParTest.c **** 
+  70:../src/ParTest.c **** /*-----------------------------------------------------------
+  71:../src/ParTest.c ****  * Simple parallel port IO routines.
+  72:../src/ParTest.c ****  *-----------------------------------------------------------*/
+  73:../src/ParTest.c **** 
+  74:../src/ParTest.c **** void vParTestInitialise( void )
+  75:../src/ParTest.c **** {
+ 3255              		.loc 1 75 0
+ 3256              		.cfi_startproc
+ 3257              		@ args = 0, pretend = 0, frame = 0
+ 3258              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3259              		@ link register save eliminated.
+ 3260 0000 80B4     		push	{r7}
+ 3261              	.LCFI0:
+ 3262              		.cfi_def_cfa_offset 4
+ 3263 0002 00AF     		add	r7, sp, #0
+ 3264              		.cfi_offset 7, -4
+ 3265              	.LCFI1:
+ 3266              		.cfi_def_cfa_register 7
+  76:../src/ParTest.c **** 	/* LEDs on port 1. */
+  77:../src/ParTest.c **** 	LPC_GPIO1->FIODIR  = partstFIO1_BITS;
+ 3267              		.loc 1 77 0
+ 3268 0004 054B     		ldr	r3, .L2
+ 3269 0006 4FF04C52 		mov	r2, #855638016
+ 3270 000a 1A60     		str	r2, [r3, #0]
+  78:../src/ParTest.c **** 	
+  79:../src/ParTest.c **** 	/* Start will all LEDs off. */
+  80:../src/ParTest.c **** 	LPC_GPIO1->FIOCLR = partstFIO1_BITS;
+ 3271              		.loc 1 80 0
+ 3272 000c 034B     		ldr	r3, .L2
+ 3273 000e 4FF04C52 		mov	r2, #855638016
+ 3274 0012 DA61     		str	r2, [r3, #28]
+  81:../src/ParTest.c **** }
+ 3275              		.loc 1 81 0
+ 3276 0014 BD46     		mov	sp, r7
+ 3277 0016 80BC     		pop	{r7}
+ 3278 0018 7047     		bx	lr
+ 3279              	.L3:
+ 3280 001a 00BF     		.align	2
+ 3281              	.L2:
+ 3282 001c 20C00920 		.word	537509920
+ 3283              		.cfi_endproc
+ 3284              	.LFE29:
+ 3286              		.align	2
+ 3287              		.global	vParTestSetLED
+ 3288              		.thumb
+ 3289              		.thumb_func
+ 3291              	vParTestSetLED:
+ 3292              	.LFB30:
+  82:../src/ParTest.c **** /*-----------------------------------------------------------*/
+  83:../src/ParTest.c **** 
+  84:../src/ParTest.c **** void vParTestSetLED( unsigned portBASE_TYPE uxLED, signed portBASE_TYPE xValue )
+  85:../src/ParTest.c **** {
+ 3293              		.loc 1 85 0
+ 3294              		.cfi_startproc
+ 3295              		@ args = 0, pretend = 0, frame = 8
+ 3296              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3297              		@ link register save eliminated.
+ 3298 0020 80B4     		push	{r7}
+ 3299              	.LCFI2:
+ 3300              		.cfi_def_cfa_offset 4
+ 3301 0022 83B0     		sub	sp, sp, #12
+ 3302              	.LCFI3:
+ 3303              		.cfi_def_cfa_offset 16
+ 3304 0024 00AF     		add	r7, sp, #0
+ 3305              		.cfi_offset 7, -4
+ 3306              	.LCFI4:
+ 3307              		.cfi_def_cfa_register 7
+ 3308 0026 7860     		str	r0, [r7, #4]
+ 3309 0028 3960     		str	r1, [r7, #0]
+  86:../src/ParTest.c **** 	if( uxLED < partstNUM_LEDS )
+ 3310              		.loc 1 86 0
+ 3311 002a 7B68     		ldr	r3, [r7, #4]
+ 3312 002c 032B     		cmp	r3, #3
+ 3313 002e 0FD8     		bhi	.L4
+  87:../src/ParTest.c **** 	{
+  88:../src/ParTest.c **** 		/* Set of clear the output. */
+  89:../src/ParTest.c **** 		if( xValue )
+ 3314              		.loc 1 89 0
+ 3315 0030 3B68     		ldr	r3, [r7, #0]
+ 3316 0032 002B     		cmp	r3, #0
+ 3317 0034 06D0     		beq	.L6
+  90:../src/ParTest.c **** 		{
+  91:../src/ParTest.c **** 			LPC_GPIO1->FIOCLR = ulLEDs[ uxLED ];
+ 3318              		.loc 1 91 0
+ 3319 0036 094B     		ldr	r3, .L7
+ 3320 0038 094A     		ldr	r2, .L7+4
+ 3321 003a 7968     		ldr	r1, [r7, #4]
+ 3322 003c 52F82120 		ldr	r2, [r2, r1, lsl #2]
+ 3323 0040 DA61     		str	r2, [r3, #28]
+ 3324 0042 05E0     		b	.L4
+ 3325              	.L6:
+  92:../src/ParTest.c **** 		}
+  93:../src/ParTest.c **** 		else
+  94:../src/ParTest.c **** 		{
+  95:../src/ParTest.c **** 			LPC_GPIO1->FIOSET = ulLEDs[ uxLED ];
+ 3326              		.loc 1 95 0
+ 3327 0044 054B     		ldr	r3, .L7
+ 3328 0046 064A     		ldr	r2, .L7+4
+ 3329 0048 7968     		ldr	r1, [r7, #4]
+ 3330 004a 52F82120 		ldr	r2, [r2, r1, lsl #2]
+ 3331 004e 9A61     		str	r2, [r3, #24]
+ 3332              	.L4:
+  96:../src/ParTest.c **** 		}
+  97:../src/ParTest.c **** 	}
+  98:../src/ParTest.c **** }
+ 3333              		.loc 1 98 0
+ 3334 0050 07F10C07 		add	r7, r7, #12
+ 3335 0054 BD46     		mov	sp, r7
+ 3336 0056 80BC     		pop	{r7}
+ 3337 0058 7047     		bx	lr
+ 3338              	.L8:
+ 3339 005a 00BF     		.align	2
+ 3340              	.L7:
+ 3341 005c 20C00920 		.word	537509920
+ 3342 0060 00000000 		.word	ulLEDs
+ 3343              		.cfi_endproc
+ 3344              	.LFE30:
+ 3346              		.align	2
+ 3347              		.global	vParTestToggleLED
+ 3348              		.thumb
+ 3349              		.thumb_func
+ 3351              	vParTestToggleLED:
+ 3352              	.LFB31:
+  99:../src/ParTest.c **** /*-----------------------------------------------------------*/
+ 100:../src/ParTest.c **** 
+ 101:../src/ParTest.c **** void vParTestToggleLED( unsigned portBASE_TYPE uxLED )
+ 102:../src/ParTest.c **** {
+ 3353              		.loc 1 102 0
+ 3354              		.cfi_startproc
+ 3355              		@ args = 0, pretend = 0, frame = 8
+ 3356              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3357              		@ link register save eliminated.
+ 3358 0064 80B4     		push	{r7}
+ 3359              	.LCFI5:
+ 3360              		.cfi_def_cfa_offset 4
+ 3361 0066 83B0     		sub	sp, sp, #12
+ 3362              	.LCFI6:
+ 3363              		.cfi_def_cfa_offset 16
+ 3364 0068 00AF     		add	r7, sp, #0
+ 3365              		.cfi_offset 7, -4
+ 3366              	.LCFI7:
+ 3367              		.cfi_def_cfa_register 7
+ 3368 006a 7860     		str	r0, [r7, #4]
+ 103:../src/ParTest.c **** 	if( uxLED < partstNUM_LEDS )
+ 3369              		.loc 1 103 0
+ 3370 006c 7B68     		ldr	r3, [r7, #4]
+ 3371 006e 032B     		cmp	r3, #3
+ 3372 0070 16D8     		bhi	.L9
+ 104:../src/ParTest.c **** 	{
+ 105:../src/ParTest.c **** 		if( LPC_GPIO1->FIOPIN & ulLEDs[ uxLED ] )
+ 3373              		.loc 1 105 0
+ 3374 0072 0E4B     		ldr	r3, .L12
+ 3375 0074 5A69     		ldr	r2, [r3, #20]
+ 3376 0076 0E4B     		ldr	r3, .L12+4
+ 3377 0078 7968     		ldr	r1, [r7, #4]
+ 3378 007a 53F82130 		ldr	r3, [r3, r1, lsl #2]
+ 3379 007e 02EA0303 		and	r3, r2, r3
+ 3380 0082 002B     		cmp	r3, #0
+ 3381 0084 06D0     		beq	.L11
+ 106:../src/ParTest.c **** 		{
+ 107:../src/ParTest.c **** 			LPC_GPIO1->FIOCLR = ulLEDs[ uxLED ];
+ 3382              		.loc 1 107 0
+ 3383 0086 094B     		ldr	r3, .L12
+ 3384 0088 094A     		ldr	r2, .L12+4
+ 3385 008a 7968     		ldr	r1, [r7, #4]
+ 3386 008c 52F82120 		ldr	r2, [r2, r1, lsl #2]
+ 3387 0090 DA61     		str	r2, [r3, #28]
+ 3388 0092 05E0     		b	.L9
+ 3389              	.L11:
+ 108:../src/ParTest.c **** 		}
+ 109:../src/ParTest.c **** 		else
+ 110:../src/ParTest.c **** 		{
+ 111:../src/ParTest.c **** 			LPC_GPIO1->FIOSET = ulLEDs[ uxLED ];
+ 3390              		.loc 1 111 0
+ 3391 0094 054B     		ldr	r3, .L12
+ 3392 0096 064A     		ldr	r2, .L12+4
+ 3393 0098 7968     		ldr	r1, [r7, #4]
+ 3394 009a 52F82120 		ldr	r2, [r2, r1, lsl #2]
+ 3395 009e 9A61     		str	r2, [r3, #24]
+ 3396              	.L9:
+ 112:../src/ParTest.c **** 		}
+ 113:../src/ParTest.c **** 	}
+ 114:../src/ParTest.c **** }
+ 3397              		.loc 1 114 0
+ 3398 00a0 07F10C07 		add	r7, r7, #12
+ 3399 00a4 BD46     		mov	sp, r7
+ 3400 00a6 80BC     		pop	{r7}
+ 3401 00a8 7047     		bx	lr
+ 3402              	.L13:
+ 3403 00aa 00BF     		.align	2
+ 3404              	.L12:
+ 3405 00ac 20C00920 		.word	537509920
+ 3406 00b0 00000000 		.word	ulLEDs
+ 3407              		.cfi_endproc
+ 3408              	.LFE31:
+ 3410              		.align	2
+ 3411              		.global	uxParTextGetLED
+ 3412              		.thumb
+ 3413              		.thumb_func
+ 3415              	uxParTextGetLED:
+ 3416              	.LFB32:
+ 115:../src/ParTest.c **** /*-----------------------------------------------------------*/
+ 116:../src/ParTest.c **** 
+ 117:../src/ParTest.c **** unsigned portBASE_TYPE uxParTextGetLED( unsigned portBASE_TYPE uxLED )
+ 118:../src/ParTest.c **** {
+ 3417              		.loc 1 118 0
+ 3418              		.cfi_startproc
+ 3419              		@ args = 0, pretend = 0, frame = 8
+ 3420              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3421              		@ link register save eliminated.
+ 3422 00b4 80B4     		push	{r7}
+ 3423              	.LCFI8:
+ 3424              		.cfi_def_cfa_offset 4
+ 3425 00b6 83B0     		sub	sp, sp, #12
+ 3426              	.LCFI9:
+ 3427              		.cfi_def_cfa_offset 16
+ 3428 00b8 00AF     		add	r7, sp, #0
+ 3429              		.cfi_offset 7, -4
+ 3430              	.LCFI10:
+ 3431              		.cfi_def_cfa_register 7
+ 3432 00ba 7860     		str	r0, [r7, #4]
+ 119:../src/ParTest.c **** 	if( uxLED < partstNUM_LEDS )
+ 3433              		.loc 1 119 0
+ 3434 00bc 7B68     		ldr	r3, [r7, #4]
+ 3435 00be 032B     		cmp	r3, #3
+ 3436 00c0 08D8     		bhi	.L15
+ 120:../src/ParTest.c **** 	{
+ 121:../src/ParTest.c **** 		return ( LPC_GPIO1->FIOPIN & ulLEDs[ uxLED ] );
+ 3437              		.loc 1 121 0
+ 3438 00c2 084B     		ldr	r3, .L17
+ 3439 00c4 5A69     		ldr	r2, [r3, #20]
+ 3440 00c6 084B     		ldr	r3, .L17+4
+ 3441 00c8 7968     		ldr	r1, [r7, #4]
+ 3442 00ca 53F82130 		ldr	r3, [r3, r1, lsl #2]
+ 3443 00ce 02EA0303 		and	r3, r2, r3
+ 3444 00d2 01E0     		b	.L16
+ 3445              	.L15:
+ 122:../src/ParTest.c **** 	}
+ 123:../src/ParTest.c **** 	else
+ 124:../src/ParTest.c **** 	{
+ 125:../src/ParTest.c **** 		return 0;
+ 3446              		.loc 1 125 0
+ 3447 00d4 4FF00003 		mov	r3, #0
+ 3448              	.L16:
+ 126:../src/ParTest.c **** 	}
+ 127:../src/ParTest.c **** }
+ 3449              		.loc 1 127 0
+ 3450 00d8 1846     		mov	r0, r3
+ 3451 00da 07F10C07 		add	r7, r7, #12
+ 3452 00de BD46     		mov	sp, r7
+ 3453 00e0 80BC     		pop	{r7}
+ 3454 00e2 7047     		bx	lr
+ 3455              	.L18:
+ 3456              		.align	2
+ 3457              	.L17:
+ 3458 00e4 20C00920 		.word	537509920
+ 3459 00e8 00000000 		.word	ulLEDs
+ 3460              		.cfi_endproc
+ 3461              	.LFE32:
+ 3463              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 ParTest.c
+     /tmp/ccpWgQNc.s:3239   .data:00000000 $d
+     /tmp/ccpWgQNc.s:3242   .data:00000000 ulLEDs
+     /tmp/ccpWgQNc.s:3248   .text:00000000 $t
+     /tmp/ccpWgQNc.s:3253   .text:00000000 vParTestInitialise
+     /tmp/ccpWgQNc.s:3282   .text:0000001c $d
+     /tmp/ccpWgQNc.s:3286   .text:00000020 $t
+     /tmp/ccpWgQNc.s:3291   .text:00000020 vParTestSetLED
+     /tmp/ccpWgQNc.s:3341   .text:0000005c $d
+     /tmp/ccpWgQNc.s:3346   .text:00000064 $t
+     /tmp/ccpWgQNc.s:3351   .text:00000064 vParTestToggleLED
+     /tmp/ccpWgQNc.s:3405   .text:000000ac $d
+     /tmp/ccpWgQNc.s:3410   .text:000000b4 $t
+     /tmp/ccpWgQNc.s:3415   .text:000000b4 uxParTextGetLED
+     /tmp/ccpWgQNc.s:3458   .text:000000e4 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

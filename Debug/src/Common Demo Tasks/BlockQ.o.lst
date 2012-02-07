@@ -1,0 +1,926 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 18, 4
+  12              		.thumb
+  13              		.file	"BlockQ.c"
+  23              	.Ltext0:
+  24              		.file 1 "../src/Common Demo Tasks/BlockQ.c"
+ 4023              		.align	2
+ 4024              	sBlockingConsumerCount:
+ 4025 0000 00000000 		.space	6
+ 4025      0000
+ 4026 0006 0000     		.align	2
+ 4027              	sBlockingProducerCount:
+ 4028 0008 00000000 		.space	6
+ 4028      0000
+ 4029              		.section	.rodata
+ 4030              		.align	2
+ 4031              	.LC0:
+ 4032 0000 51436F6E 		.ascii	"QConsB1\000"
+ 4032      73423100 
+ 4033              		.align	2
+ 4034              	.LC1:
+ 4035 0008 5150726F 		.ascii	"QProdB2\000"
+ 4035      64423200 
+ 4036              		.align	2
+ 4037              	.LC2:
+ 4038 0010 51436F6E 		.ascii	"QConsB3\000"
+ 4038      73423300 
+ 4039              		.align	2
+ 4040              	.LC3:
+ 4041 0018 5150726F 		.ascii	"QProdB4\000"
+ 4041      64423400 
+ 4042              		.align	2
+ 4043              	.LC4:
+ 4044 0020 5150726F 		.ascii	"QProdB5\000"
+ 4044      64423500 
+ 4045              		.align	2
+ 4046              	.LC5:
+ 4047 0028 51436F6E 		.ascii	"QConsB6\000"
+ 4047      73423600 
+ 4048              		.text
+ 4049              		.align	2
+ 4050              		.global	vStartBlockingQueueTasks
+ 4051              		.thumb
+ 4052              		.thumb_func
+ 4054              	vStartBlockingQueueTasks:
+ 4055              	.LFB29:
+   1:../src/Common Demo Tasks/BlockQ.c **** /*
+   2:../src/Common Demo Tasks/BlockQ.c ****     FreeRTOS V7.1.0 - Copyright (C) 2011 Real Time Engineers Ltd.
+   3:../src/Common Demo Tasks/BlockQ.c **** 	
+   4:../src/Common Demo Tasks/BlockQ.c **** 
+   5:../src/Common Demo Tasks/BlockQ.c ****     ***************************************************************************
+   6:../src/Common Demo Tasks/BlockQ.c ****      *                                                                       *
+   7:../src/Common Demo Tasks/BlockQ.c ****      *    FreeRTOS tutorial books are available in pdf and paperback.        *
+   8:../src/Common Demo Tasks/BlockQ.c ****      *    Complete, revised, and edited pdf reference manuals are also       *
+   9:../src/Common Demo Tasks/BlockQ.c ****      *    available.                                                         *
+  10:../src/Common Demo Tasks/BlockQ.c ****      *                                                                       *
+  11:../src/Common Demo Tasks/BlockQ.c ****      *    Purchasing FreeRTOS documentation will not only help you, by       *
+  12:../src/Common Demo Tasks/BlockQ.c ****      *    ensuring you get running as quickly as possible and with an        *
+  13:../src/Common Demo Tasks/BlockQ.c ****      *    in-depth knowledge of how to use FreeRTOS, it will also help       *
+  14:../src/Common Demo Tasks/BlockQ.c ****      *    the FreeRTOS project to continue with its mission of providing     *
+  15:../src/Common Demo Tasks/BlockQ.c ****      *    professional grade, cross platform, de facto standard solutions    *
+  16:../src/Common Demo Tasks/BlockQ.c ****      *    for microcontrollers - completely free of charge!                  *
+  17:../src/Common Demo Tasks/BlockQ.c ****      *                                                                       *
+  18:../src/Common Demo Tasks/BlockQ.c ****      *    >>> See http://www.FreeRTOS.org/Documentation for details. <<<     *
+  19:../src/Common Demo Tasks/BlockQ.c ****      *                                                                       *
+  20:../src/Common Demo Tasks/BlockQ.c ****      *    Thank you for using FreeRTOS, and thank you for your support!      *
+  21:../src/Common Demo Tasks/BlockQ.c ****      *                                                                       *
+  22:../src/Common Demo Tasks/BlockQ.c ****     ***************************************************************************
+  23:../src/Common Demo Tasks/BlockQ.c **** 
+  24:../src/Common Demo Tasks/BlockQ.c **** 
+  25:../src/Common Demo Tasks/BlockQ.c ****     This file is part of the FreeRTOS distribution.
+  26:../src/Common Demo Tasks/BlockQ.c **** 
+  27:../src/Common Demo Tasks/BlockQ.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  28:../src/Common Demo Tasks/BlockQ.c ****     the terms of the GNU General Public License (version 2) as published by the
+  29:../src/Common Demo Tasks/BlockQ.c ****     Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+  30:../src/Common Demo Tasks/BlockQ.c ****     >>>NOTE<<< The modification to the GPL is included to allow you to
+  31:../src/Common Demo Tasks/BlockQ.c ****     distribute a combined work that includes FreeRTOS without being obliged to
+  32:../src/Common Demo Tasks/BlockQ.c ****     provide the source code for proprietary components outside of the FreeRTOS
+  33:../src/Common Demo Tasks/BlockQ.c ****     kernel.  FreeRTOS is distributed in the hope that it will be useful, but
+  34:../src/Common Demo Tasks/BlockQ.c ****     WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  35:../src/Common Demo Tasks/BlockQ.c ****     or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+  36:../src/Common Demo Tasks/BlockQ.c ****     more details. You should have received a copy of the GNU General Public
+  37:../src/Common Demo Tasks/BlockQ.c ****     License and the FreeRTOS license exception along with FreeRTOS; if not it
+  38:../src/Common Demo Tasks/BlockQ.c ****     can be viewed here: http://www.freertos.org/a00114.html and also obtained
+  39:../src/Common Demo Tasks/BlockQ.c ****     by writing to Richard Barry, contact details for whom are available on the
+  40:../src/Common Demo Tasks/BlockQ.c ****     FreeRTOS WEB site.
+  41:../src/Common Demo Tasks/BlockQ.c **** 
+  42:../src/Common Demo Tasks/BlockQ.c ****     1 tab == 4 spaces!
+  43:../src/Common Demo Tasks/BlockQ.c **** 
+  44:../src/Common Demo Tasks/BlockQ.c ****     http://www.FreeRTOS.org - Documentation, latest information, license and
+  45:../src/Common Demo Tasks/BlockQ.c ****     contact details.
+  46:../src/Common Demo Tasks/BlockQ.c **** 
+  47:../src/Common Demo Tasks/BlockQ.c ****     http://www.SafeRTOS.com - A version that is certified for use in safety
+  48:../src/Common Demo Tasks/BlockQ.c ****     critical systems.
+  49:../src/Common Demo Tasks/BlockQ.c **** 
+  50:../src/Common Demo Tasks/BlockQ.c ****     http://www.OpenRTOS.com - Commercial support, development, porting,
+  51:../src/Common Demo Tasks/BlockQ.c ****     licensing and training services.
+  52:../src/Common Demo Tasks/BlockQ.c **** */
+  53:../src/Common Demo Tasks/BlockQ.c **** 
+  54:../src/Common Demo Tasks/BlockQ.c **** /*
+  55:../src/Common Demo Tasks/BlockQ.c ****  * Creates six tasks that operate on three queues as follows:
+  56:../src/Common Demo Tasks/BlockQ.c ****  *
+  57:../src/Common Demo Tasks/BlockQ.c ****  * The first two tasks send and receive an incrementing number to/from a queue.
+  58:../src/Common Demo Tasks/BlockQ.c ****  * One task acts as a producer and the other as the consumer.  The consumer is a
+  59:../src/Common Demo Tasks/BlockQ.c ****  * higher priority than the producer and is set to block on queue reads.  The queue
+  60:../src/Common Demo Tasks/BlockQ.c ****  * only has space for one item - as soon as the producer posts a message on the
+  61:../src/Common Demo Tasks/BlockQ.c ****  * queue the consumer will unblock, pre-empt the producer, and remove the item.
+  62:../src/Common Demo Tasks/BlockQ.c ****  *
+  63:../src/Common Demo Tasks/BlockQ.c ****  * The second two tasks work the other way around.  Again the queue used only has
+  64:../src/Common Demo Tasks/BlockQ.c ****  * enough space for one item.  This time the consumer has a lower priority than the
+  65:../src/Common Demo Tasks/BlockQ.c ****  * producer.  The producer will try to post on the queue blocking when the queue is
+  66:../src/Common Demo Tasks/BlockQ.c ****  * full.  When the consumer wakes it will remove the item from the queue, causing
+  67:../src/Common Demo Tasks/BlockQ.c ****  * the producer to unblock, pre-empt the consumer, and immediately re-fill the
+  68:../src/Common Demo Tasks/BlockQ.c ****  * queue.
+  69:../src/Common Demo Tasks/BlockQ.c ****  *
+  70:../src/Common Demo Tasks/BlockQ.c ****  * The last two tasks use the same queue producer and consumer functions.  This time the queue has
+  71:../src/Common Demo Tasks/BlockQ.c ****  * enough space for lots of items and the tasks operate at the same priority.  The
+  72:../src/Common Demo Tasks/BlockQ.c ****  * producer will execute, placing items into the queue.  The consumer will start
+  73:../src/Common Demo Tasks/BlockQ.c ****  * executing when either the queue becomes full (causing the producer to block) or
+  74:../src/Common Demo Tasks/BlockQ.c ****  * a context switch occurs (tasks of the same priority will time slice).
+  75:../src/Common Demo Tasks/BlockQ.c ****  *
+  76:../src/Common Demo Tasks/BlockQ.c ****  */
+  77:../src/Common Demo Tasks/BlockQ.c **** 
+  78:../src/Common Demo Tasks/BlockQ.c **** /*
+  79:../src/Common Demo Tasks/BlockQ.c **** 
+  80:../src/Common Demo Tasks/BlockQ.c **** Changes from V4.1.1
+  81:../src/Common Demo Tasks/BlockQ.c **** 
+  82:../src/Common Demo Tasks/BlockQ.c **** 	+ The second set of tasks were created the wrong way around.  This has been
+  83:../src/Common Demo Tasks/BlockQ.c **** 	  corrected.
+  84:../src/Common Demo Tasks/BlockQ.c **** */
+  85:../src/Common Demo Tasks/BlockQ.c **** 
+  86:../src/Common Demo Tasks/BlockQ.c **** 
+  87:../src/Common Demo Tasks/BlockQ.c **** #include <stdlib.h>
+  88:../src/Common Demo Tasks/BlockQ.c **** 
+  89:../src/Common Demo Tasks/BlockQ.c **** /* Scheduler include files. */
+  90:../src/Common Demo Tasks/BlockQ.c **** #include "FreeRTOS.h"
+  91:../src/Common Demo Tasks/BlockQ.c **** #include "task.h"
+  92:../src/Common Demo Tasks/BlockQ.c **** #include "queue.h"
+  93:../src/Common Demo Tasks/BlockQ.c **** 
+  94:../src/Common Demo Tasks/BlockQ.c **** /* Demo program include files. */
+  95:../src/Common Demo Tasks/BlockQ.c **** #include "BlockQ.h"
+  96:../src/Common Demo Tasks/BlockQ.c **** 
+  97:../src/Common Demo Tasks/BlockQ.c **** #define blckqSTACK_SIZE		configMINIMAL_STACK_SIZE
+  98:../src/Common Demo Tasks/BlockQ.c **** #define blckqNUM_TASK_SETS	( 3 )
+  99:../src/Common Demo Tasks/BlockQ.c **** 
+ 100:../src/Common Demo Tasks/BlockQ.c **** /* Structure used to pass parameters to the blocking queue tasks. */
+ 101:../src/Common Demo Tasks/BlockQ.c **** typedef struct BLOCKING_QUEUE_PARAMETERS
+ 102:../src/Common Demo Tasks/BlockQ.c **** {
+ 103:../src/Common Demo Tasks/BlockQ.c **** 	xQueueHandle xQueue;					/*< The queue to be used by the task. */
+ 104:../src/Common Demo Tasks/BlockQ.c **** 	portTickType xBlockTime;				/*< The block time to use on queue reads/writes. */
+ 105:../src/Common Demo Tasks/BlockQ.c **** 	volatile short *psCheckVariable;	/*< Incremented on each successful cycle to check the task is sti
+ 106:../src/Common Demo Tasks/BlockQ.c **** } xBlockingQueueParameters;
+ 107:../src/Common Demo Tasks/BlockQ.c **** 
+ 108:../src/Common Demo Tasks/BlockQ.c **** /* Task function that creates an incrementing number and posts it on a queue. */
+ 109:../src/Common Demo Tasks/BlockQ.c **** static portTASK_FUNCTION_PROTO( vBlockingQueueProducer, pvParameters );
+ 110:../src/Common Demo Tasks/BlockQ.c **** 
+ 111:../src/Common Demo Tasks/BlockQ.c **** /* Task function that removes the incrementing number from a queue and checks that
+ 112:../src/Common Demo Tasks/BlockQ.c **** it is the expected number. */
+ 113:../src/Common Demo Tasks/BlockQ.c **** static portTASK_FUNCTION_PROTO( vBlockingQueueConsumer, pvParameters );
+ 114:../src/Common Demo Tasks/BlockQ.c **** 
+ 115:../src/Common Demo Tasks/BlockQ.c **** /* Variables which are incremented each time an item is removed from a queue, and
+ 116:../src/Common Demo Tasks/BlockQ.c **** found to be the expected value.
+ 117:../src/Common Demo Tasks/BlockQ.c **** These are used to check that the tasks are still running. */
+ 118:../src/Common Demo Tasks/BlockQ.c **** static volatile short sBlockingConsumerCount[ blckqNUM_TASK_SETS ] = { ( unsigned short ) 0, ( unsi
+ 119:../src/Common Demo Tasks/BlockQ.c **** 
+ 120:../src/Common Demo Tasks/BlockQ.c **** /* Variable which are incremented each time an item is posted on a queue.   These
+ 121:../src/Common Demo Tasks/BlockQ.c **** are used to check that the tasks are still running. */
+ 122:../src/Common Demo Tasks/BlockQ.c **** static volatile short sBlockingProducerCount[ blckqNUM_TASK_SETS ] = { ( unsigned short ) 0, ( unsi
+ 123:../src/Common Demo Tasks/BlockQ.c **** 
+ 124:../src/Common Demo Tasks/BlockQ.c **** /*-----------------------------------------------------------*/
+ 125:../src/Common Demo Tasks/BlockQ.c **** 
+ 126:../src/Common Demo Tasks/BlockQ.c **** void vStartBlockingQueueTasks( unsigned portBASE_TYPE uxPriority )
+ 127:../src/Common Demo Tasks/BlockQ.c **** {
+ 4056              		.loc 1 127 0
+ 4057              		.cfi_startproc
+ 4058              		@ args = 0, pretend = 0, frame = 48
+ 4059              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4060 0000 80B5     		push	{r7, lr}
+ 4061              	.LCFI0:
+ 4062              		.cfi_def_cfa_offset 8
+ 4063 0002 90B0     		sub	sp, sp, #64
+ 4064              	.LCFI1:
+ 4065              		.cfi_def_cfa_offset 72
+ 4066 0004 04AF     		add	r7, sp, #16
+ 4067              		.cfi_offset 14, -4
+ 4068              		.cfi_offset 7, -8
+ 4069              	.LCFI2:
+ 4070              		.cfi_def_cfa 7, 56
+ 4071 0006 7860     		str	r0, [r7, #4]
+ 128:../src/Common Demo Tasks/BlockQ.c **** xBlockingQueueParameters *pxQueueParameters1, *pxQueueParameters2;
+ 129:../src/Common Demo Tasks/BlockQ.c **** xBlockingQueueParameters *pxQueueParameters3, *pxQueueParameters4;
+ 130:../src/Common Demo Tasks/BlockQ.c **** xBlockingQueueParameters *pxQueueParameters5, *pxQueueParameters6;
+ 131:../src/Common Demo Tasks/BlockQ.c **** const unsigned portBASE_TYPE uxQueueSize1 = 1, uxQueueSize5 = 5;
+ 4072              		.loc 1 131 0
+ 4073 0008 4FF00103 		mov	r3, #1
+ 4074 000c FB62     		str	r3, [r7, #44]
+ 4075 000e 4FF00503 		mov	r3, #5
+ 4076 0012 BB62     		str	r3, [r7, #40]
+ 132:../src/Common Demo Tasks/BlockQ.c **** const portTickType xBlockTime = ( portTickType ) 1000 / portTICK_RATE_MS;
+ 4077              		.loc 1 132 0
+ 4078 0014 4FF47A73 		mov	r3, #1000
+ 4079 0018 7B62     		str	r3, [r7, #36]
+ 133:../src/Common Demo Tasks/BlockQ.c **** const portTickType xDontBlock = ( portTickType ) 0;
+ 4080              		.loc 1 133 0
+ 4081 001a 4FF00003 		mov	r3, #0
+ 4082 001e 3B62     		str	r3, [r7, #32]
+ 134:../src/Common Demo Tasks/BlockQ.c **** 
+ 135:../src/Common Demo Tasks/BlockQ.c **** 	/* Create the first two tasks as described at the top of the file. */
+ 136:../src/Common Demo Tasks/BlockQ.c **** 	
+ 137:../src/Common Demo Tasks/BlockQ.c **** 	/* First create the structure used to pass parameters to the consumer tasks. */
+ 138:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters1 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+ 4083              		.loc 1 138 0
+ 4084 0020 4FF00C00 		mov	r0, #12
+ 4085 0024 FFF7FEFF 		bl	pvPortMalloc
+ 4086 0028 0346     		mov	r3, r0
+ 4087 002a FB61     		str	r3, [r7, #28]
+ 139:../src/Common Demo Tasks/BlockQ.c **** 
+ 140:../src/Common Demo Tasks/BlockQ.c **** 	/* Create the queue used by the first two tasks to pass the incrementing number.
+ 141:../src/Common Demo Tasks/BlockQ.c **** 	Pass a pointer to the queue in the parameter structure. */
+ 142:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters1->xQueue = xQueueCreate( uxQueueSize1, ( unsigned portBASE_TYPE ) sizeof( unsign
+ 4088              		.loc 1 142 0
+ 4089 002c F86A     		ldr	r0, [r7, #44]
+ 4090 002e 4FF00201 		mov	r1, #2
+ 4091 0032 4FF00002 		mov	r2, #0
+ 4092 0036 FFF7FEFF 		bl	xQueueGenericCreate
+ 4093 003a 0246     		mov	r2, r0
+ 4094 003c FB69     		ldr	r3, [r7, #28]
+ 4095 003e 1A60     		str	r2, [r3, #0]
+ 143:../src/Common Demo Tasks/BlockQ.c **** 
+ 144:../src/Common Demo Tasks/BlockQ.c **** 	/* The consumer is created first so gets a block time as described above. */
+ 145:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters1->xBlockTime = xBlockTime;
+ 4096              		.loc 1 145 0
+ 4097 0040 FB69     		ldr	r3, [r7, #28]
+ 4098 0042 7A6A     		ldr	r2, [r7, #36]
+ 4099 0044 5A60     		str	r2, [r3, #4]
+ 146:../src/Common Demo Tasks/BlockQ.c **** 
+ 147:../src/Common Demo Tasks/BlockQ.c **** 	/* Pass in the variable that this task is going to increment so we can check it
+ 148:../src/Common Demo Tasks/BlockQ.c **** 	is still running. */
+ 149:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters1->psCheckVariable = &( sBlockingConsumerCount[ 0 ] );
+ 4100              		.loc 1 149 0
+ 4101 0046 FB69     		ldr	r3, [r7, #28]
+ 4102 0048 6B4A     		ldr	r2, .L2
+ 4103 004a 9A60     		str	r2, [r3, #8]
+ 150:../src/Common Demo Tasks/BlockQ.c **** 		
+ 151:../src/Common Demo Tasks/BlockQ.c **** 	/* Create the structure used to pass parameters to the producer task. */
+ 152:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters2 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+ 4104              		.loc 1 152 0
+ 4105 004c 4FF00C00 		mov	r0, #12
+ 4106 0050 FFF7FEFF 		bl	pvPortMalloc
+ 4107 0054 0346     		mov	r3, r0
+ 4108 0056 BB61     		str	r3, [r7, #24]
+ 153:../src/Common Demo Tasks/BlockQ.c **** 
+ 154:../src/Common Demo Tasks/BlockQ.c **** 	/* Pass the queue to this task also, using the parameter structure. */
+ 155:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters2->xQueue = pxQueueParameters1->xQueue;
+ 4109              		.loc 1 155 0
+ 4110 0058 FB69     		ldr	r3, [r7, #28]
+ 4111 005a 1A68     		ldr	r2, [r3, #0]
+ 4112 005c BB69     		ldr	r3, [r7, #24]
+ 4113 005e 1A60     		str	r2, [r3, #0]
+ 156:../src/Common Demo Tasks/BlockQ.c **** 
+ 157:../src/Common Demo Tasks/BlockQ.c **** 	/* The producer is not going to block - as soon as it posts the consumer will
+ 158:../src/Common Demo Tasks/BlockQ.c **** 	wake and remove the item so the producer should always have room to post. */
+ 159:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters2->xBlockTime = xDontBlock;
+ 4114              		.loc 1 159 0
+ 4115 0060 BB69     		ldr	r3, [r7, #24]
+ 4116 0062 3A6A     		ldr	r2, [r7, #32]
+ 4117 0064 5A60     		str	r2, [r3, #4]
+ 160:../src/Common Demo Tasks/BlockQ.c **** 
+ 161:../src/Common Demo Tasks/BlockQ.c **** 	/* Pass in the variable that this task is going to increment so we can check
+ 162:../src/Common Demo Tasks/BlockQ.c **** 	it is still running. */
+ 163:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters2->psCheckVariable = &( sBlockingProducerCount[ 0 ] );
+ 4118              		.loc 1 163 0
+ 4119 0066 BB69     		ldr	r3, [r7, #24]
+ 4120 0068 644A     		ldr	r2, .L2+4
+ 4121 006a 9A60     		str	r2, [r3, #8]
+ 164:../src/Common Demo Tasks/BlockQ.c **** 
+ 165:../src/Common Demo Tasks/BlockQ.c **** 
+ 166:../src/Common Demo Tasks/BlockQ.c **** 	/* Note the producer has a lower priority than the consumer when the tasks are
+ 167:../src/Common Demo Tasks/BlockQ.c **** 	spawned. */
+ 168:../src/Common Demo Tasks/BlockQ.c **** 	xTaskCreate( vBlockingQueueConsumer, ( signed char * ) "QConsB1", blckqSTACK_SIZE, ( void * ) pxQu
+ 4122              		.loc 1 168 0
+ 4123 006c 644B     		ldr	r3, .L2+8
+ 4124 006e 7A68     		ldr	r2, [r7, #4]
+ 4125 0070 0092     		str	r2, [sp, #0]
+ 4126 0072 4FF00002 		mov	r2, #0
+ 4127 0076 0192     		str	r2, [sp, #4]
+ 4128 0078 4FF00002 		mov	r2, #0
+ 4129 007c 0292     		str	r2, [sp, #8]
+ 4130 007e 4FF00002 		mov	r2, #0
+ 4131 0082 0392     		str	r2, [sp, #12]
+ 4132 0084 5F48     		ldr	r0, .L2+12
+ 4133 0086 1946     		mov	r1, r3
+ 4134 0088 4FF05002 		mov	r2, #80
+ 4135 008c FB69     		ldr	r3, [r7, #28]
+ 4136 008e FFF7FEFF 		bl	xTaskGenericCreate
+ 169:../src/Common Demo Tasks/BlockQ.c **** 	xTaskCreate( vBlockingQueueProducer, ( signed char * ) "QProdB2", blckqSTACK_SIZE, ( void * ) pxQu
+ 4137              		.loc 1 169 0
+ 4138 0092 5D4B     		ldr	r3, .L2+16
+ 4139 0094 4FF00002 		mov	r2, #0
+ 4140 0098 0092     		str	r2, [sp, #0]
+ 4141 009a 4FF00002 		mov	r2, #0
+ 4142 009e 0192     		str	r2, [sp, #4]
+ 4143 00a0 4FF00002 		mov	r2, #0
+ 4144 00a4 0292     		str	r2, [sp, #8]
+ 4145 00a6 4FF00002 		mov	r2, #0
+ 4146 00aa 0392     		str	r2, [sp, #12]
+ 4147 00ac 5748     		ldr	r0, .L2+20
+ 4148 00ae 1946     		mov	r1, r3
+ 4149 00b0 4FF05002 		mov	r2, #80
+ 4150 00b4 BB69     		ldr	r3, [r7, #24]
+ 4151 00b6 FFF7FEFF 		bl	xTaskGenericCreate
+ 170:../src/Common Demo Tasks/BlockQ.c **** 
+ 171:../src/Common Demo Tasks/BlockQ.c **** 	
+ 172:../src/Common Demo Tasks/BlockQ.c **** 
+ 173:../src/Common Demo Tasks/BlockQ.c **** 	/* Create the second two tasks as described at the top of the file.   This uses
+ 174:../src/Common Demo Tasks/BlockQ.c **** 	the same mechanism but reverses the task priorities. */
+ 175:../src/Common Demo Tasks/BlockQ.c **** 
+ 176:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters3 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+ 4152              		.loc 1 176 0
+ 4153 00ba 4FF00C00 		mov	r0, #12
+ 4154 00be FFF7FEFF 		bl	pvPortMalloc
+ 4155 00c2 0346     		mov	r3, r0
+ 4156 00c4 7B61     		str	r3, [r7, #20]
+ 177:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters3->xQueue = xQueueCreate( uxQueueSize1, ( unsigned portBASE_TYPE ) sizeof( unsign
+ 4157              		.loc 1 177 0
+ 4158 00c6 F86A     		ldr	r0, [r7, #44]
+ 4159 00c8 4FF00201 		mov	r1, #2
+ 4160 00cc 4FF00002 		mov	r2, #0
+ 4161 00d0 FFF7FEFF 		bl	xQueueGenericCreate
+ 4162 00d4 0246     		mov	r2, r0
+ 4163 00d6 7B69     		ldr	r3, [r7, #20]
+ 4164 00d8 1A60     		str	r2, [r3, #0]
+ 178:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters3->xBlockTime = xDontBlock;
+ 4165              		.loc 1 178 0
+ 4166 00da 7B69     		ldr	r3, [r7, #20]
+ 4167 00dc 3A6A     		ldr	r2, [r7, #32]
+ 4168 00de 5A60     		str	r2, [r3, #4]
+ 179:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters3->psCheckVariable = &( sBlockingProducerCount[ 1 ] );
+ 4169              		.loc 1 179 0
+ 4170 00e0 7B69     		ldr	r3, [r7, #20]
+ 4171 00e2 4B4A     		ldr	r2, .L2+24
+ 4172 00e4 9A60     		str	r2, [r3, #8]
+ 180:../src/Common Demo Tasks/BlockQ.c **** 
+ 181:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters4 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+ 4173              		.loc 1 181 0
+ 4174 00e6 4FF00C00 		mov	r0, #12
+ 4175 00ea FFF7FEFF 		bl	pvPortMalloc
+ 4176 00ee 0346     		mov	r3, r0
+ 4177 00f0 3B61     		str	r3, [r7, #16]
+ 182:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters4->xQueue = pxQueueParameters3->xQueue;
+ 4178              		.loc 1 182 0
+ 4179 00f2 7B69     		ldr	r3, [r7, #20]
+ 4180 00f4 1A68     		ldr	r2, [r3, #0]
+ 4181 00f6 3B69     		ldr	r3, [r7, #16]
+ 4182 00f8 1A60     		str	r2, [r3, #0]
+ 183:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters4->xBlockTime = xBlockTime;
+ 4183              		.loc 1 183 0
+ 4184 00fa 3B69     		ldr	r3, [r7, #16]
+ 4185 00fc 7A6A     		ldr	r2, [r7, #36]
+ 4186 00fe 5A60     		str	r2, [r3, #4]
+ 184:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters4->psCheckVariable = &( sBlockingConsumerCount[ 1 ] );
+ 4187              		.loc 1 184 0
+ 4188 0100 3B69     		ldr	r3, [r7, #16]
+ 4189 0102 444A     		ldr	r2, .L2+28
+ 4190 0104 9A60     		str	r2, [r3, #8]
+ 185:../src/Common Demo Tasks/BlockQ.c **** 
+ 186:../src/Common Demo Tasks/BlockQ.c **** 	xTaskCreate( vBlockingQueueConsumer, ( signed char * ) "QConsB3", blckqSTACK_SIZE, ( void * ) pxQu
+ 4191              		.loc 1 186 0
+ 4192 0106 444B     		ldr	r3, .L2+32
+ 4193 0108 4FF00002 		mov	r2, #0
+ 4194 010c 0092     		str	r2, [sp, #0]
+ 4195 010e 4FF00002 		mov	r2, #0
+ 4196 0112 0192     		str	r2, [sp, #4]
+ 4197 0114 4FF00002 		mov	r2, #0
+ 4198 0118 0292     		str	r2, [sp, #8]
+ 4199 011a 4FF00002 		mov	r2, #0
+ 4200 011e 0392     		str	r2, [sp, #12]
+ 4201 0120 3848     		ldr	r0, .L2+12
+ 4202 0122 1946     		mov	r1, r3
+ 4203 0124 4FF05002 		mov	r2, #80
+ 4204 0128 7B69     		ldr	r3, [r7, #20]
+ 4205 012a FFF7FEFF 		bl	xTaskGenericCreate
+ 187:../src/Common Demo Tasks/BlockQ.c **** 	xTaskCreate( vBlockingQueueProducer, ( signed char * ) "QProdB4", blckqSTACK_SIZE, ( void * ) pxQu
+ 4206              		.loc 1 187 0
+ 4207 012e 3B4B     		ldr	r3, .L2+36
+ 4208 0130 7A68     		ldr	r2, [r7, #4]
+ 4209 0132 0092     		str	r2, [sp, #0]
+ 4210 0134 4FF00002 		mov	r2, #0
+ 4211 0138 0192     		str	r2, [sp, #4]
+ 4212 013a 4FF00002 		mov	r2, #0
+ 4213 013e 0292     		str	r2, [sp, #8]
+ 4214 0140 4FF00002 		mov	r2, #0
+ 4215 0144 0392     		str	r2, [sp, #12]
+ 4216 0146 3148     		ldr	r0, .L2+20
+ 4217 0148 1946     		mov	r1, r3
+ 4218 014a 4FF05002 		mov	r2, #80
+ 4219 014e 3B69     		ldr	r3, [r7, #16]
+ 4220 0150 FFF7FEFF 		bl	xTaskGenericCreate
+ 188:../src/Common Demo Tasks/BlockQ.c **** 
+ 189:../src/Common Demo Tasks/BlockQ.c **** 
+ 190:../src/Common Demo Tasks/BlockQ.c **** 
+ 191:../src/Common Demo Tasks/BlockQ.c **** 	/* Create the last two tasks as described above.  The mechanism is again just
+ 192:../src/Common Demo Tasks/BlockQ.c **** 	the same.  This time both parameter structures are given a block time. */
+ 193:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters5 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+ 4221              		.loc 1 193 0
+ 4222 0154 4FF00C00 		mov	r0, #12
+ 4223 0158 FFF7FEFF 		bl	pvPortMalloc
+ 4224 015c 0346     		mov	r3, r0
+ 4225 015e FB60     		str	r3, [r7, #12]
+ 194:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters5->xQueue = xQueueCreate( uxQueueSize5, ( unsigned portBASE_TYPE ) sizeof( unsign
+ 4226              		.loc 1 194 0
+ 4227 0160 B86A     		ldr	r0, [r7, #40]
+ 4228 0162 4FF00201 		mov	r1, #2
+ 4229 0166 4FF00002 		mov	r2, #0
+ 4230 016a FFF7FEFF 		bl	xQueueGenericCreate
+ 4231 016e 0246     		mov	r2, r0
+ 4232 0170 FB68     		ldr	r3, [r7, #12]
+ 4233 0172 1A60     		str	r2, [r3, #0]
+ 195:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters5->xBlockTime = xBlockTime;
+ 4234              		.loc 1 195 0
+ 4235 0174 FB68     		ldr	r3, [r7, #12]
+ 4236 0176 7A6A     		ldr	r2, [r7, #36]
+ 4237 0178 5A60     		str	r2, [r3, #4]
+ 196:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters5->psCheckVariable = &( sBlockingProducerCount[ 2 ] );
+ 4238              		.loc 1 196 0
+ 4239 017a FB68     		ldr	r3, [r7, #12]
+ 4240 017c 284A     		ldr	r2, .L2+40
+ 4241 017e 9A60     		str	r2, [r3, #8]
+ 197:../src/Common Demo Tasks/BlockQ.c **** 
+ 198:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters6 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+ 4242              		.loc 1 198 0
+ 4243 0180 4FF00C00 		mov	r0, #12
+ 4244 0184 FFF7FEFF 		bl	pvPortMalloc
+ 4245 0188 0346     		mov	r3, r0
+ 4246 018a BB60     		str	r3, [r7, #8]
+ 199:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters6->xQueue = pxQueueParameters5->xQueue;
+ 4247              		.loc 1 199 0
+ 4248 018c FB68     		ldr	r3, [r7, #12]
+ 4249 018e 1A68     		ldr	r2, [r3, #0]
+ 4250 0190 BB68     		ldr	r3, [r7, #8]
+ 4251 0192 1A60     		str	r2, [r3, #0]
+ 200:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters6->xBlockTime = xBlockTime;
+ 4252              		.loc 1 200 0
+ 4253 0194 BB68     		ldr	r3, [r7, #8]
+ 4254 0196 7A6A     		ldr	r2, [r7, #36]
+ 4255 0198 5A60     		str	r2, [r3, #4]
+ 201:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters6->psCheckVariable = &( sBlockingConsumerCount[ 2 ] );	
+ 4256              		.loc 1 201 0
+ 4257 019a BB68     		ldr	r3, [r7, #8]
+ 4258 019c 214A     		ldr	r2, .L2+44
+ 4259 019e 9A60     		str	r2, [r3, #8]
+ 202:../src/Common Demo Tasks/BlockQ.c **** 
+ 203:../src/Common Demo Tasks/BlockQ.c **** 	xTaskCreate( vBlockingQueueProducer, ( signed char * ) "QProdB5", blckqSTACK_SIZE, ( void * ) pxQu
+ 4260              		.loc 1 203 0
+ 4261 01a0 214B     		ldr	r3, .L2+48
+ 4262 01a2 4FF00002 		mov	r2, #0
+ 4263 01a6 0092     		str	r2, [sp, #0]
+ 4264 01a8 4FF00002 		mov	r2, #0
+ 4265 01ac 0192     		str	r2, [sp, #4]
+ 4266 01ae 4FF00002 		mov	r2, #0
+ 4267 01b2 0292     		str	r2, [sp, #8]
+ 4268 01b4 4FF00002 		mov	r2, #0
+ 4269 01b8 0392     		str	r2, [sp, #12]
+ 4270 01ba 1448     		ldr	r0, .L2+20
+ 4271 01bc 1946     		mov	r1, r3
+ 4272 01be 4FF05002 		mov	r2, #80
+ 4273 01c2 FB68     		ldr	r3, [r7, #12]
+ 4274 01c4 FFF7FEFF 		bl	xTaskGenericCreate
+ 204:../src/Common Demo Tasks/BlockQ.c **** 	xTaskCreate( vBlockingQueueConsumer, ( signed char * ) "QConsB6", blckqSTACK_SIZE, ( void * ) pxQu
+ 4275              		.loc 1 204 0
+ 4276 01c8 184B     		ldr	r3, .L2+52
+ 4277 01ca 4FF00002 		mov	r2, #0
+ 4278 01ce 0092     		str	r2, [sp, #0]
+ 4279 01d0 4FF00002 		mov	r2, #0
+ 4280 01d4 0192     		str	r2, [sp, #4]
+ 4281 01d6 4FF00002 		mov	r2, #0
+ 4282 01da 0292     		str	r2, [sp, #8]
+ 4283 01dc 4FF00002 		mov	r2, #0
+ 4284 01e0 0392     		str	r2, [sp, #12]
+ 4285 01e2 0848     		ldr	r0, .L2+12
+ 4286 01e4 1946     		mov	r1, r3
+ 4287 01e6 4FF05002 		mov	r2, #80
+ 4288 01ea BB68     		ldr	r3, [r7, #8]
+ 4289 01ec FFF7FEFF 		bl	xTaskGenericCreate
+ 205:../src/Common Demo Tasks/BlockQ.c **** }
+ 4290              		.loc 1 205 0
+ 4291 01f0 07F13007 		add	r7, r7, #48
+ 4292 01f4 BD46     		mov	sp, r7
+ 4293 01f6 80BD     		pop	{r7, pc}
+ 4294              	.L3:
+ 4295              		.align	2
+ 4296              	.L2:
+ 4297 01f8 00000000 		.word	sBlockingConsumerCount
+ 4298 01fc 08000000 		.word	sBlockingProducerCount
+ 4299 0200 00000000 		.word	.LC0
+ 4300 0204 00000000 		.word	vBlockingQueueConsumer
+ 4301 0208 08000000 		.word	.LC1
+ 4302 020c 00000000 		.word	vBlockingQueueProducer
+ 4303 0210 0A000000 		.word	sBlockingProducerCount+2
+ 4304 0214 02000000 		.word	sBlockingConsumerCount+2
+ 4305 0218 10000000 		.word	.LC2
+ 4306 021c 18000000 		.word	.LC3
+ 4307 0220 0C000000 		.word	sBlockingProducerCount+4
+ 4308 0224 04000000 		.word	sBlockingConsumerCount+4
+ 4309 0228 20000000 		.word	.LC4
+ 4310 022c 28000000 		.word	.LC5
+ 4311              		.cfi_endproc
+ 4312              	.LFE29:
+ 4314              		.align	2
+ 4315              		.thumb
+ 4316              		.thumb_func
+ 4318              	vBlockingQueueProducer:
+ 4319              	.LFB30:
+ 206:../src/Common Demo Tasks/BlockQ.c **** /*-----------------------------------------------------------*/
+ 207:../src/Common Demo Tasks/BlockQ.c **** 
+ 208:../src/Common Demo Tasks/BlockQ.c **** static portTASK_FUNCTION( vBlockingQueueProducer, pvParameters )
+ 209:../src/Common Demo Tasks/BlockQ.c **** {
+ 4320              		.loc 1 209 0
+ 4321              		.cfi_startproc
+ 4322              		@ args = 0, pretend = 0, frame = 24
+ 4323              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4324 0230 80B5     		push	{r7, lr}
+ 4325              	.LCFI3:
+ 4326              		.cfi_def_cfa_offset 8
+ 4327 0232 86B0     		sub	sp, sp, #24
+ 4328              	.LCFI4:
+ 4329              		.cfi_def_cfa_offset 32
+ 4330 0234 00AF     		add	r7, sp, #0
+ 4331              		.cfi_offset 14, -4
+ 4332              		.cfi_offset 7, -8
+ 4333              	.LCFI5:
+ 4334              		.cfi_def_cfa_register 7
+ 4335 0236 7860     		str	r0, [r7, #4]
+ 210:../src/Common Demo Tasks/BlockQ.c **** unsigned short usValue = 0;
+ 4336              		.loc 1 210 0
+ 4337 0238 4FF00003 		mov	r3, #0
+ 4338 023c FB81     		strh	r3, [r7, #14]	@ movhi
+ 211:../src/Common Demo Tasks/BlockQ.c **** xBlockingQueueParameters *pxQueueParameters;
+ 212:../src/Common Demo Tasks/BlockQ.c **** short sErrorEverOccurred = pdFALSE;
+ 4339              		.loc 1 212 0
+ 4340 023e 4FF00003 		mov	r3, #0
+ 4341 0242 FB82     		strh	r3, [r7, #22]	@ movhi
+ 213:../src/Common Demo Tasks/BlockQ.c **** 
+ 214:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters = ( xBlockingQueueParameters * ) pvParameters;
+ 4342              		.loc 1 214 0
+ 4343 0244 7B68     		ldr	r3, [r7, #4]
+ 4344 0246 3B61     		str	r3, [r7, #16]
+ 4345              	.L8:
+ 215:../src/Common Demo Tasks/BlockQ.c **** 
+ 216:../src/Common Demo Tasks/BlockQ.c **** 	for( ;; )
+ 217:../src/Common Demo Tasks/BlockQ.c **** 	{		
+ 218:../src/Common Demo Tasks/BlockQ.c **** 		if( xQueueSend( pxQueueParameters->xQueue, ( void * ) &usValue, pxQueueParameters->xBlockTime ) !
+ 4346              		.loc 1 218 0
+ 4347 0248 3B69     		ldr	r3, [r7, #16]
+ 4348 024a 1968     		ldr	r1, [r3, #0]
+ 4349 024c 3B69     		ldr	r3, [r7, #16]
+ 4350 024e 5B68     		ldr	r3, [r3, #4]
+ 4351 0250 07F10E02 		add	r2, r7, #14
+ 4352 0254 0846     		mov	r0, r1
+ 4353 0256 1146     		mov	r1, r2
+ 4354 0258 1A46     		mov	r2, r3
+ 4355 025a 4FF00003 		mov	r3, #0
+ 4356 025e FFF7FEFF 		bl	xQueueGenericSend
+ 4357 0262 0346     		mov	r3, r0
+ 4358 0264 012B     		cmp	r3, #1
+ 4359 0266 03D0     		beq	.L5
+ 219:../src/Common Demo Tasks/BlockQ.c **** 		{
+ 220:../src/Common Demo Tasks/BlockQ.c **** 			sErrorEverOccurred = pdTRUE;
+ 4360              		.loc 1 220 0
+ 4361 0268 4FF00103 		mov	r3, #1
+ 4362 026c FB82     		strh	r3, [r7, #22]	@ movhi
+ 221:../src/Common Demo Tasks/BlockQ.c **** 		}
+ 222:../src/Common Demo Tasks/BlockQ.c **** 		else
+ 223:../src/Common Demo Tasks/BlockQ.c **** 		{
+ 224:../src/Common Demo Tasks/BlockQ.c **** 			/* We have successfully posted a message, so increment the variable
+ 225:../src/Common Demo Tasks/BlockQ.c **** 			used to check we are still running. */
+ 226:../src/Common Demo Tasks/BlockQ.c **** 			if( sErrorEverOccurred == pdFALSE )
+ 227:../src/Common Demo Tasks/BlockQ.c **** 			{
+ 228:../src/Common Demo Tasks/BlockQ.c **** 				( *pxQueueParameters->psCheckVariable )++;
+ 229:../src/Common Demo Tasks/BlockQ.c **** 			}
+ 230:../src/Common Demo Tasks/BlockQ.c **** 
+ 231:../src/Common Demo Tasks/BlockQ.c **** 			/* Increment the variable we are going to post next time round.  The
+ 232:../src/Common Demo Tasks/BlockQ.c **** 			consumer will expect the numbers to	follow in numerical order. */
+ 233:../src/Common Demo Tasks/BlockQ.c **** 			++usValue;
+ 234:../src/Common Demo Tasks/BlockQ.c **** 		}
+ 235:../src/Common Demo Tasks/BlockQ.c **** 	}
+ 4363              		.loc 1 235 0
+ 4364 026e EBE7     		b	.L8
+ 4365              	.L5:
+ 226:../src/Common Demo Tasks/BlockQ.c **** 			if( sErrorEverOccurred == pdFALSE )
+ 4366              		.loc 1 226 0
+ 4367 0270 B7F91630 		ldrsh	r3, [r7, #22]
+ 4368 0274 002B     		cmp	r3, #0
+ 4369 0276 07D1     		bne	.L7
+ 228:../src/Common Demo Tasks/BlockQ.c **** 				( *pxQueueParameters->psCheckVariable )++;
+ 4370              		.loc 1 228 0
+ 4371 0278 3B69     		ldr	r3, [r7, #16]
+ 4372 027a 9B68     		ldr	r3, [r3, #8]
+ 4373 027c 1A88     		ldrh	r2, [r3, #0]	@ movhi
+ 4374 027e 92B2     		uxth	r2, r2
+ 4375 0280 02F10102 		add	r2, r2, #1
+ 4376 0284 92B2     		uxth	r2, r2
+ 4377 0286 1A80     		strh	r2, [r3, #0]	@ movhi
+ 4378              	.L7:
+ 233:../src/Common Demo Tasks/BlockQ.c **** 			++usValue;
+ 4379              		.loc 1 233 0
+ 4380 0288 FB89     		ldrh	r3, [r7, #14]
+ 4381 028a 03F10103 		add	r3, r3, #1
+ 4382 028e 9BB2     		uxth	r3, r3
+ 4383 0290 FB81     		strh	r3, [r7, #14]	@ movhi
+ 4384              		.loc 1 235 0
+ 4385 0292 D9E7     		b	.L8
+ 4386              		.cfi_endproc
+ 4387              	.LFE30:
+ 4389              		.align	2
+ 4390              		.thumb
+ 4391              		.thumb_func
+ 4393              	vBlockingQueueConsumer:
+ 4394              	.LFB31:
+ 236:../src/Common Demo Tasks/BlockQ.c **** }
+ 237:../src/Common Demo Tasks/BlockQ.c **** /*-----------------------------------------------------------*/
+ 238:../src/Common Demo Tasks/BlockQ.c **** 
+ 239:../src/Common Demo Tasks/BlockQ.c **** static portTASK_FUNCTION( vBlockingQueueConsumer, pvParameters )
+ 240:../src/Common Demo Tasks/BlockQ.c **** {
+ 4395              		.loc 1 240 0
+ 4396              		.cfi_startproc
+ 4397              		@ args = 0, pretend = 0, frame = 24
+ 4398              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4399 0294 80B5     		push	{r7, lr}
+ 4400              	.LCFI6:
+ 4401              		.cfi_def_cfa_offset 8
+ 4402 0296 86B0     		sub	sp, sp, #24
+ 4403              	.LCFI7:
+ 4404              		.cfi_def_cfa_offset 32
+ 4405 0298 00AF     		add	r7, sp, #0
+ 4406              		.cfi_offset 14, -4
+ 4407              		.cfi_offset 7, -8
+ 4408              	.LCFI8:
+ 4409              		.cfi_def_cfa_register 7
+ 4410 029a 7860     		str	r0, [r7, #4]
+ 241:../src/Common Demo Tasks/BlockQ.c **** unsigned short usData, usExpectedValue = 0;
+ 4411              		.loc 1 241 0
+ 4412 029c 4FF00003 		mov	r3, #0
+ 4413 02a0 FB82     		strh	r3, [r7, #22]	@ movhi
+ 242:../src/Common Demo Tasks/BlockQ.c **** xBlockingQueueParameters *pxQueueParameters;
+ 243:../src/Common Demo Tasks/BlockQ.c **** short sErrorEverOccurred = pdFALSE;
+ 4414              		.loc 1 243 0
+ 4415 02a2 4FF00003 		mov	r3, #0
+ 4416 02a6 BB82     		strh	r3, [r7, #20]	@ movhi
+ 244:../src/Common Demo Tasks/BlockQ.c **** 
+ 245:../src/Common Demo Tasks/BlockQ.c **** 	pxQueueParameters = ( xBlockingQueueParameters * ) pvParameters;
+ 4417              		.loc 1 245 0
+ 4418 02a8 7B68     		ldr	r3, [r7, #4]
+ 4419 02aa 3B61     		str	r3, [r7, #16]
+ 4420 02ac 00E0     		b	.L13
+ 4421              	.L14:
+ 246:../src/Common Demo Tasks/BlockQ.c **** 
+ 247:../src/Common Demo Tasks/BlockQ.c **** 	for( ;; )
+ 248:../src/Common Demo Tasks/BlockQ.c **** 	{	
+ 249:../src/Common Demo Tasks/BlockQ.c **** 		if( xQueueReceive( pxQueueParameters->xQueue, &usData, pxQueueParameters->xBlockTime ) == pdPASS 
+ 250:../src/Common Demo Tasks/BlockQ.c **** 		{
+ 251:../src/Common Demo Tasks/BlockQ.c **** 			if( usData != usExpectedValue )
+ 252:../src/Common Demo Tasks/BlockQ.c **** 			{
+ 253:../src/Common Demo Tasks/BlockQ.c **** 				/* Catch-up. */
+ 254:../src/Common Demo Tasks/BlockQ.c **** 				usExpectedValue = usData;
+ 255:../src/Common Demo Tasks/BlockQ.c **** 
+ 256:../src/Common Demo Tasks/BlockQ.c **** 				sErrorEverOccurred = pdTRUE;
+ 257:../src/Common Demo Tasks/BlockQ.c **** 			}
+ 258:../src/Common Demo Tasks/BlockQ.c **** 			else
+ 259:../src/Common Demo Tasks/BlockQ.c **** 			{
+ 260:../src/Common Demo Tasks/BlockQ.c **** 				/* We have successfully received a message, so increment the
+ 261:../src/Common Demo Tasks/BlockQ.c **** 				variable used to check we are still running. */	
+ 262:../src/Common Demo Tasks/BlockQ.c **** 				if( sErrorEverOccurred == pdFALSE )
+ 263:../src/Common Demo Tasks/BlockQ.c **** 				{
+ 264:../src/Common Demo Tasks/BlockQ.c **** 					( *pxQueueParameters->psCheckVariable )++;
+ 265:../src/Common Demo Tasks/BlockQ.c **** 				}
+ 266:../src/Common Demo Tasks/BlockQ.c **** 							
+ 267:../src/Common Demo Tasks/BlockQ.c **** 				/* Increment the value we expect to remove from the queue next time
+ 268:../src/Common Demo Tasks/BlockQ.c **** 				round. */
+ 269:../src/Common Demo Tasks/BlockQ.c **** 				++usExpectedValue;
+ 270:../src/Common Demo Tasks/BlockQ.c **** 			}			
+ 271:../src/Common Demo Tasks/BlockQ.c **** 		}		
+ 272:../src/Common Demo Tasks/BlockQ.c **** 	}
+ 4422              		.loc 1 272 0
+ 4423 02ae 00BF     		nop
+ 4424              	.L13:
+ 249:../src/Common Demo Tasks/BlockQ.c **** 		if( xQueueReceive( pxQueueParameters->xQueue, &usData, pxQueueParameters->xBlockTime ) == pdPASS 
+ 4425              		.loc 1 249 0
+ 4426 02b0 3B69     		ldr	r3, [r7, #16]
+ 4427 02b2 1968     		ldr	r1, [r3, #0]
+ 4428 02b4 3B69     		ldr	r3, [r7, #16]
+ 4429 02b6 5B68     		ldr	r3, [r3, #4]
+ 4430 02b8 07F10E02 		add	r2, r7, #14
+ 4431 02bc 0846     		mov	r0, r1
+ 4432 02be 1146     		mov	r1, r2
+ 4433 02c0 1A46     		mov	r2, r3
+ 4434 02c2 4FF00003 		mov	r3, #0
+ 4435 02c6 FFF7FEFF 		bl	xQueueGenericReceive
+ 4436 02ca 0346     		mov	r3, r0
+ 4437 02cc 012B     		cmp	r3, #1
+ 4438 02ce EED1     		bne	.L14
+ 251:../src/Common Demo Tasks/BlockQ.c **** 			if( usData != usExpectedValue )
+ 4439              		.loc 1 251 0
+ 4440 02d0 FB89     		ldrh	r3, [r7, #14]
+ 4441 02d2 FA8A     		ldrh	r2, [r7, #22]
+ 4442 02d4 9A42     		cmp	r2, r3
+ 4443 02d6 05D0     		beq	.L11
+ 254:../src/Common Demo Tasks/BlockQ.c **** 				usExpectedValue = usData;
+ 4444              		.loc 1 254 0
+ 4445 02d8 FB89     		ldrh	r3, [r7, #14]	@ movhi
+ 4446 02da FB82     		strh	r3, [r7, #22]	@ movhi
+ 256:../src/Common Demo Tasks/BlockQ.c **** 				sErrorEverOccurred = pdTRUE;
+ 4447              		.loc 1 256 0
+ 4448 02dc 4FF00103 		mov	r3, #1
+ 4449 02e0 BB82     		strh	r3, [r7, #20]	@ movhi
+ 4450              		.loc 1 272 0
+ 4451 02e2 E5E7     		b	.L13
+ 4452              	.L11:
+ 262:../src/Common Demo Tasks/BlockQ.c **** 				if( sErrorEverOccurred == pdFALSE )
+ 4453              		.loc 1 262 0
+ 4454 02e4 B7F91430 		ldrsh	r3, [r7, #20]
+ 4455 02e8 002B     		cmp	r3, #0
+ 4456 02ea 07D1     		bne	.L12
+ 264:../src/Common Demo Tasks/BlockQ.c **** 					( *pxQueueParameters->psCheckVariable )++;
+ 4457              		.loc 1 264 0
+ 4458 02ec 3B69     		ldr	r3, [r7, #16]
+ 4459 02ee 9B68     		ldr	r3, [r3, #8]
+ 4460 02f0 1A88     		ldrh	r2, [r3, #0]	@ movhi
+ 4461 02f2 92B2     		uxth	r2, r2
+ 4462 02f4 02F10102 		add	r2, r2, #1
+ 4463 02f8 92B2     		uxth	r2, r2
+ 4464 02fa 1A80     		strh	r2, [r3, #0]	@ movhi
+ 4465              	.L12:
+ 269:../src/Common Demo Tasks/BlockQ.c **** 				++usExpectedValue;
+ 4466              		.loc 1 269 0
+ 4467 02fc FB8A     		ldrh	r3, [r7, #22]	@ movhi
+ 4468 02fe 03F10103 		add	r3, r3, #1
+ 4469 0302 FB82     		strh	r3, [r7, #22]	@ movhi
+ 4470              		.loc 1 272 0
+ 4471 0304 D4E7     		b	.L13
+ 4472              		.cfi_endproc
+ 4473              	.LFE31:
+ 4475 0306 00BF     		.align	2
+ 4476              		.global	xAreBlockingQueuesStillRunning
+ 4477              		.thumb
+ 4478              		.thumb_func
+ 4480              	xAreBlockingQueuesStillRunning:
+ 4481              	.LFB32:
+ 273:../src/Common Demo Tasks/BlockQ.c **** }
+ 274:../src/Common Demo Tasks/BlockQ.c **** /*-----------------------------------------------------------*/
+ 275:../src/Common Demo Tasks/BlockQ.c **** 
+ 276:../src/Common Demo Tasks/BlockQ.c **** /* This is called to check that all the created tasks are still running. */
+ 277:../src/Common Demo Tasks/BlockQ.c **** portBASE_TYPE xAreBlockingQueuesStillRunning( void )
+ 278:../src/Common Demo Tasks/BlockQ.c **** {
+ 4482              		.loc 1 278 0
+ 4483              		.cfi_startproc
+ 4484              		@ args = 0, pretend = 0, frame = 8
+ 4485              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4486              		@ link register save eliminated.
+ 4487 0308 80B4     		push	{r7}
+ 4488              	.LCFI9:
+ 4489              		.cfi_def_cfa_offset 4
+ 4490 030a 83B0     		sub	sp, sp, #12
+ 4491              	.LCFI10:
+ 4492              		.cfi_def_cfa_offset 16
+ 4493 030c 00AF     		add	r7, sp, #0
+ 4494              		.cfi_offset 7, -4
+ 4495              	.LCFI11:
+ 4496              		.cfi_def_cfa_register 7
+ 279:../src/Common Demo Tasks/BlockQ.c **** static short sLastBlockingConsumerCount[ blckqNUM_TASK_SETS ] = { ( unsigned short ) 0, ( unsigned 
+ 280:../src/Common Demo Tasks/BlockQ.c **** static short sLastBlockingProducerCount[ blckqNUM_TASK_SETS ] = { ( unsigned short ) 0, ( unsigned 
+ 281:../src/Common Demo Tasks/BlockQ.c **** portBASE_TYPE xReturn = pdPASS, xTasks;
+ 4497              		.loc 1 281 0
+ 4498 030e 4FF00103 		mov	r3, #1
+ 4499 0312 7B60     		str	r3, [r7, #4]
+ 282:../src/Common Demo Tasks/BlockQ.c **** 
+ 283:../src/Common Demo Tasks/BlockQ.c **** 	/* Not too worried about mutual exclusion on these variables as they are 16
+ 284:../src/Common Demo Tasks/BlockQ.c **** 	bits and we are only reading them. We also only care to see if they have
+ 285:../src/Common Demo Tasks/BlockQ.c **** 	changed or not.
+ 286:../src/Common Demo Tasks/BlockQ.c **** 	
+ 287:../src/Common Demo Tasks/BlockQ.c **** 	Loop through each check variable to and return pdFALSE if any are found not
+ 288:../src/Common Demo Tasks/BlockQ.c **** 	to have changed since the last call. */
+ 289:../src/Common Demo Tasks/BlockQ.c **** 
+ 290:../src/Common Demo Tasks/BlockQ.c **** 	for( xTasks = 0; xTasks < blckqNUM_TASK_SETS; xTasks++ )
+ 4500              		.loc 1 290 0
+ 4501 0314 4FF00003 		mov	r3, #0
+ 4502 0318 3B60     		str	r3, [r7, #0]
+ 4503 031a 35E0     		b	.L16
+ 4504              	.L19:
+ 291:../src/Common Demo Tasks/BlockQ.c **** 	{
+ 292:../src/Common Demo Tasks/BlockQ.c **** 		if( sBlockingConsumerCount[ xTasks ] == sLastBlockingConsumerCount[ xTasks ]  )
+ 4505              		.loc 1 292 0
+ 4506 031c 1F4B     		ldr	r3, .L20
+ 4507 031e 3A68     		ldr	r2, [r7, #0]
+ 4508 0320 33F81230 		ldrh	r3, [r3, r2, lsl #1]	@ movhi
+ 4509 0324 9AB2     		uxth	r2, r3
+ 4510 0326 1E4B     		ldr	r3, .L20+4
+ 4511 0328 3968     		ldr	r1, [r7, #0]
+ 4512 032a 33F81130 		ldrh	r3, [r3, r1, lsl #1]
+ 4513 032e 12B2     		sxth	r2, r2
+ 4514 0330 1BB2     		sxth	r3, r3
+ 4515 0332 9A42     		cmp	r2, r3
+ 4516 0334 02D1     		bne	.L17
+ 293:../src/Common Demo Tasks/BlockQ.c **** 		{
+ 294:../src/Common Demo Tasks/BlockQ.c **** 			xReturn = pdFALSE;
+ 4517              		.loc 1 294 0
+ 4518 0336 4FF00003 		mov	r3, #0
+ 4519 033a 7B60     		str	r3, [r7, #4]
+ 4520              	.L17:
+ 295:../src/Common Demo Tasks/BlockQ.c **** 		}
+ 296:../src/Common Demo Tasks/BlockQ.c **** 		sLastBlockingConsumerCount[ xTasks ] = sBlockingConsumerCount[ xTasks ];
+ 4521              		.loc 1 296 0
+ 4522 033c 174B     		ldr	r3, .L20
+ 4523 033e 3A68     		ldr	r2, [r7, #0]
+ 4524 0340 33F81230 		ldrh	r3, [r3, r2, lsl #1]	@ movhi
+ 4525 0344 99B2     		uxth	r1, r3
+ 4526 0346 164B     		ldr	r3, .L20+4
+ 4527 0348 3A68     		ldr	r2, [r7, #0]
+ 4528 034a 23F81210 		strh	r1, [r3, r2, lsl #1]	@ movhi
+ 297:../src/Common Demo Tasks/BlockQ.c **** 
+ 298:../src/Common Demo Tasks/BlockQ.c **** 
+ 299:../src/Common Demo Tasks/BlockQ.c **** 		if( sBlockingProducerCount[ xTasks ] == sLastBlockingProducerCount[ xTasks ]  )
+ 4529              		.loc 1 299 0
+ 4530 034e 154B     		ldr	r3, .L20+8
+ 4531 0350 3A68     		ldr	r2, [r7, #0]
+ 4532 0352 33F81230 		ldrh	r3, [r3, r2, lsl #1]	@ movhi
+ 4533 0356 9AB2     		uxth	r2, r3
+ 4534 0358 134B     		ldr	r3, .L20+12
+ 4535 035a 3968     		ldr	r1, [r7, #0]
+ 4536 035c 33F81130 		ldrh	r3, [r3, r1, lsl #1]
+ 4537 0360 12B2     		sxth	r2, r2
+ 4538 0362 1BB2     		sxth	r3, r3
+ 4539 0364 9A42     		cmp	r2, r3
+ 4540 0366 02D1     		bne	.L18
+ 300:../src/Common Demo Tasks/BlockQ.c **** 		{
+ 301:../src/Common Demo Tasks/BlockQ.c **** 			xReturn = pdFALSE;
+ 4541              		.loc 1 301 0
+ 4542 0368 4FF00003 		mov	r3, #0
+ 4543 036c 7B60     		str	r3, [r7, #4]
+ 4544              	.L18:
+ 302:../src/Common Demo Tasks/BlockQ.c **** 		}
+ 303:../src/Common Demo Tasks/BlockQ.c **** 		sLastBlockingProducerCount[ xTasks ] = sBlockingProducerCount[ xTasks ];
+ 4545              		.loc 1 303 0
+ 4546 036e 0D4B     		ldr	r3, .L20+8
+ 4547 0370 3A68     		ldr	r2, [r7, #0]
+ 4548 0372 33F81230 		ldrh	r3, [r3, r2, lsl #1]	@ movhi
+ 4549 0376 99B2     		uxth	r1, r3
+ 4550 0378 0B4B     		ldr	r3, .L20+12
+ 4551 037a 3A68     		ldr	r2, [r7, #0]
+ 4552 037c 23F81210 		strh	r1, [r3, r2, lsl #1]	@ movhi
+ 290:../src/Common Demo Tasks/BlockQ.c **** 	for( xTasks = 0; xTasks < blckqNUM_TASK_SETS; xTasks++ )
+ 4553              		.loc 1 290 0
+ 4554 0380 3B68     		ldr	r3, [r7, #0]
+ 4555 0382 03F10103 		add	r3, r3, #1
+ 4556 0386 3B60     		str	r3, [r7, #0]
+ 4557              	.L16:
+ 290:../src/Common Demo Tasks/BlockQ.c **** 	for( xTasks = 0; xTasks < blckqNUM_TASK_SETS; xTasks++ )
+ 4558              		.loc 1 290 0 is_stmt 0 discriminator 1
+ 4559 0388 3B68     		ldr	r3, [r7, #0]
+ 4560 038a 022B     		cmp	r3, #2
+ 4561 038c C6DD     		ble	.L19
+ 304:../src/Common Demo Tasks/BlockQ.c **** 	}
+ 305:../src/Common Demo Tasks/BlockQ.c **** 
+ 306:../src/Common Demo Tasks/BlockQ.c **** 	return xReturn;
+ 4562              		.loc 1 306 0 is_stmt 1
+ 4563 038e 7B68     		ldr	r3, [r7, #4]
+ 307:../src/Common Demo Tasks/BlockQ.c **** }
+ 4564              		.loc 1 307 0
+ 4565 0390 1846     		mov	r0, r3
+ 4566 0392 07F10C07 		add	r7, r7, #12
+ 4567 0396 BD46     		mov	sp, r7
+ 4568 0398 80BC     		pop	{r7}
+ 4569 039a 7047     		bx	lr
+ 4570              	.L21:
+ 4571              		.align	2
+ 4572              	.L20:
+ 4573 039c 00000000 		.word	sBlockingConsumerCount
+ 4574 03a0 10000000 		.word	sLastBlockingConsumerCount.5833
+ 4575 03a4 08000000 		.word	sBlockingProducerCount
+ 4576 03a8 18000000 		.word	sLastBlockingProducerCount.5834
+ 4577              		.cfi_endproc
+ 4578              	.LFE32:
+ 4580              		.bss
+ 4581 000e 0000     		.align	2
+ 4582              	sLastBlockingConsumerCount.5833:
+ 4583 0010 00000000 		.space	6
+ 4583      0000
+ 4584 0016 0000     		.align	2
+ 4585              	sLastBlockingProducerCount.5834:
+ 4586 0018 00000000 		.space	6
+ 4586      0000
+ 4587 001e 0000     		.text
+ 4588              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 BlockQ.c
+     /tmp/cc9Mz3ea.s:4023   .bss:00000000 $d
+     /tmp/cc9Mz3ea.s:4024   .bss:00000000 sBlockingConsumerCount
+     /tmp/cc9Mz3ea.s:4027   .bss:00000008 sBlockingProducerCount
+     /tmp/cc9Mz3ea.s:4030   .rodata:00000000 $d
+     /tmp/cc9Mz3ea.s:4049   .text:00000000 $t
+     /tmp/cc9Mz3ea.s:4054   .text:00000000 vStartBlockingQueueTasks
+     /tmp/cc9Mz3ea.s:4297   .text:000001f8 $d
+     /tmp/cc9Mz3ea.s:4393   .text:00000294 vBlockingQueueConsumer
+     /tmp/cc9Mz3ea.s:4318   .text:00000230 vBlockingQueueProducer
+     /tmp/cc9Mz3ea.s:4314   .text:00000230 $t
+     /tmp/cc9Mz3ea.s:4480   .text:00000308 xAreBlockingQueuesStillRunning
+     /tmp/cc9Mz3ea.s:4573   .text:0000039c $d
+     /tmp/cc9Mz3ea.s:4582   .bss:00000010 sLastBlockingConsumerCount.5833
+     /tmp/cc9Mz3ea.s:4585   .bss:00000018 sLastBlockingProducerCount.5834
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+pvPortMalloc
+xQueueGenericCreate
+xTaskGenericCreate
+xQueueGenericSend
+xQueueGenericReceive

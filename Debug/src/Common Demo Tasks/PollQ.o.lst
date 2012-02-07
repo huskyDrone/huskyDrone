@@ -1,0 +1,659 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 18, 4
+  12              		.thumb
+  13              		.file	"PollQ.c"
+  23              	.Ltext0:
+  24              		.file 1 "../src/Common Demo Tasks/PollQ.c"
+ 4041              		.align	2
+ 4042              	xPollingConsumerCount:
+ 4043 0000 00000000 		.space	4
+ 4044              		.align	2
+ 4045              	xPollingProducerCount:
+ 4046 0004 00000000 		.space	4
+ 4047              		.section	.rodata
+ 4048              		.align	2
+ 4049              	.LC0:
+ 4050 0000 506F6C6C 		.ascii	"Poll_Test_Queue\000"
+ 4050      5F546573 
+ 4050      745F5175 
+ 4050      65756500 
+ 4051              		.align	2
+ 4052              	.LC1:
+ 4053 0010 51436F6E 		.ascii	"QConsNB\000"
+ 4053      734E4200 
+ 4054              		.align	2
+ 4055              	.LC2:
+ 4056 0018 5150726F 		.ascii	"QProdNB\000"
+ 4056      644E4200 
+ 4057              		.text
+ 4058              		.align	2
+ 4059              		.global	vStartPolledQueueTasks
+ 4060              		.thumb
+ 4061              		.thumb_func
+ 4063              	vStartPolledQueueTasks:
+ 4064              	.LFB29:
+   1:../src/Common Demo Tasks/PollQ.c **** /*
+   2:../src/Common Demo Tasks/PollQ.c ****     FreeRTOS V7.1.0 - Copyright (C) 2011 Real Time Engineers Ltd.
+   3:../src/Common Demo Tasks/PollQ.c **** 	
+   4:../src/Common Demo Tasks/PollQ.c **** 
+   5:../src/Common Demo Tasks/PollQ.c ****     ***************************************************************************
+   6:../src/Common Demo Tasks/PollQ.c ****      *                                                                       *
+   7:../src/Common Demo Tasks/PollQ.c ****      *    FreeRTOS tutorial books are available in pdf and paperback.        *
+   8:../src/Common Demo Tasks/PollQ.c ****      *    Complete, revised, and edited pdf reference manuals are also       *
+   9:../src/Common Demo Tasks/PollQ.c ****      *    available.                                                         *
+  10:../src/Common Demo Tasks/PollQ.c ****      *                                                                       *
+  11:../src/Common Demo Tasks/PollQ.c ****      *    Purchasing FreeRTOS documentation will not only help you, by       *
+  12:../src/Common Demo Tasks/PollQ.c ****      *    ensuring you get running as quickly as possible and with an        *
+  13:../src/Common Demo Tasks/PollQ.c ****      *    in-depth knowledge of how to use FreeRTOS, it will also help       *
+  14:../src/Common Demo Tasks/PollQ.c ****      *    the FreeRTOS project to continue with its mission of providing     *
+  15:../src/Common Demo Tasks/PollQ.c ****      *    professional grade, cross platform, de facto standard solutions    *
+  16:../src/Common Demo Tasks/PollQ.c ****      *    for microcontrollers - completely free of charge!                  *
+  17:../src/Common Demo Tasks/PollQ.c ****      *                                                                       *
+  18:../src/Common Demo Tasks/PollQ.c ****      *    >>> See http://www.FreeRTOS.org/Documentation for details. <<<     *
+  19:../src/Common Demo Tasks/PollQ.c ****      *                                                                       *
+  20:../src/Common Demo Tasks/PollQ.c ****      *    Thank you for using FreeRTOS, and thank you for your support!      *
+  21:../src/Common Demo Tasks/PollQ.c ****      *                                                                       *
+  22:../src/Common Demo Tasks/PollQ.c ****     ***************************************************************************
+  23:../src/Common Demo Tasks/PollQ.c **** 
+  24:../src/Common Demo Tasks/PollQ.c **** 
+  25:../src/Common Demo Tasks/PollQ.c ****     This file is part of the FreeRTOS distribution.
+  26:../src/Common Demo Tasks/PollQ.c **** 
+  27:../src/Common Demo Tasks/PollQ.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  28:../src/Common Demo Tasks/PollQ.c ****     the terms of the GNU General Public License (version 2) as published by the
+  29:../src/Common Demo Tasks/PollQ.c ****     Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+  30:../src/Common Demo Tasks/PollQ.c ****     >>>NOTE<<< The modification to the GPL is included to allow you to
+  31:../src/Common Demo Tasks/PollQ.c ****     distribute a combined work that includes FreeRTOS without being obliged to
+  32:../src/Common Demo Tasks/PollQ.c ****     provide the source code for proprietary components outside of the FreeRTOS
+  33:../src/Common Demo Tasks/PollQ.c ****     kernel.  FreeRTOS is distributed in the hope that it will be useful, but
+  34:../src/Common Demo Tasks/PollQ.c ****     WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  35:../src/Common Demo Tasks/PollQ.c ****     or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+  36:../src/Common Demo Tasks/PollQ.c ****     more details. You should have received a copy of the GNU General Public
+  37:../src/Common Demo Tasks/PollQ.c ****     License and the FreeRTOS license exception along with FreeRTOS; if not it
+  38:../src/Common Demo Tasks/PollQ.c ****     can be viewed here: http://www.freertos.org/a00114.html and also obtained
+  39:../src/Common Demo Tasks/PollQ.c ****     by writing to Richard Barry, contact details for whom are available on the
+  40:../src/Common Demo Tasks/PollQ.c ****     FreeRTOS WEB site.
+  41:../src/Common Demo Tasks/PollQ.c **** 
+  42:../src/Common Demo Tasks/PollQ.c ****     1 tab == 4 spaces!
+  43:../src/Common Demo Tasks/PollQ.c **** 
+  44:../src/Common Demo Tasks/PollQ.c ****     http://www.FreeRTOS.org - Documentation, latest information, license and
+  45:../src/Common Demo Tasks/PollQ.c ****     contact details.
+  46:../src/Common Demo Tasks/PollQ.c **** 
+  47:../src/Common Demo Tasks/PollQ.c ****     http://www.SafeRTOS.com - A version that is certified for use in safety
+  48:../src/Common Demo Tasks/PollQ.c ****     critical systems.
+  49:../src/Common Demo Tasks/PollQ.c **** 
+  50:../src/Common Demo Tasks/PollQ.c ****     http://www.OpenRTOS.com - Commercial support, development, porting,
+  51:../src/Common Demo Tasks/PollQ.c ****     licensing and training services.
+  52:../src/Common Demo Tasks/PollQ.c **** */
+  53:../src/Common Demo Tasks/PollQ.c **** 
+  54:../src/Common Demo Tasks/PollQ.c **** /*
+  55:../src/Common Demo Tasks/PollQ.c ****  * This version of PollQ. c is for use on systems that have limited stack
+  56:../src/Common Demo Tasks/PollQ.c ****  * space and no display facilities.  The complete version can be found in
+  57:../src/Common Demo Tasks/PollQ.c ****  * the Demo/Common/Full directory.
+  58:../src/Common Demo Tasks/PollQ.c ****  *
+  59:../src/Common Demo Tasks/PollQ.c ****  * Creates two tasks that communicate over a single queue.  One task acts as a
+  60:../src/Common Demo Tasks/PollQ.c ****  * producer, the other a consumer.
+  61:../src/Common Demo Tasks/PollQ.c ****  *
+  62:../src/Common Demo Tasks/PollQ.c ****  * The producer loops for three iteration, posting an incrementing number onto the
+  63:../src/Common Demo Tasks/PollQ.c ****  * queue each cycle.  It then delays for a fixed period before doing exactly the
+  64:../src/Common Demo Tasks/PollQ.c ****  * same again.
+  65:../src/Common Demo Tasks/PollQ.c ****  *
+  66:../src/Common Demo Tasks/PollQ.c ****  * The consumer loops emptying the queue.  Each item removed from the queue is
+  67:../src/Common Demo Tasks/PollQ.c ****  * checked to ensure it contains the expected value.  When the queue is empty it
+  68:../src/Common Demo Tasks/PollQ.c ****  * blocks for a fixed period, then does the same again.
+  69:../src/Common Demo Tasks/PollQ.c ****  *
+  70:../src/Common Demo Tasks/PollQ.c ****  * All queue access is performed without blocking.  The consumer completely empties
+  71:../src/Common Demo Tasks/PollQ.c ****  * the queue each time it runs so the producer should never find the queue full.
+  72:../src/Common Demo Tasks/PollQ.c ****  *
+  73:../src/Common Demo Tasks/PollQ.c ****  * An error is flagged if the consumer obtains an unexpected value or the producer
+  74:../src/Common Demo Tasks/PollQ.c ****  * find the queue is full.
+  75:../src/Common Demo Tasks/PollQ.c ****  */
+  76:../src/Common Demo Tasks/PollQ.c **** 
+  77:../src/Common Demo Tasks/PollQ.c **** /*
+  78:../src/Common Demo Tasks/PollQ.c **** Changes from V2.0.0
+  79:../src/Common Demo Tasks/PollQ.c **** 
+  80:../src/Common Demo Tasks/PollQ.c **** 	+ Delay periods are now specified using variables and constants of
+  81:../src/Common Demo Tasks/PollQ.c **** 	  portTickType rather than unsigned long.
+  82:../src/Common Demo Tasks/PollQ.c **** */
+  83:../src/Common Demo Tasks/PollQ.c **** 
+  84:../src/Common Demo Tasks/PollQ.c **** #include <stdlib.h>
+  85:../src/Common Demo Tasks/PollQ.c **** 
+  86:../src/Common Demo Tasks/PollQ.c **** /* Scheduler include files. */
+  87:../src/Common Demo Tasks/PollQ.c **** #include "FreeRTOS.h"
+  88:../src/Common Demo Tasks/PollQ.c **** #include "task.h"
+  89:../src/Common Demo Tasks/PollQ.c **** #include "queue.h"
+  90:../src/Common Demo Tasks/PollQ.c **** 
+  91:../src/Common Demo Tasks/PollQ.c **** /* Demo program include files. */
+  92:../src/Common Demo Tasks/PollQ.c **** #include "PollQ.h"
+  93:../src/Common Demo Tasks/PollQ.c **** 
+  94:../src/Common Demo Tasks/PollQ.c **** #define pollqSTACK_SIZE			configMINIMAL_STACK_SIZE
+  95:../src/Common Demo Tasks/PollQ.c **** #define pollqQUEUE_SIZE			( 10 )
+  96:../src/Common Demo Tasks/PollQ.c **** #define pollqPRODUCER_DELAY		( ( portTickType ) 200 / portTICK_RATE_MS )
+  97:../src/Common Demo Tasks/PollQ.c **** #define pollqCONSUMER_DELAY		( pollqPRODUCER_DELAY - ( portTickType ) ( 20 / portTICK_RATE_MS ) )
+  98:../src/Common Demo Tasks/PollQ.c **** #define pollqNO_DELAY			( ( portTickType ) 0 )
+  99:../src/Common Demo Tasks/PollQ.c **** #define pollqVALUES_TO_PRODUCE	( ( signed portBASE_TYPE ) 3 )
+ 100:../src/Common Demo Tasks/PollQ.c **** #define pollqINITIAL_VALUE		( ( signed portBASE_TYPE ) 0 )
+ 101:../src/Common Demo Tasks/PollQ.c **** 
+ 102:../src/Common Demo Tasks/PollQ.c **** /* The task that posts the incrementing number onto the queue. */
+ 103:../src/Common Demo Tasks/PollQ.c **** static portTASK_FUNCTION_PROTO( vPolledQueueProducer, pvParameters );
+ 104:../src/Common Demo Tasks/PollQ.c **** 
+ 105:../src/Common Demo Tasks/PollQ.c **** /* The task that empties the queue. */
+ 106:../src/Common Demo Tasks/PollQ.c **** static portTASK_FUNCTION_PROTO( vPolledQueueConsumer, pvParameters );
+ 107:../src/Common Demo Tasks/PollQ.c **** 
+ 108:../src/Common Demo Tasks/PollQ.c **** /* Variables that are used to check that the tasks are still running with no
+ 109:../src/Common Demo Tasks/PollQ.c **** errors. */
+ 110:../src/Common Demo Tasks/PollQ.c **** static volatile signed portBASE_TYPE xPollingConsumerCount = pollqINITIAL_VALUE, xPollingProducerCo
+ 111:../src/Common Demo Tasks/PollQ.c **** 
+ 112:../src/Common Demo Tasks/PollQ.c **** /*-----------------------------------------------------------*/
+ 113:../src/Common Demo Tasks/PollQ.c **** 
+ 114:../src/Common Demo Tasks/PollQ.c **** void vStartPolledQueueTasks( unsigned portBASE_TYPE uxPriority )
+ 115:../src/Common Demo Tasks/PollQ.c **** {
+ 4065              		.loc 1 115 0
+ 4066              		.cfi_startproc
+ 4067              		@ args = 0, pretend = 0, frame = 8
+ 4068              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4069 0000 80B5     		push	{r7, lr}
+ 4070              	.LCFI0:
+ 4071              		.cfi_def_cfa_offset 8
+ 4072 0002 86B0     		sub	sp, sp, #24
+ 4073              	.LCFI1:
+ 4074              		.cfi_def_cfa_offset 32
+ 4075 0004 04AF     		add	r7, sp, #16
+ 4076              		.cfi_offset 14, -4
+ 4077              		.cfi_offset 7, -8
+ 4078              	.LCFI2:
+ 4079              		.cfi_def_cfa 7, 16
+ 4080 0006 7860     		str	r0, [r7, #4]
+ 116:../src/Common Demo Tasks/PollQ.c **** static xQueueHandle xPolledQueue;
+ 117:../src/Common Demo Tasks/PollQ.c **** 
+ 118:../src/Common Demo Tasks/PollQ.c **** 	/* Create the queue used by the producer and consumer. */
+ 119:../src/Common Demo Tasks/PollQ.c **** 	xPolledQueue = xQueueCreate( pollqQUEUE_SIZE, ( unsigned portBASE_TYPE ) sizeof( unsigned short ) 
+ 4081              		.loc 1 119 0
+ 4082 0008 4FF00A00 		mov	r0, #10
+ 4083 000c 4FF00201 		mov	r1, #2
+ 4084 0010 4FF00002 		mov	r2, #0
+ 4085 0014 FFF7FEFF 		bl	xQueueGenericCreate
+ 4086 0018 0246     		mov	r2, r0
+ 4087 001a 194B     		ldr	r3, .L2
+ 4088 001c 1A60     		str	r2, [r3, #0]
+ 120:../src/Common Demo Tasks/PollQ.c **** 
+ 121:../src/Common Demo Tasks/PollQ.c **** 	/* vQueueAddToRegistry() adds the queue to the queue registry, if one is
+ 122:../src/Common Demo Tasks/PollQ.c **** 	in use.  The queue registry is provided as a means for kernel aware 
+ 123:../src/Common Demo Tasks/PollQ.c **** 	debuggers to locate queues and has no purpose if a kernel aware debugger
+ 124:../src/Common Demo Tasks/PollQ.c **** 	is not being used.  The call to vQueueAddToRegistry() will be removed
+ 125:../src/Common Demo Tasks/PollQ.c **** 	by the pre-processor if configQUEUE_REGISTRY_SIZE is not defined or is 
+ 126:../src/Common Demo Tasks/PollQ.c **** 	defined to be less than 1. */
+ 127:../src/Common Demo Tasks/PollQ.c **** 	vQueueAddToRegistry( xPolledQueue, ( signed char * ) "Poll_Test_Queue" );
+ 4089              		.loc 1 127 0
+ 4090 001e 184B     		ldr	r3, .L2
+ 4091 0020 1A68     		ldr	r2, [r3, #0]
+ 4092 0022 184B     		ldr	r3, .L2+4
+ 4093 0024 1046     		mov	r0, r2
+ 4094 0026 1946     		mov	r1, r3
+ 4095 0028 FFF7FEFF 		bl	vQueueAddToRegistry
+ 128:../src/Common Demo Tasks/PollQ.c **** 
+ 129:../src/Common Demo Tasks/PollQ.c **** 	/* Spawn the producer and consumer. */
+ 130:../src/Common Demo Tasks/PollQ.c **** 	xTaskCreate( vPolledQueueConsumer, ( signed char * ) "QConsNB", pollqSTACK_SIZE, ( void * ) &xPoll
+ 4096              		.loc 1 130 0
+ 4097 002c 164B     		ldr	r3, .L2+8
+ 4098 002e 7A68     		ldr	r2, [r7, #4]
+ 4099 0030 0092     		str	r2, [sp, #0]
+ 4100 0032 4FF00002 		mov	r2, #0
+ 4101 0036 0192     		str	r2, [sp, #4]
+ 4102 0038 4FF00002 		mov	r2, #0
+ 4103 003c 0292     		str	r2, [sp, #8]
+ 4104 003e 4FF00002 		mov	r2, #0
+ 4105 0042 0392     		str	r2, [sp, #12]
+ 4106 0044 1148     		ldr	r0, .L2+12
+ 4107 0046 1946     		mov	r1, r3
+ 4108 0048 4FF05002 		mov	r2, #80
+ 4109 004c 0C4B     		ldr	r3, .L2
+ 4110 004e FFF7FEFF 		bl	xTaskGenericCreate
+ 131:../src/Common Demo Tasks/PollQ.c **** 	xTaskCreate( vPolledQueueProducer, ( signed char * ) "QProdNB", pollqSTACK_SIZE, ( void * ) &xPoll
+ 4111              		.loc 1 131 0
+ 4112 0052 0F4B     		ldr	r3, .L2+16
+ 4113 0054 7A68     		ldr	r2, [r7, #4]
+ 4114 0056 0092     		str	r2, [sp, #0]
+ 4115 0058 4FF00002 		mov	r2, #0
+ 4116 005c 0192     		str	r2, [sp, #4]
+ 4117 005e 4FF00002 		mov	r2, #0
+ 4118 0062 0292     		str	r2, [sp, #8]
+ 4119 0064 4FF00002 		mov	r2, #0
+ 4120 0068 0392     		str	r2, [sp, #12]
+ 4121 006a 0A48     		ldr	r0, .L2+20
+ 4122 006c 1946     		mov	r1, r3
+ 4123 006e 4FF05002 		mov	r2, #80
+ 4124 0072 034B     		ldr	r3, .L2
+ 4125 0074 FFF7FEFF 		bl	xTaskGenericCreate
+ 132:../src/Common Demo Tasks/PollQ.c **** }
+ 4126              		.loc 1 132 0
+ 4127 0078 07F10807 		add	r7, r7, #8
+ 4128 007c BD46     		mov	sp, r7
+ 4129 007e 80BD     		pop	{r7, pc}
+ 4130              	.L3:
+ 4131              		.align	2
+ 4132              	.L2:
+ 4133 0080 08000000 		.word	xPolledQueue.5800
+ 4134 0084 00000000 		.word	.LC0
+ 4135 0088 10000000 		.word	.LC1
+ 4136 008c 00000000 		.word	vPolledQueueConsumer
+ 4137 0090 18000000 		.word	.LC2
+ 4138 0094 00000000 		.word	vPolledQueueProducer
+ 4139              		.cfi_endproc
+ 4140              	.LFE29:
+ 4142              		.align	2
+ 4143              		.thumb
+ 4144              		.thumb_func
+ 4146              	vPolledQueueProducer:
+ 4147              	.LFB30:
+ 133:../src/Common Demo Tasks/PollQ.c **** /*-----------------------------------------------------------*/
+ 134:../src/Common Demo Tasks/PollQ.c **** 
+ 135:../src/Common Demo Tasks/PollQ.c **** static portTASK_FUNCTION( vPolledQueueProducer, pvParameters )
+ 136:../src/Common Demo Tasks/PollQ.c **** {
+ 4148              		.loc 1 136 0
+ 4149              		.cfi_startproc
+ 4150              		@ args = 0, pretend = 0, frame = 24
+ 4151              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4152 0098 80B5     		push	{r7, lr}
+ 4153              	.LCFI3:
+ 4154              		.cfi_def_cfa_offset 8
+ 4155 009a 86B0     		sub	sp, sp, #24
+ 4156              	.LCFI4:
+ 4157              		.cfi_def_cfa_offset 32
+ 4158 009c 00AF     		add	r7, sp, #0
+ 4159              		.cfi_offset 14, -4
+ 4160              		.cfi_offset 7, -8
+ 4161              	.LCFI5:
+ 4162              		.cfi_def_cfa_register 7
+ 4163 009e 7860     		str	r0, [r7, #4]
+ 137:../src/Common Demo Tasks/PollQ.c **** unsigned short usValue = ( unsigned short ) 0;
+ 4164              		.loc 1 137 0
+ 4165 00a0 4FF00003 		mov	r3, #0
+ 4166 00a4 FB81     		strh	r3, [r7, #14]	@ movhi
+ 138:../src/Common Demo Tasks/PollQ.c **** signed portBASE_TYPE xError = pdFALSE, xLoop;
+ 4167              		.loc 1 138 0
+ 4168 00a6 4FF00003 		mov	r3, #0
+ 4169 00aa 7B61     		str	r3, [r7, #20]
+ 4170              	.L10:
+ 139:../src/Common Demo Tasks/PollQ.c **** 
+ 140:../src/Common Demo Tasks/PollQ.c **** 	for( ;; )
+ 141:../src/Common Demo Tasks/PollQ.c **** 	{		
+ 142:../src/Common Demo Tasks/PollQ.c **** 		for( xLoop = 0; xLoop < pollqVALUES_TO_PRODUCE; xLoop++ )
+ 4171              		.loc 1 142 0
+ 4172 00ac 4FF00003 		mov	r3, #0
+ 4173 00b0 3B61     		str	r3, [r7, #16]
+ 4174 00b2 28E0     		b	.L5
+ 4175              	.L9:
+ 143:../src/Common Demo Tasks/PollQ.c **** 		{
+ 144:../src/Common Demo Tasks/PollQ.c **** 			/* Send an incrementing number on the queue without blocking. */
+ 145:../src/Common Demo Tasks/PollQ.c **** 			if( xQueueSend( *( ( xQueueHandle * ) pvParameters ), ( void * ) &usValue, pollqNO_DELAY ) != pd
+ 4176              		.loc 1 145 0
+ 4177 00b4 7B68     		ldr	r3, [r7, #4]
+ 4178 00b6 1A68     		ldr	r2, [r3, #0]
+ 4179 00b8 07F10E03 		add	r3, r7, #14
+ 4180 00bc 1046     		mov	r0, r2
+ 4181 00be 1946     		mov	r1, r3
+ 4182 00c0 4FF00002 		mov	r2, #0
+ 4183 00c4 4FF00003 		mov	r3, #0
+ 4184 00c8 FFF7FEFF 		bl	xQueueGenericSend
+ 4185 00cc 0346     		mov	r3, r0
+ 4186 00ce 012B     		cmp	r3, #1
+ 4187 00d0 03D0     		beq	.L6
+ 146:../src/Common Demo Tasks/PollQ.c **** 			{
+ 147:../src/Common Demo Tasks/PollQ.c **** 				/* We should never find the queue full so if we get here there
+ 148:../src/Common Demo Tasks/PollQ.c **** 				has been an error. */
+ 149:../src/Common Demo Tasks/PollQ.c **** 				xError = pdTRUE;
+ 4188              		.loc 1 149 0
+ 4189 00d2 4FF00103 		mov	r3, #1
+ 4190 00d6 7B61     		str	r3, [r7, #20]
+ 4191 00d8 11E0     		b	.L7
+ 4192              	.L6:
+ 150:../src/Common Demo Tasks/PollQ.c **** 			}
+ 151:../src/Common Demo Tasks/PollQ.c **** 			else
+ 152:../src/Common Demo Tasks/PollQ.c **** 			{
+ 153:../src/Common Demo Tasks/PollQ.c **** 				if( xError == pdFALSE )
+ 4193              		.loc 1 153 0
+ 4194 00da 7B69     		ldr	r3, [r7, #20]
+ 4195 00dc 002B     		cmp	r3, #0
+ 4196 00de 09D1     		bne	.L8
+ 154:../src/Common Demo Tasks/PollQ.c **** 				{
+ 155:../src/Common Demo Tasks/PollQ.c **** 					/* If an error has ever been recorded we stop incrementing the
+ 156:../src/Common Demo Tasks/PollQ.c **** 					check variable. */
+ 157:../src/Common Demo Tasks/PollQ.c **** 					portENTER_CRITICAL();
+ 4197              		.loc 1 157 0
+ 4198 00e0 FFF7FEFF 		bl	vPortEnterCritical
+ 158:../src/Common Demo Tasks/PollQ.c **** 						xPollingProducerCount++;
+ 4199              		.loc 1 158 0
+ 4200 00e4 0C4B     		ldr	r3, .L11
+ 4201 00e6 1B68     		ldr	r3, [r3, #0]
+ 4202 00e8 03F10102 		add	r2, r3, #1
+ 4203 00ec 0A4B     		ldr	r3, .L11
+ 4204 00ee 1A60     		str	r2, [r3, #0]
+ 159:../src/Common Demo Tasks/PollQ.c **** 					portEXIT_CRITICAL();
+ 4205              		.loc 1 159 0
+ 4206 00f0 FFF7FEFF 		bl	vPortExitCritical
+ 4207              	.L8:
+ 160:../src/Common Demo Tasks/PollQ.c **** 				}
+ 161:../src/Common Demo Tasks/PollQ.c **** 
+ 162:../src/Common Demo Tasks/PollQ.c **** 				/* Update the value we are going to post next time around. */
+ 163:../src/Common Demo Tasks/PollQ.c **** 				usValue++;
+ 4208              		.loc 1 163 0
+ 4209 00f4 FB89     		ldrh	r3, [r7, #14]
+ 4210 00f6 03F10103 		add	r3, r3, #1
+ 4211 00fa 9BB2     		uxth	r3, r3
+ 4212 00fc FB81     		strh	r3, [r7, #14]	@ movhi
+ 4213              	.L7:
+ 142:../src/Common Demo Tasks/PollQ.c **** 		for( xLoop = 0; xLoop < pollqVALUES_TO_PRODUCE; xLoop++ )
+ 4214              		.loc 1 142 0
+ 4215 00fe 3B69     		ldr	r3, [r7, #16]
+ 4216 0100 03F10103 		add	r3, r3, #1
+ 4217 0104 3B61     		str	r3, [r7, #16]
+ 4218              	.L5:
+ 142:../src/Common Demo Tasks/PollQ.c **** 		for( xLoop = 0; xLoop < pollqVALUES_TO_PRODUCE; xLoop++ )
+ 4219              		.loc 1 142 0 is_stmt 0 discriminator 1
+ 4220 0106 3B69     		ldr	r3, [r7, #16]
+ 4221 0108 022B     		cmp	r3, #2
+ 4222 010a D3DD     		ble	.L9
+ 164:../src/Common Demo Tasks/PollQ.c **** 			}
+ 165:../src/Common Demo Tasks/PollQ.c **** 		}
+ 166:../src/Common Demo Tasks/PollQ.c **** 
+ 167:../src/Common Demo Tasks/PollQ.c **** 		/* Wait before we start posting again to ensure the consumer runs and
+ 168:../src/Common Demo Tasks/PollQ.c **** 		empties the queue. */
+ 169:../src/Common Demo Tasks/PollQ.c **** 		vTaskDelay( pollqPRODUCER_DELAY );
+ 4223              		.loc 1 169 0 is_stmt 1
+ 4224 010c 4FF0C800 		mov	r0, #200
+ 4225 0110 FFF7FEFF 		bl	vTaskDelay
+ 170:../src/Common Demo Tasks/PollQ.c **** 	}
+ 4226              		.loc 1 170 0
+ 4227 0114 CAE7     		b	.L10
+ 4228              	.L12:
+ 4229 0116 00BF     		.align	2
+ 4230              	.L11:
+ 4231 0118 04000000 		.word	xPollingProducerCount
+ 4232              		.cfi_endproc
+ 4233              	.LFE30:
+ 4235              		.align	2
+ 4236              		.thumb
+ 4237              		.thumb_func
+ 4239              	vPolledQueueConsumer:
+ 4240              	.LFB31:
+ 171:../src/Common Demo Tasks/PollQ.c **** }  /*lint !e818 Function prototype must conform to API. */
+ 172:../src/Common Demo Tasks/PollQ.c **** /*-----------------------------------------------------------*/
+ 173:../src/Common Demo Tasks/PollQ.c **** 
+ 174:../src/Common Demo Tasks/PollQ.c **** static portTASK_FUNCTION( vPolledQueueConsumer, pvParameters )
+ 175:../src/Common Demo Tasks/PollQ.c **** {
+ 4241              		.loc 1 175 0
+ 4242              		.cfi_startproc
+ 4243              		@ args = 0, pretend = 0, frame = 24
+ 4244              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4245 011c 80B5     		push	{r7, lr}
+ 4246              	.LCFI6:
+ 4247              		.cfi_def_cfa_offset 8
+ 4248 011e 86B0     		sub	sp, sp, #24
+ 4249              	.LCFI7:
+ 4250              		.cfi_def_cfa_offset 32
+ 4251 0120 00AF     		add	r7, sp, #0
+ 4252              		.cfi_offset 14, -4
+ 4253              		.cfi_offset 7, -8
+ 4254              	.LCFI8:
+ 4255              		.cfi_def_cfa_register 7
+ 4256 0122 7860     		str	r0, [r7, #4]
+ 176:../src/Common Demo Tasks/PollQ.c **** unsigned short usData, usExpectedValue = ( unsigned short ) 0;
+ 4257              		.loc 1 176 0
+ 4258 0124 4FF00003 		mov	r3, #0
+ 4259 0128 FB82     		strh	r3, [r7, #22]	@ movhi
+ 177:../src/Common Demo Tasks/PollQ.c **** signed portBASE_TYPE xError = pdFALSE;
+ 4260              		.loc 1 177 0
+ 4261 012a 4FF00003 		mov	r3, #0
+ 4262 012e 3B61     		str	r3, [r7, #16]
+ 178:../src/Common Demo Tasks/PollQ.c **** 
+ 179:../src/Common Demo Tasks/PollQ.c **** 	for( ;; )
+ 180:../src/Common Demo Tasks/PollQ.c **** 	{		
+ 181:../src/Common Demo Tasks/PollQ.c **** 		/* Loop until the queue is empty. */
+ 182:../src/Common Demo Tasks/PollQ.c **** 		while( uxQueueMessagesWaiting( *( ( xQueueHandle * ) pvParameters ) ) )
+ 4263              		.loc 1 182 0
+ 4264 0130 29E0     		b	.L14
+ 4265              	.L17:
+ 183:../src/Common Demo Tasks/PollQ.c **** 		{
+ 184:../src/Common Demo Tasks/PollQ.c **** 			if( xQueueReceive( *( ( xQueueHandle * ) pvParameters ), &usData, pollqNO_DELAY ) == pdPASS )
+ 4266              		.loc 1 184 0
+ 4267 0132 7B68     		ldr	r3, [r7, #4]
+ 4268 0134 1A68     		ldr	r2, [r3, #0]
+ 4269 0136 07F10E03 		add	r3, r7, #14
+ 4270 013a 1046     		mov	r0, r2
+ 4271 013c 1946     		mov	r1, r3
+ 4272 013e 4FF00002 		mov	r2, #0
+ 4273 0142 4FF00003 		mov	r3, #0
+ 4274 0146 FFF7FEFF 		bl	xQueueGenericReceive
+ 4275 014a 0346     		mov	r3, r0
+ 4276 014c 012B     		cmp	r3, #1
+ 4277 014e 1AD1     		bne	.L14
+ 185:../src/Common Demo Tasks/PollQ.c **** 			{
+ 186:../src/Common Demo Tasks/PollQ.c **** 				if( usData != usExpectedValue )
+ 4278              		.loc 1 186 0
+ 4279 0150 FB89     		ldrh	r3, [r7, #14]
+ 4280 0152 FA8A     		ldrh	r2, [r7, #22]
+ 4281 0154 9A42     		cmp	r2, r3
+ 4282 0156 05D0     		beq	.L15
+ 187:../src/Common Demo Tasks/PollQ.c **** 				{
+ 188:../src/Common Demo Tasks/PollQ.c **** 					/* This is not what we expected to receive so an error has
+ 189:../src/Common Demo Tasks/PollQ.c **** 					occurred. */
+ 190:../src/Common Demo Tasks/PollQ.c **** 					xError = pdTRUE;
+ 4283              		.loc 1 190 0
+ 4284 0158 4FF00103 		mov	r3, #1
+ 4285 015c 3B61     		str	r3, [r7, #16]
+ 191:../src/Common Demo Tasks/PollQ.c **** 
+ 192:../src/Common Demo Tasks/PollQ.c **** 					/* Catch-up to the value we received so our next expected
+ 193:../src/Common Demo Tasks/PollQ.c **** 					value should again be correct. */
+ 194:../src/Common Demo Tasks/PollQ.c **** 					usExpectedValue = usData;
+ 4286              		.loc 1 194 0
+ 4287 015e FB89     		ldrh	r3, [r7, #14]	@ movhi
+ 4288 0160 FB82     		strh	r3, [r7, #22]	@ movhi
+ 4289 0162 0CE0     		b	.L16
+ 4290              	.L15:
+ 195:../src/Common Demo Tasks/PollQ.c **** 				}
+ 196:../src/Common Demo Tasks/PollQ.c **** 				else
+ 197:../src/Common Demo Tasks/PollQ.c **** 				{
+ 198:../src/Common Demo Tasks/PollQ.c **** 					if( xError == pdFALSE )
+ 4291              		.loc 1 198 0
+ 4292 0164 3B69     		ldr	r3, [r7, #16]
+ 4293 0166 002B     		cmp	r3, #0
+ 4294 0168 09D1     		bne	.L16
+ 199:../src/Common Demo Tasks/PollQ.c **** 					{
+ 200:../src/Common Demo Tasks/PollQ.c **** 						/* Only increment the check variable if no errors have
+ 201:../src/Common Demo Tasks/PollQ.c **** 						occurred. */
+ 202:../src/Common Demo Tasks/PollQ.c **** 						portENTER_CRITICAL();
+ 4295              		.loc 1 202 0
+ 4296 016a FFF7FEFF 		bl	vPortEnterCritical
+ 203:../src/Common Demo Tasks/PollQ.c **** 							xPollingConsumerCount++;
+ 4297              		.loc 1 203 0
+ 4298 016e 0D4B     		ldr	r3, .L19
+ 4299 0170 1B68     		ldr	r3, [r3, #0]
+ 4300 0172 03F10102 		add	r2, r3, #1
+ 4301 0176 0B4B     		ldr	r3, .L19
+ 4302 0178 1A60     		str	r2, [r3, #0]
+ 204:../src/Common Demo Tasks/PollQ.c **** 						portEXIT_CRITICAL();
+ 4303              		.loc 1 204 0
+ 4304 017a FFF7FEFF 		bl	vPortExitCritical
+ 4305              	.L16:
+ 205:../src/Common Demo Tasks/PollQ.c **** 					}
+ 206:../src/Common Demo Tasks/PollQ.c **** 				}
+ 207:../src/Common Demo Tasks/PollQ.c **** 
+ 208:../src/Common Demo Tasks/PollQ.c **** 				/* Next time round we would expect the number to be one higher. */
+ 209:../src/Common Demo Tasks/PollQ.c **** 				usExpectedValue++;
+ 4306              		.loc 1 209 0
+ 4307 017e FB8A     		ldrh	r3, [r7, #22]	@ movhi
+ 4308 0180 03F10103 		add	r3, r3, #1
+ 4309 0184 FB82     		strh	r3, [r7, #22]	@ movhi
+ 4310              	.L14:
+ 182:../src/Common Demo Tasks/PollQ.c **** 		while( uxQueueMessagesWaiting( *( ( xQueueHandle * ) pvParameters ) ) )
+ 4311              		.loc 1 182 0 discriminator 1
+ 4312 0186 7B68     		ldr	r3, [r7, #4]
+ 4313 0188 1B68     		ldr	r3, [r3, #0]
+ 4314 018a 1846     		mov	r0, r3
+ 4315 018c FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 4316 0190 0346     		mov	r3, r0
+ 4317 0192 002B     		cmp	r3, #0
+ 4318 0194 CDD1     		bne	.L17
+ 210:../src/Common Demo Tasks/PollQ.c **** 			}
+ 211:../src/Common Demo Tasks/PollQ.c **** 		}
+ 212:../src/Common Demo Tasks/PollQ.c **** 
+ 213:../src/Common Demo Tasks/PollQ.c **** 		/* Now the queue is empty we block, allowing the producer to place more
+ 214:../src/Common Demo Tasks/PollQ.c **** 		items in the queue. */
+ 215:../src/Common Demo Tasks/PollQ.c **** 		vTaskDelay( pollqCONSUMER_DELAY );
+ 4319              		.loc 1 215 0
+ 4320 0196 4FF0B400 		mov	r0, #180
+ 4321 019a FFF7FEFF 		bl	vTaskDelay
+ 216:../src/Common Demo Tasks/PollQ.c **** 	}
+ 4322              		.loc 1 216 0
+ 4323 019e 00BF     		nop
+ 182:../src/Common Demo Tasks/PollQ.c **** 		while( uxQueueMessagesWaiting( *( ( xQueueHandle * ) pvParameters ) ) )
+ 4324              		.loc 1 182 0
+ 4325 01a0 F1E7     		b	.L14
+ 4326              	.L20:
+ 4327 01a2 00BF     		.align	2
+ 4328              	.L19:
+ 4329 01a4 00000000 		.word	xPollingConsumerCount
+ 4330              		.cfi_endproc
+ 4331              	.LFE31:
+ 4333              		.align	2
+ 4334              		.global	xArePollingQueuesStillRunning
+ 4335              		.thumb
+ 4336              		.thumb_func
+ 4338              	xArePollingQueuesStillRunning:
+ 4339              	.LFB32:
+ 217:../src/Common Demo Tasks/PollQ.c **** } /*lint !e818 Function prototype must conform to API. */
+ 218:../src/Common Demo Tasks/PollQ.c **** /*-----------------------------------------------------------*/
+ 219:../src/Common Demo Tasks/PollQ.c **** 
+ 220:../src/Common Demo Tasks/PollQ.c **** /* This is called to check that all the created tasks are still running with no errors. */
+ 221:../src/Common Demo Tasks/PollQ.c **** portBASE_TYPE xArePollingQueuesStillRunning( void )
+ 222:../src/Common Demo Tasks/PollQ.c **** {
+ 4340              		.loc 1 222 0
+ 4341              		.cfi_startproc
+ 4342              		@ args = 0, pretend = 0, frame = 8
+ 4343              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4344              		@ link register save eliminated.
+ 4345 01a8 80B4     		push	{r7}
+ 4346              	.LCFI9:
+ 4347              		.cfi_def_cfa_offset 4
+ 4348 01aa 83B0     		sub	sp, sp, #12
+ 4349              	.LCFI10:
+ 4350              		.cfi_def_cfa_offset 16
+ 4351 01ac 00AF     		add	r7, sp, #0
+ 4352              		.cfi_offset 7, -4
+ 4353              	.LCFI11:
+ 4354              		.cfi_def_cfa_register 7
+ 223:../src/Common Demo Tasks/PollQ.c **** portBASE_TYPE xReturn;
+ 224:../src/Common Demo Tasks/PollQ.c **** 
+ 225:../src/Common Demo Tasks/PollQ.c **** 	/* Check both the consumer and producer poll count to check they have both
+ 226:../src/Common Demo Tasks/PollQ.c **** 	been changed since out last trip round.  We do not need a critical section
+ 227:../src/Common Demo Tasks/PollQ.c **** 	around the check variables as this is called from a higher priority than
+ 228:../src/Common Demo Tasks/PollQ.c **** 	the other tasks that access the same variables. */
+ 229:../src/Common Demo Tasks/PollQ.c **** 	if( ( xPollingConsumerCount == pollqINITIAL_VALUE ) ||
+ 4355              		.loc 1 229 0
+ 4356 01ae 0F4B     		ldr	r3, .L25
+ 4357 01b0 1B68     		ldr	r3, [r3, #0]
+ 4358 01b2 002B     		cmp	r3, #0
+ 4359 01b4 03D0     		beq	.L22
+ 230:../src/Common Demo Tasks/PollQ.c **** 		( xPollingProducerCount == pollqINITIAL_VALUE )
+ 4360              		.loc 1 230 0 discriminator 1
+ 4361 01b6 0E4B     		ldr	r3, .L25+4
+ 4362 01b8 1B68     		ldr	r3, [r3, #0]
+ 229:../src/Common Demo Tasks/PollQ.c **** 	if( ( xPollingConsumerCount == pollqINITIAL_VALUE ) ||
+ 4363              		.loc 1 229 0 discriminator 1
+ 4364 01ba 002B     		cmp	r3, #0
+ 4365 01bc 03D1     		bne	.L23
+ 4366              	.L22:
+ 231:../src/Common Demo Tasks/PollQ.c **** 	  )
+ 232:../src/Common Demo Tasks/PollQ.c **** 	{
+ 233:../src/Common Demo Tasks/PollQ.c **** 		xReturn = pdFALSE;
+ 4367              		.loc 1 233 0
+ 4368 01be 4FF00003 		mov	r3, #0
+ 4369 01c2 7B60     		str	r3, [r7, #4]
+ 4370 01c4 02E0     		b	.L24
+ 4371              	.L23:
+ 234:../src/Common Demo Tasks/PollQ.c **** 	}
+ 235:../src/Common Demo Tasks/PollQ.c **** 	else
+ 236:../src/Common Demo Tasks/PollQ.c **** 	{
+ 237:../src/Common Demo Tasks/PollQ.c **** 		xReturn = pdTRUE;
+ 4372              		.loc 1 237 0
+ 4373 01c6 4FF00103 		mov	r3, #1
+ 4374 01ca 7B60     		str	r3, [r7, #4]
+ 4375              	.L24:
+ 238:../src/Common Demo Tasks/PollQ.c **** 	}
+ 239:../src/Common Demo Tasks/PollQ.c **** 
+ 240:../src/Common Demo Tasks/PollQ.c **** 	/* Set the check variables back down so we know if they have been
+ 241:../src/Common Demo Tasks/PollQ.c **** 	incremented the next time around. */
+ 242:../src/Common Demo Tasks/PollQ.c **** 	xPollingConsumerCount = pollqINITIAL_VALUE;
+ 4376              		.loc 1 242 0
+ 4377 01cc 074B     		ldr	r3, .L25
+ 4378 01ce 4FF00002 		mov	r2, #0
+ 4379 01d2 1A60     		str	r2, [r3, #0]
+ 243:../src/Common Demo Tasks/PollQ.c **** 	xPollingProducerCount = pollqINITIAL_VALUE;
+ 4380              		.loc 1 243 0
+ 4381 01d4 064B     		ldr	r3, .L25+4
+ 4382 01d6 4FF00002 		mov	r2, #0
+ 4383 01da 1A60     		str	r2, [r3, #0]
+ 244:../src/Common Demo Tasks/PollQ.c **** 
+ 245:../src/Common Demo Tasks/PollQ.c **** 	return xReturn;
+ 4384              		.loc 1 245 0
+ 4385 01dc 7B68     		ldr	r3, [r7, #4]
+ 246:../src/Common Demo Tasks/PollQ.c **** }
+ 4386              		.loc 1 246 0
+ 4387 01de 1846     		mov	r0, r3
+ 4388 01e0 07F10C07 		add	r7, r7, #12
+ 4389 01e4 BD46     		mov	sp, r7
+ 4390 01e6 80BC     		pop	{r7}
+ 4391 01e8 7047     		bx	lr
+ 4392              	.L26:
+ 4393 01ea 00BF     		.align	2
+ 4394              	.L25:
+ 4395 01ec 00000000 		.word	xPollingConsumerCount
+ 4396 01f0 04000000 		.word	xPollingProducerCount
+ 4397              		.cfi_endproc
+ 4398              	.LFE32:
+ 4400              		.bss
+ 4401              		.align	2
+ 4402              	xPolledQueue.5800:
+ 4403 0008 00000000 		.space	4
+ 4404              		.text
+ 4405              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 PollQ.c
+     /tmp/ccA57vSL.s:4041   .bss:00000000 $d
+     /tmp/ccA57vSL.s:4042   .bss:00000000 xPollingConsumerCount
+     /tmp/ccA57vSL.s:4045   .bss:00000004 xPollingProducerCount
+     /tmp/ccA57vSL.s:4048   .rodata:00000000 $d
+     /tmp/ccA57vSL.s:4058   .text:00000000 $t
+     /tmp/ccA57vSL.s:4063   .text:00000000 vStartPolledQueueTasks
+     /tmp/ccA57vSL.s:4133   .text:00000080 $d
+     /tmp/ccA57vSL.s:4402   .bss:00000008 xPolledQueue.5800
+     /tmp/ccA57vSL.s:4239   .text:0000011c vPolledQueueConsumer
+     /tmp/ccA57vSL.s:4146   .text:00000098 vPolledQueueProducer
+     /tmp/ccA57vSL.s:4142   .text:00000098 $t
+     /tmp/ccA57vSL.s:4231   .text:00000118 $d
+     /tmp/ccA57vSL.s:4235   .text:0000011c $t
+     /tmp/ccA57vSL.s:4329   .text:000001a4 $d
+     /tmp/ccA57vSL.s:4333   .text:000001a8 $t
+     /tmp/ccA57vSL.s:4338   .text:000001a8 xArePollingQueuesStillRunning
+     /tmp/ccA57vSL.s:4395   .text:000001ec $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+xQueueGenericCreate
+vQueueAddToRegistry
+xTaskGenericCreate
+xQueueGenericSend
+vPortEnterCritical
+vPortExitCritical
+vTaskDelay
+xQueueGenericReceive
+uxQueueMessagesWaiting
