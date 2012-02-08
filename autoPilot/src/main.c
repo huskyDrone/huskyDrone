@@ -51,34 +51,6 @@
     licensing and training services.
 */
 
-
-//#error The batch file Demo\CORTEX_LPC1768_GCC_RedSuite\CreateProjectDirectoryStructure.bat must be executed before the first build.  After executing the batch file hit F5 to refrech the Eclipse project, then delete this line.
-
-
-
-/*
- * Creates all the demo application tasks, then starts the scheduler.  The WEB
- * documentation provides more details of the standard demo application tasks
- * (which just exist to test the kernel port and provide an example of how to use
- * each FreeRTOS API function).
- *
- * In addition to the standard demo tasks, the following tasks and tests are
- * defined and/or created within this file:
- *
- * "Check" hook -  This only executes fully every five seconds from the tick
- * hook.  Its main function is to check that all the standard demo tasks are
- * still operational.  The status can be viewed using on the Task Stats page
- * served by the WEB server.
- *
- * "uIP" task -  This is the task that handles the uIP stack.  All TCP/IP
- * processing is performed in this task.
- * 
- * "USB" task - Enumerates the USB device as a CDC class, then echoes back all
- * received characters with a configurable offset (for example, if the offset
- * is 1 and 'A' is received then 'B' will be sent back).  A dumb terminal such
- * as Hyperterminal can be used to talk to the USB task.
- */
-
 /* Standard includes. */
 #include "stdio.h"
 
@@ -89,23 +61,8 @@
 #include "queue.h"
 #include "semphr.h"
 
-#include "testTask.h"
-
-/*
-#include "BlockQ.h"
-#include "integer.h"
-#include "blocktim.h"
-#include "flash.h"
-#include "partest.h"
-#include "semtest.h"
-#include "PollQ.h"
-#include "GenQTest.h"
-#include "QPeek.h"
-#include "recmutex.h"
-*/
-/* Red Suite includes. */
-//#include "lcd_driver.h"
-//#include "lcd.h"
+#include "hwConfig.h"
+#include "taskLed.h"
 
 /*-----------------------------------------------------------*/
 
@@ -113,98 +70,36 @@
 tick hook. */
 #define mainCHECK_DELAY						( ( portTickType ) 5000 / portTICK_RATE_MS )
 
-/* Task priorities. */
-#define mainQUEUE_POLL_PRIORITY				( tskIDLE_PRIORITY + 2 )
-#define mainSEM_TEST_PRIORITY				( tskIDLE_PRIORITY + 1 )
-#define mainBLOCK_Q_PRIORITY				( tskIDLE_PRIORITY + 2 )
-#define mainUIP_TASK_PRIORITY				( tskIDLE_PRIORITY + 3 )
-#define mainINTEGER_TASK_PRIORITY           ( tskIDLE_PRIORITY )
-#define mainGEN_QUEUE_TASK_PRIORITY			( tskIDLE_PRIORITY )
-#define mainFLASH_TASK_PRIORITY				( tskIDLE_PRIORITY + 2 )
-
-/* The WEB server has a larger stack as it utilises stack hungry string
-handling library calls. */
-#define mainBASIC_WEB_STACK_SIZE            ( configMINIMAL_STACK_SIZE * 4 )
-
-/* The message displayed by the WEB server when all tasks are executing
-without an error being reported. */
-#define mainPASS_STATUS_MESSAGE				"All tasks are executing without error."
-
-/* Bit definitions. */
-#define PCONP_PCGPIO    0x00008000
-#define PLLFEED_FEED1   0x000000AA
-#define PLLFEED_FEED2   0x00000055
 /*-----------------------------------------------------------*/
 
-/*
- * Configure the hardware for the demo.
- */
-static void prvSetupHardware( void );
-
-/*
- * The task that handles the uIP stack.  All TCP/IP processing is performed in
- * this task.
- */
-//extern void vuIP_Task( void *pvParameters );
-
-/*
- * The task that handles the USB stack.
- */
-//extern void vUSBTask( void *pvParameters );
-
-/*
- * Simply returns the current status message for display on served WEB pages.
- */
-char *pcGetTaskStatusMessage( void );
-
-void vLedConfig( void );
-
-/*-----------------------------------------------------------*/
-
-/* Holds the status message displayed by the WEB server. */
-static char *pcStatusMessage = mainPASS_STATUS_MESSAGE;
-
-/*-----------------------------------------------------------*/
+// contains the handles for all tasks
+// define one more taskHandle than you need, zero the last entry
+xTaskHandle taskHandles[5];  //TODO: need to know how many there will be
 
 int main( void )
 {
-char cIPAddress[ 16 ]; /* Enough space for "xxx.xxx.xxx.xxx\0". */
+	// configure the system
+    setSystem();
 
-	/* Configure the hardware for use by this demo. */
-	prvSetupHardware();
+    // create the LED task
+    if(xTaskCreate(vLedTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[0]) != pdPASS)
+    {
+    	//TODO: the task was not created, do something
+    }
 
-	/* Start the standard demo tasks.  These are just here to exercise the
-	kernel port and provide examples of how the FreeRTOS API can be used. */
-	//vStartBlockingQueueTasks( mainBLOCK_Q_PRIORITY );
-    //vCreateBlockTimeTasks();
-    //vStartSemaphoreTasks( mainSEM_TEST_PRIORITY );
-   // vStartPolledQueueTasks( mainQUEUE_POLL_PRIORITY );
-    //vStartIntegerMathTasks( mainINTEGER_TASK_PRIORITY );
-   // vStartGenericQueueTasks( mainGEN_QUEUE_TASK_PRIORITY );
-   // vStartQueuePeekTasks();
-   // vStartRecursiveMutexTasks();
-	//vStartLEDFlashTasks( mainFLASH_TASK_PRIORITY );
+    taskHandles[4] = 0; //TODO: will need to change when we know how many tasks there will be
 
-    /* Create the USB task. */
-    //xTaskCreate( vUSBTask, ( signed char * ) "USB", configMINIMAL_STACK_SIZE, ( void * ) NULL, tskIDLE_PRIORITY, NULL );
+    // enable the interrupts
+    portENABLE_INTERRUPTS();
 
-    // Create the test task
-    xTaskCreate( vTestTask, ( signed char * ) "LED", configMINIMAL_STACK_SIZE, ( void * ) NULL, 1, NULL );
-	
-	/* Display the IP address, then create the uIP task.  The WEB server runs 
-	in this task. */
-	//LCDdriver_initialisation();
-	//LCD_PrintString( 5, 10, "FreeRTOS.org", 14, COLOR_GREEN);
-	sprintf( cIPAddress, "%d.%d.%d.%d", configIP_ADDR0, configIP_ADDR1, configIP_ADDR2, configIP_ADDR3 );
-	//LCD_PrintString( 5, 30, cIPAddress, 14, COLOR_RED);
-    //xTaskCreate( vuIP_Task, ( signed char * ) "uIP", mainBASIC_WEB_STACK_SIZE, ( void * ) NULL, mainUIP_TASK_PRIORITY, NULL );
-
-    /* Start the scheduler. */
+    // start the scheduler
 	vTaskStartScheduler();
 
-    /* Will only get here if there was insufficient memory to create the idle
-    task.  The idle task is created within vTaskStartScheduler(). */
+    // will only get here if there was insufficient memory to create the idle
+    // task.  The idle task is created within vTaskStartScheduler().
 	for( ;; );
+
+	return 0; // never gets here
 }
 /*-----------------------------------------------------------*/
 
@@ -262,119 +157,6 @@ static unsigned long ulTicksSinceLastDisplay = 0;
 }
 
 /*-----------------------------------------------------------*/
-
-char *pcGetTaskStatusMessage( void )
-{
-	/* Not bothered about a critical section here. */
-	return pcStatusMessage;
-}
-/*-----------------------------------------------------------*/
-
-void prvSetupHardware( void )
-{
-	/* Disable peripherals power. */
-	LPC_SC->PCONP = 0;
-
-	/* Enable GPIO power. */
-	LPC_SC->PCONP = PCONP_PCGPIO;
-
-	/* Disable TPIU. */
-	LPC_PINCON->PINSEL10 = 0;
-
-	if ( LPC_SC->PLL0STAT & ( 1 << 25 ) )
-	{
-		/* Enable PLL, disconnected. */
-		LPC_SC->PLL0CON = 1;
-		LPC_SC->PLL0FEED = PLLFEED_FEED1;
-		LPC_SC->PLL0FEED = PLLFEED_FEED2;
-	}
-	
-	/* Disable PLL, disconnected. */
-	LPC_SC->PLL0CON = 0;
-	LPC_SC->PLL0FEED = PLLFEED_FEED1;
-	LPC_SC->PLL0FEED = PLLFEED_FEED2;
-	    
-	/* Enable main OSC. */
-	LPC_SC->SCS |= 0x20;
-	while( !( LPC_SC->SCS & 0x40 ) );
-	
-	/* select main OSC, 12MHz, as the PLL clock source. */
-	LPC_SC->CLKSRCSEL = 0x1;
-	
-	LPC_SC->PLL0CFG = 0x20031;
-	LPC_SC->PLL0FEED = PLLFEED_FEED1;
-	LPC_SC->PLL0FEED = PLLFEED_FEED2;
-	      
-	/* Enable PLL, disconnected. */
-	LPC_SC->PLL0CON = 1;
-	LPC_SC->PLL0FEED = PLLFEED_FEED1;
-	LPC_SC->PLL0FEED = PLLFEED_FEED2;
-	
-	/* Set clock divider. */
-	LPC_SC->CCLKCFG = 0x03;
-	
-	/* Configure flash accelerator. */
-	LPC_SC->FLASHCFG = 0x403a;
-	
-	/* Check lock bit status. */
-	while( ( ( LPC_SC->PLL0STAT & ( 1 << 26 ) ) == 0 ) );
-	    
-	/* Enable and connect. */
-	LPC_SC->PLL0CON = 3;
-	LPC_SC->PLL0FEED = PLLFEED_FEED1;
-	LPC_SC->PLL0FEED = PLLFEED_FEED2;
-	while( ( ( LPC_SC->PLL0STAT & ( 1 << 25 ) ) == 0 ) );
-
-	
-	
-	
-	/* Configure the clock for the USB. */
-	  
-	if( LPC_SC->PLL1STAT & ( 1 << 9 ) )
-	{
-		/* Enable PLL, disconnected. */
-		LPC_SC->PLL1CON = 1;
-		LPC_SC->PLL1FEED = PLLFEED_FEED1;
-		LPC_SC->PLL1FEED = PLLFEED_FEED2;
-	}
-	
-	/* Disable PLL, disconnected. */
-	LPC_SC->PLL1CON = 0;
-	LPC_SC->PLL1FEED = PLLFEED_FEED1;
-	LPC_SC->PLL1FEED = PLLFEED_FEED2;
-	
-	LPC_SC->PLL1CFG = 0x23;
-	LPC_SC->PLL1FEED = PLLFEED_FEED1;
-	LPC_SC->PLL1FEED = PLLFEED_FEED2;
-	      
-	/* Enable PLL, disconnected. */
-	LPC_SC->PLL1CON = 1;
-	LPC_SC->PLL1FEED = PLLFEED_FEED1;
-	LPC_SC->PLL1FEED = PLLFEED_FEED2;
-	while( ( ( LPC_SC->PLL1STAT & ( 1 << 10 ) ) == 0 ) );
-	
-	/* Enable and connect. */
-	LPC_SC->PLL1CON = 3;
-	LPC_SC->PLL1FEED = PLLFEED_FEED1;
-	LPC_SC->PLL1FEED = PLLFEED_FEED2;
-	while( ( ( LPC_SC->PLL1STAT & ( 1 << 9 ) ) == 0 ) );
-
-	/*  Setup the peripheral bus to be the same as the PLL output (64 MHz). */
-	LPC_SC->PCLKSEL0 = 0x05555555;
-
-	/* Configure the LEDs. */
-	vLedConfig();
-}
-/*-----------------------------------------------------------*/
-
-void vLedConfig( void )
-{
-	/* LEDs on port 1. */
-	LPC_GPIO3->FIODIR  = LED;
-
-	/* Start will all LEDs off. */
-	LPC_GPIO3->FIOCLR = LED;
-}
 
 void vApplicationStackOverflowHook( xTaskHandle pxTask, signed char *pcTaskName )
 {

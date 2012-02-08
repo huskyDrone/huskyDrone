@@ -14,7 +14,8 @@ autoPilot/src/main.d autoPilot/src/main.o: ../autoPilot/src/main.c \
  /home/jenya/Documents/DEV/ee542/3rdParty/FreeRTOS/include/queue.h \
  /home/jenya/Documents/DEV/ee542/3rdParty/FreeRTOS/include/semphr.h \
  /home/jenya/Documents/DEV/ee542/3rdParty/FreeRTOS/include/queue.h \
- /home/jenya/Documents/DEV/ee542/autoPilot/inc/testTask.h
+ /home/jenya/Documents/DEV/ee542/autoPilot/inc/hwConfig.h \
+ /home/jenya/Documents/DEV/ee542/autoPilot/inc/taskLed.h
 
 /home/jenya/Documents/DEV/ee542/3rdParty/FreeRTOS/include/FreeRTOSConfig.h:
 
@@ -46,4 +47,6 @@ autoPilot/src/main.d autoPilot/src/main.o: ../autoPilot/src/main.c \
 
 /home/jenya/Documents/DEV/ee542/3rdParty/FreeRTOS/include/queue.h:
 
-/home/jenya/Documents/DEV/ee542/autoPilot/inc/testTask.h:
+/home/jenya/Documents/DEV/ee542/autoPilot/inc/hwConfig.h:
+
+/home/jenya/Documents/DEV/ee542/autoPilot/inc/taskLed.h:

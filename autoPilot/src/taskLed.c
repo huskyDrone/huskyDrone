@@ -11,9 +11,10 @@
 #include "queue.h"
 #include "semphr.h"
 
-#include "testTask.h"
+#include "hwConfig.h"
+#include "taskLed.h"
 
-void vTestTask( void *pvParameters )
+void vLedTask( void *pvParameters )
 {
 	portTickType xLastWakeTime;
 
@@ -25,13 +26,13 @@ void vTestTask( void *pvParameters )
 		vTaskDelayUntil(&xLastWakeTime, DELAY_PERIOD);
 
 		// Turn the LED on
-		LPC_GPIO3->FIOCLR = LED;
+		LPC_GPIO3->FIOCLR = RED_LED;
 
 		// wait for the next cycle
 		vTaskDelayUntil(&xLastWakeTime, DELAY_PERIOD);
 
 		// Turn the LED off
-		LPC_GPIO3->FIOSET = LED;
+		LPC_GPIO3->FIOSET = RED_LED;
 	}
 
 }
