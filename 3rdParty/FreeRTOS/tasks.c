@@ -283,7 +283,7 @@ portTickType xItemValue;																\
 
 /* Callback function prototypes. --------------------------*/
 extern void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName );
-extern void vApplicationTickHook( void );
+//extern void vApplicationTickHook( void );
 		
 /* File private functions. --------------------------------*/
 

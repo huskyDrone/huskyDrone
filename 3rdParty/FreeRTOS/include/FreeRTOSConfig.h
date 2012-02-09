@@ -54,7 +54,7 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
-#include "LPC17xx.h"
+#include "lpc17xx.h"
 
 /*-----------------------------------------------------------
  * Application specific definitions.

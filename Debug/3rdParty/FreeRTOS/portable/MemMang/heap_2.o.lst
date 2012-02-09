@@ -13,37 +13,37 @@
   13              		.file	"heap_2.c"
   23              	.Ltext0:
   24              		.file 1 "../3rdParty/FreeRTOS/portable/MemMang/heap_2.c"
- 3941              		.align	3
- 3942              	xHeap:
- 3943 0000 00000000 		.space	19456
- 3943      00000000 
- 3943      00000000 
- 3943      00000000 
- 3943      00000000 
- 3944              		.section	.rodata
- 3945              		.align	1
- 3948              	heapSTRUCT_SIZE:
- 3949 0000 1000     		.short	16
- 3950              		.bss
- 3951              		.align	2
- 3952              	xStart:
- 3953 4c00 00000000 		.space	8
- 3953      00000000 
- 3954              		.align	2
- 3955              	xEnd:
- 3956 4c08 00000000 		.space	8
- 3956      00000000 
- 3957              		.data
- 3958              		.align	2
- 3961              	xFreeBytesRemaining:
- 3962 0000 004C0000 		.word	19456
- 3963              		.text
- 3964              		.align	2
- 3965              		.global	pvPortMalloc
- 3966              		.thumb
- 3967              		.thumb_func
- 3969              	pvPortMalloc:
- 3970              	.LFB29:
+ 3975              		.align	3
+ 3976              	xHeap:
+ 3977 0000 00000000 		.space	19456
+ 3977      00000000 
+ 3977      00000000 
+ 3977      00000000 
+ 3977      00000000 
+ 3978              		.section	.rodata
+ 3979              		.align	1
+ 3982              	heapSTRUCT_SIZE:
+ 3983 0000 1000     		.short	16
+ 3984              		.bss
+ 3985              		.align	2
+ 3986              	xStart:
+ 3987 4c00 00000000 		.space	8
+ 3987      00000000 
+ 3988              		.align	2
+ 3989              	xEnd:
+ 3990 4c08 00000000 		.space	8
+ 3990      00000000 
+ 3991              		.data
+ 3992              		.align	2
+ 3995              	xFreeBytesRemaining:
+ 3996 0000 004C0000 		.word	19456
+ 3997              		.text
+ 3998              		.align	2
+ 3999              		.global	pvPortMalloc
+ 4000              		.thumb
+ 4001              		.thumb_func
+ 4003              	pvPortMalloc:
+ 4004              	.LFB55:
    1:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** /*
    2:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c ****     FreeRTOS V7.1.0 - Copyright (C) 2011 Real Time Engineers Ltd.
    3:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	
@@ -199,280 +199,280 @@
  153:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  154:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** void *pvPortMalloc( size_t xWantedSize )
  155:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** {
- 3971              		.loc 1 155 0
- 3972              		.cfi_startproc
- 3973              		@ args = 0, pretend = 0, frame = 40
- 3974              		@ frame_needed = 1, uses_anonymous_args = 0
- 3975 0000 80B5     		push	{r7, lr}
- 3976              	.LCFI0:
- 3977              		.cfi_def_cfa_offset 8
- 3978 0002 8AB0     		sub	sp, sp, #40
- 3979              	.LCFI1:
- 3980              		.cfi_def_cfa_offset 48
- 3981 0004 00AF     		add	r7, sp, #0
- 3982              		.cfi_offset 14, -4
- 3983              		.cfi_offset 7, -8
- 3984              	.LCFI2:
- 3985              		.cfi_def_cfa_register 7
- 3986 0006 7860     		str	r0, [r7, #4]
+ 4005              		.loc 1 155 0
+ 4006              		.cfi_startproc
+ 4007              		@ args = 0, pretend = 0, frame = 40
+ 4008              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4009 0000 80B5     		push	{r7, lr}
+ 4010              	.LCFI0:
+ 4011              		.cfi_def_cfa_offset 8
+ 4012 0002 8AB0     		sub	sp, sp, #40
+ 4013              	.LCFI1:
+ 4014              		.cfi_def_cfa_offset 48
+ 4015 0004 00AF     		add	r7, sp, #0
+ 4016              		.cfi_offset 14, -4
+ 4017              		.cfi_offset 7, -8
+ 4018              	.LCFI2:
+ 4019              		.cfi_def_cfa_register 7
+ 4020 0006 7860     		str	r0, [r7, #4]
  156:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** xBlockLink *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
  157:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** static portBASE_TYPE xHeapHasBeenInitialised = pdFALSE;
  158:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** void *pvReturn = NULL;
- 3987              		.loc 1 158 0
- 3988 0008 4FF00003 		mov	r3, #0
- 3989 000c FB61     		str	r3, [r7, #28]
+ 4021              		.loc 1 158 0
+ 4022 0008 4FF00003 		mov	r3, #0
+ 4023 000c FB61     		str	r3, [r7, #28]
  159:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  160:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	vTaskSuspendAll();
- 3990              		.loc 1 160 0
- 3991 000e FFF7FEFF 		bl	vTaskSuspendAll
+ 4024              		.loc 1 160 0
+ 4025 000e FFF7FEFF 		bl	vTaskSuspendAll
  161:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	{
  162:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		/* If this is the first call to malloc then the heap will require
  163:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		initialisation to setup the list of free blocks. */
  164:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		if( xHeapHasBeenInitialised == pdFALSE )
- 3992              		.loc 1 164 0
- 3993 0012 4C4B     		ldr	r3, .L11
- 3994 0014 1B68     		ldr	r3, [r3, #0]
- 3995 0016 002B     		cmp	r3, #0
- 3996 0018 1BD1     		bne	.L2
- 3997              	.LBB2:
+ 4026              		.loc 1 164 0
+ 4027 0012 4C4B     		ldr	r3, .L11
+ 4028 0014 1B68     		ldr	r3, [r3, #0]
+ 4029 0016 002B     		cmp	r3, #0
+ 4030 0018 1BD1     		bne	.L2
+ 4031              	.LBB2:
  165:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		{
  166:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			prvHeapInit();
- 3998              		.loc 1 166 0
- 3999 001a 4B4A     		ldr	r2, .L11+4
- 4000 001c 4B4B     		ldr	r3, .L11+8
- 4001 001e 1A60     		str	r2, [r3, #0]
- 4002 0020 4A4B     		ldr	r3, .L11+8
- 4003 0022 4FF00002 		mov	r2, #0
- 4004 0026 5A60     		str	r2, [r3, #4]
- 4005 0028 494B     		ldr	r3, .L11+12
- 4006 002a 4FF49842 		mov	r2, #19456
- 4007 002e 5A60     		str	r2, [r3, #4]
- 4008 0030 474B     		ldr	r3, .L11+12
- 4009 0032 4FF00002 		mov	r2, #0
- 4010 0036 1A60     		str	r2, [r3, #0]
- 4011 0038 434B     		ldr	r3, .L11+4
- 4012 003a 7B61     		str	r3, [r7, #20]
- 4013 003c 7B69     		ldr	r3, [r7, #20]
- 4014 003e 4FF49842 		mov	r2, #19456
- 4015 0042 5A60     		str	r2, [r3, #4]
- 4016 0044 7B69     		ldr	r3, [r7, #20]
- 4017 0046 424A     		ldr	r2, .L11+12
- 4018 0048 1A60     		str	r2, [r3, #0]
- 4019              	.LBE2:
+ 4032              		.loc 1 166 0
+ 4033 001a 4B4A     		ldr	r2, .L11+4
+ 4034 001c 4B4B     		ldr	r3, .L11+8
+ 4035 001e 1A60     		str	r2, [r3, #0]
+ 4036 0020 4A4B     		ldr	r3, .L11+8
+ 4037 0022 4FF00002 		mov	r2, #0
+ 4038 0026 5A60     		str	r2, [r3, #4]
+ 4039 0028 494B     		ldr	r3, .L11+12
+ 4040 002a 4FF49842 		mov	r2, #19456
+ 4041 002e 5A60     		str	r2, [r3, #4]
+ 4042 0030 474B     		ldr	r3, .L11+12
+ 4043 0032 4FF00002 		mov	r2, #0
+ 4044 0036 1A60     		str	r2, [r3, #0]
+ 4045 0038 434B     		ldr	r3, .L11+4
+ 4046 003a 7B61     		str	r3, [r7, #20]
+ 4047 003c 7B69     		ldr	r3, [r7, #20]
+ 4048 003e 4FF49842 		mov	r2, #19456
+ 4049 0042 5A60     		str	r2, [r3, #4]
+ 4050 0044 7B69     		ldr	r3, [r7, #20]
+ 4051 0046 424A     		ldr	r2, .L11+12
+ 4052 0048 1A60     		str	r2, [r3, #0]
+ 4053              	.LBE2:
  167:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			xHeapHasBeenInitialised = pdTRUE;
- 4020              		.loc 1 167 0
- 4021 004a 3E4B     		ldr	r3, .L11
- 4022 004c 4FF00102 		mov	r2, #1
- 4023 0050 1A60     		str	r2, [r3, #0]
- 4024              	.L2:
+ 4054              		.loc 1 167 0
+ 4055 004a 3E4B     		ldr	r3, .L11
+ 4056 004c 4FF00102 		mov	r2, #1
+ 4057 0050 1A60     		str	r2, [r3, #0]
+ 4058              	.L2:
  168:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		}
  169:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  170:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		/* The wanted size is increased so it can contain a xBlockLink
  171:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		structure in addition to the requested amount of bytes. */
  172:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		if( xWantedSize > 0 )
- 4025              		.loc 1 172 0
- 4026 0052 7B68     		ldr	r3, [r7, #4]
- 4027 0054 002B     		cmp	r3, #0
- 4028 0056 0FD0     		beq	.L3
+ 4059              		.loc 1 172 0
+ 4060 0052 7B68     		ldr	r3, [r7, #4]
+ 4061 0054 002B     		cmp	r3, #0
+ 4062 0056 0FD0     		beq	.L3
  173:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		{
  174:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			xWantedSize += heapSTRUCT_SIZE;
- 4029              		.loc 1 174 0
- 4030 0058 3E4B     		ldr	r3, .L11+16
- 4031 005a 1B88     		ldrh	r3, [r3, #0]
- 4032 005c 7A68     		ldr	r2, [r7, #4]
- 4033 005e D318     		adds	r3, r2, r3
- 4034 0060 7B60     		str	r3, [r7, #4]
+ 4063              		.loc 1 174 0
+ 4064 0058 3E4B     		ldr	r3, .L11+16
+ 4065 005a 1B88     		ldrh	r3, [r3, #0]
+ 4066 005c 7A68     		ldr	r2, [r7, #4]
+ 4067 005e D318     		adds	r3, r2, r3
+ 4068 0060 7B60     		str	r3, [r7, #4]
  175:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  176:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			/* Ensure that blocks are always aligned to the required number of bytes. */
  177:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			if( xWantedSize & portBYTE_ALIGNMENT_MASK )
- 4035              		.loc 1 177 0
- 4036 0062 7B68     		ldr	r3, [r7, #4]
- 4037 0064 03F00703 		and	r3, r3, #7
- 4038 0068 002B     		cmp	r3, #0
- 4039 006a 05D0     		beq	.L3
+ 4069              		.loc 1 177 0
+ 4070 0062 7B68     		ldr	r3, [r7, #4]
+ 4071 0064 03F00703 		and	r3, r3, #7
+ 4072 0068 002B     		cmp	r3, #0
+ 4073 006a 05D0     		beq	.L3
  178:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			{
  179:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				/* Byte alignment required. */
  180:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				xWantedSize += ( portBYTE_ALIGNMENT - ( xWantedSize & portBYTE_ALIGNMENT_MASK ) );
- 4040              		.loc 1 180 0
- 4041 006c 7B68     		ldr	r3, [r7, #4]
- 4042 006e 23F00703 		bic	r3, r3, #7
- 4043 0072 03F10803 		add	r3, r3, #8
- 4044 0076 7B60     		str	r3, [r7, #4]
- 4045              	.L3:
+ 4074              		.loc 1 180 0
+ 4075 006c 7B68     		ldr	r3, [r7, #4]
+ 4076 006e 23F00703 		bic	r3, r3, #7
+ 4077 0072 03F10803 		add	r3, r3, #8
+ 4078 0076 7B60     		str	r3, [r7, #4]
+ 4079              	.L3:
  181:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			}
  182:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		}
  183:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  184:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		if( ( xWantedSize > 0 ) && ( xWantedSize < configTOTAL_HEAP_SIZE ) )
- 4046              		.loc 1 184 0
- 4047 0078 7B68     		ldr	r3, [r7, #4]
- 4048 007a 002B     		cmp	r3, #0
- 4049 007c 5AD0     		beq	.L4
- 4050              		.loc 1 184 0 is_stmt 0 discriminator 1
- 4051 007e 7A68     		ldr	r2, [r7, #4]
- 4052 0080 44F6FF33 		movw	r3, #19455
- 4053 0084 9A42     		cmp	r2, r3
- 4054 0086 55D8     		bhi	.L4
+ 4080              		.loc 1 184 0
+ 4081 0078 7B68     		ldr	r3, [r7, #4]
+ 4082 007a 002B     		cmp	r3, #0
+ 4083 007c 5AD0     		beq	.L4
+ 4084              		.loc 1 184 0 is_stmt 0 discriminator 1
+ 4085 007e 7A68     		ldr	r2, [r7, #4]
+ 4086 0080 44F6FF33 		movw	r3, #19455
+ 4087 0084 9A42     		cmp	r2, r3
+ 4088 0086 55D8     		bhi	.L4
  185:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		{
  186:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			/* Blocks are stored in byte order - traverse the list from the start
  187:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			(smallest) block until one of adequate size is found. */
  188:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			pxPreviousBlock = &xStart;
- 4055              		.loc 1 188 0 is_stmt 1
- 4056 0088 304B     		ldr	r3, .L11+8
- 4057 008a 3B62     		str	r3, [r7, #32]
+ 4089              		.loc 1 188 0 is_stmt 1
+ 4090 0088 304B     		ldr	r3, .L11+8
+ 4091 008a 3B62     		str	r3, [r7, #32]
  189:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			pxBlock = xStart.pxNextFreeBlock;
- 4058              		.loc 1 189 0
- 4059 008c 2F4B     		ldr	r3, .L11+8
- 4060 008e 1B68     		ldr	r3, [r3, #0]
- 4061 0090 7B62     		str	r3, [r7, #36]
+ 4092              		.loc 1 189 0
+ 4093 008c 2F4B     		ldr	r3, .L11+8
+ 4094 008e 1B68     		ldr	r3, [r3, #0]
+ 4095 0090 7B62     		str	r3, [r7, #36]
  190:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock ) )
- 4062              		.loc 1 190 0
- 4063 0092 04E0     		b	.L5
- 4064              	.L7:
+ 4096              		.loc 1 190 0
+ 4097 0092 04E0     		b	.L5
+ 4098              	.L7:
  191:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			{
  192:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				pxPreviousBlock = pxBlock;
- 4065              		.loc 1 192 0
- 4066 0094 7B6A     		ldr	r3, [r7, #36]
- 4067 0096 3B62     		str	r3, [r7, #32]
+ 4099              		.loc 1 192 0
+ 4100 0094 7B6A     		ldr	r3, [r7, #36]
+ 4101 0096 3B62     		str	r3, [r7, #32]
  193:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				pxBlock = pxBlock->pxNextFreeBlock;
- 4068              		.loc 1 193 0
- 4069 0098 7B6A     		ldr	r3, [r7, #36]
- 4070 009a 1B68     		ldr	r3, [r3, #0]
- 4071 009c 7B62     		str	r3, [r7, #36]
- 4072              	.L5:
+ 4102              		.loc 1 193 0
+ 4103 0098 7B6A     		ldr	r3, [r7, #36]
+ 4104 009a 1B68     		ldr	r3, [r3, #0]
+ 4105 009c 7B62     		str	r3, [r7, #36]
+ 4106              	.L5:
  190:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock ) )
- 4073              		.loc 1 190 0 discriminator 1
- 4074 009e 7B6A     		ldr	r3, [r7, #36]
- 4075 00a0 5A68     		ldr	r2, [r3, #4]
- 4076 00a2 7B68     		ldr	r3, [r7, #4]
- 4077 00a4 9A42     		cmp	r2, r3
- 4078 00a6 03D2     		bcs	.L6
+ 4107              		.loc 1 190 0 discriminator 1
+ 4108 009e 7B6A     		ldr	r3, [r7, #36]
+ 4109 00a0 5A68     		ldr	r2, [r3, #4]
+ 4110 00a2 7B68     		ldr	r3, [r7, #4]
+ 4111 00a4 9A42     		cmp	r2, r3
+ 4112 00a6 03D2     		bcs	.L6
  190:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock ) )
- 4079              		.loc 1 190 0 is_stmt 0 discriminator 2
- 4080 00a8 7B6A     		ldr	r3, [r7, #36]
- 4081 00aa 1B68     		ldr	r3, [r3, #0]
- 4082 00ac 002B     		cmp	r3, #0
- 4083 00ae F1D1     		bne	.L7
- 4084              	.L6:
+ 4113              		.loc 1 190 0 is_stmt 0 discriminator 2
+ 4114 00a8 7B6A     		ldr	r3, [r7, #36]
+ 4115 00aa 1B68     		ldr	r3, [r3, #0]
+ 4116 00ac 002B     		cmp	r3, #0
+ 4117 00ae F1D1     		bne	.L7
+ 4118              	.L6:
  194:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			}
  195:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  196:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			/* If we found the end marker then a block of adequate size was not found. */
  197:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			if( pxBlock != &xEnd )
- 4085              		.loc 1 197 0 is_stmt 1
- 4086 00b0 7A6A     		ldr	r2, [r7, #36]
- 4087 00b2 274B     		ldr	r3, .L11+12
- 4088 00b4 9A42     		cmp	r2, r3
- 4089 00b6 3DD0     		beq	.L4
+ 4119              		.loc 1 197 0 is_stmt 1
+ 4120 00b0 7A6A     		ldr	r2, [r7, #36]
+ 4121 00b2 274B     		ldr	r3, .L11+12
+ 4122 00b4 9A42     		cmp	r2, r3
+ 4123 00b6 3DD0     		beq	.L4
  198:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			{
  199:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				/* Return the memory space - jumping over the xBlockLink structure
  200:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				at its start. */
  201:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				pvReturn = ( void * ) ( ( ( unsigned char * ) pxPreviousBlock->pxNextFreeBlock ) + heapSTRUCT_S
- 4090              		.loc 1 201 0
- 4091 00b8 3B6A     		ldr	r3, [r7, #32]
- 4092 00ba 1A68     		ldr	r2, [r3, #0]
- 4093 00bc 254B     		ldr	r3, .L11+16
- 4094 00be 1B88     		ldrh	r3, [r3, #0]
- 4095 00c0 D318     		adds	r3, r2, r3
- 4096 00c2 FB61     		str	r3, [r7, #28]
+ 4124              		.loc 1 201 0
+ 4125 00b8 3B6A     		ldr	r3, [r7, #32]
+ 4126 00ba 1A68     		ldr	r2, [r3, #0]
+ 4127 00bc 254B     		ldr	r3, .L11+16
+ 4128 00be 1B88     		ldrh	r3, [r3, #0]
+ 4129 00c0 D318     		adds	r3, r2, r3
+ 4130 00c2 FB61     		str	r3, [r7, #28]
  202:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  203:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				/* This block is being returned for use so must be taken our of the
  204:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				list of free blocks. */
  205:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				pxPreviousBlock->pxNextFreeBlock = pxBlock->pxNextFreeBlock;
- 4097              		.loc 1 205 0
- 4098 00c4 7B6A     		ldr	r3, [r7, #36]
- 4099 00c6 1A68     		ldr	r2, [r3, #0]
- 4100 00c8 3B6A     		ldr	r3, [r7, #32]
- 4101 00ca 1A60     		str	r2, [r3, #0]
+ 4131              		.loc 1 205 0
+ 4132 00c4 7B6A     		ldr	r3, [r7, #36]
+ 4133 00c6 1A68     		ldr	r2, [r3, #0]
+ 4134 00c8 3B6A     		ldr	r3, [r7, #32]
+ 4135 00ca 1A60     		str	r2, [r3, #0]
  206:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  207:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				/* If the block is larger than required it can be split into two. */
  208:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				if( ( pxBlock->xBlockSize - xWantedSize ) > heapMINIMUM_BLOCK_SIZE )
- 4102              		.loc 1 208 0
- 4103 00cc 7B6A     		ldr	r3, [r7, #36]
- 4104 00ce 5A68     		ldr	r2, [r3, #4]
- 4105 00d0 7B68     		ldr	r3, [r7, #4]
- 4106 00d2 D21A     		subs	r2, r2, r3
- 4107 00d4 1F4B     		ldr	r3, .L11+16
- 4108 00d6 1B88     		ldrh	r3, [r3, #0]
- 4109 00d8 4FEA4303 		lsl	r3, r3, #1
- 4110 00dc 9A42     		cmp	r2, r3
- 4111 00de 22D9     		bls	.L8
+ 4136              		.loc 1 208 0
+ 4137 00cc 7B6A     		ldr	r3, [r7, #36]
+ 4138 00ce 5A68     		ldr	r2, [r3, #4]
+ 4139 00d0 7B68     		ldr	r3, [r7, #4]
+ 4140 00d2 D21A     		subs	r2, r2, r3
+ 4141 00d4 1F4B     		ldr	r3, .L11+16
+ 4142 00d6 1B88     		ldrh	r3, [r3, #0]
+ 4143 00d8 4FEA4303 		lsl	r3, r3, #1
+ 4144 00dc 9A42     		cmp	r2, r3
+ 4145 00de 22D9     		bls	.L8
  209:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				{
  210:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 					/* This block is to be split into two.  Create a new block
  211:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 					following the number of bytes requested. The void cast is
  212:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 					used to prevent byte alignment warnings from the compiler. */
  213:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 					pxNewBlockLink = ( void * ) ( ( ( unsigned char * ) pxBlock ) + xWantedSize );
- 4112              		.loc 1 213 0
- 4113 00e0 7A6A     		ldr	r2, [r7, #36]
- 4114 00e2 7B68     		ldr	r3, [r7, #4]
- 4115 00e4 D318     		adds	r3, r2, r3
- 4116 00e6 3B61     		str	r3, [r7, #16]
+ 4146              		.loc 1 213 0
+ 4147 00e0 7A6A     		ldr	r2, [r7, #36]
+ 4148 00e2 7B68     		ldr	r3, [r7, #4]
+ 4149 00e4 D318     		adds	r3, r2, r3
+ 4150 00e6 3B61     		str	r3, [r7, #16]
  214:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  215:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 					/* Calculate the sizes of two blocks split from the single
  216:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 					block. */
  217:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 					pxNewBlockLink->xBlockSize = pxBlock->xBlockSize - xWantedSize;
- 4117              		.loc 1 217 0
- 4118 00e8 7B6A     		ldr	r3, [r7, #36]
- 4119 00ea 5A68     		ldr	r2, [r3, #4]
- 4120 00ec 7B68     		ldr	r3, [r7, #4]
- 4121 00ee D21A     		subs	r2, r2, r3
- 4122 00f0 3B69     		ldr	r3, [r7, #16]
- 4123 00f2 5A60     		str	r2, [r3, #4]
+ 4151              		.loc 1 217 0
+ 4152 00e8 7B6A     		ldr	r3, [r7, #36]
+ 4153 00ea 5A68     		ldr	r2, [r3, #4]
+ 4154 00ec 7B68     		ldr	r3, [r7, #4]
+ 4155 00ee D21A     		subs	r2, r2, r3
+ 4156 00f0 3B69     		ldr	r3, [r7, #16]
+ 4157 00f2 5A60     		str	r2, [r3, #4]
  218:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 					pxBlock->xBlockSize = xWantedSize;
- 4124              		.loc 1 218 0
- 4125 00f4 7B6A     		ldr	r3, [r7, #36]
- 4126 00f6 7A68     		ldr	r2, [r7, #4]
- 4127 00f8 5A60     		str	r2, [r3, #4]
- 4128              	.LBB3:
+ 4158              		.loc 1 218 0
+ 4159 00f4 7B6A     		ldr	r3, [r7, #36]
+ 4160 00f6 7A68     		ldr	r2, [r7, #4]
+ 4161 00f8 5A60     		str	r2, [r3, #4]
+ 4162              	.LBB3:
  219:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  220:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 					/* Insert the new block into the list of free blocks. */
  221:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 					prvInsertBlockIntoFreeList( ( pxNewBlockLink ) );
- 4129              		.loc 1 221 0
- 4130 00fa 3B69     		ldr	r3, [r7, #16]
- 4131 00fc 5B68     		ldr	r3, [r3, #4]
- 4132 00fe FB60     		str	r3, [r7, #12]
- 4133 0100 124B     		ldr	r3, .L11+8
- 4134 0102 BB61     		str	r3, [r7, #24]
- 4135 0104 02E0     		b	.L9
- 4136              	.L10:
- 4137              		.loc 1 221 0 is_stmt 0 discriminator 2
- 4138 0106 BB69     		ldr	r3, [r7, #24]
- 4139 0108 1B68     		ldr	r3, [r3, #0]
- 4140 010a BB61     		str	r3, [r7, #24]
- 4141              	.L9:
- 4142              		.loc 1 221 0 discriminator 1
- 4143 010c BB69     		ldr	r3, [r7, #24]
- 4144 010e 1B68     		ldr	r3, [r3, #0]
- 4145 0110 5A68     		ldr	r2, [r3, #4]
- 4146 0112 FB68     		ldr	r3, [r7, #12]
- 4147 0114 9A42     		cmp	r2, r3
- 4148 0116 F6D3     		bcc	.L10
- 4149              		.loc 1 221 0 discriminator 3
- 4150 0118 BB69     		ldr	r3, [r7, #24]
- 4151 011a 1A68     		ldr	r2, [r3, #0]
- 4152 011c 3B69     		ldr	r3, [r7, #16]
- 4153 011e 1A60     		str	r2, [r3, #0]
- 4154 0120 BB69     		ldr	r3, [r7, #24]
- 4155 0122 3A69     		ldr	r2, [r7, #16]
- 4156 0124 1A60     		str	r2, [r3, #0]
- 4157              	.L8:
- 4158              	.LBE3:
+ 4163              		.loc 1 221 0
+ 4164 00fa 3B69     		ldr	r3, [r7, #16]
+ 4165 00fc 5B68     		ldr	r3, [r3, #4]
+ 4166 00fe FB60     		str	r3, [r7, #12]
+ 4167 0100 124B     		ldr	r3, .L11+8
+ 4168 0102 BB61     		str	r3, [r7, #24]
+ 4169 0104 02E0     		b	.L9
+ 4170              	.L10:
+ 4171              		.loc 1 221 0 is_stmt 0 discriminator 2
+ 4172 0106 BB69     		ldr	r3, [r7, #24]
+ 4173 0108 1B68     		ldr	r3, [r3, #0]
+ 4174 010a BB61     		str	r3, [r7, #24]
+ 4175              	.L9:
+ 4176              		.loc 1 221 0 discriminator 1
+ 4177 010c BB69     		ldr	r3, [r7, #24]
+ 4178 010e 1B68     		ldr	r3, [r3, #0]
+ 4179 0110 5A68     		ldr	r2, [r3, #4]
+ 4180 0112 FB68     		ldr	r3, [r7, #12]
+ 4181 0114 9A42     		cmp	r2, r3
+ 4182 0116 F6D3     		bcc	.L10
+ 4183              		.loc 1 221 0 discriminator 3
+ 4184 0118 BB69     		ldr	r3, [r7, #24]
+ 4185 011a 1A68     		ldr	r2, [r3, #0]
+ 4186 011c 3B69     		ldr	r3, [r7, #16]
+ 4187 011e 1A60     		str	r2, [r3, #0]
+ 4188 0120 BB69     		ldr	r3, [r7, #24]
+ 4189 0122 3A69     		ldr	r2, [r7, #16]
+ 4190 0124 1A60     		str	r2, [r3, #0]
+ 4191              	.L8:
+ 4192              	.LBE3:
  222:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				}
  223:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				
  224:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 				xFreeBytesRemaining -= pxBlock->xBlockSize;
- 4159              		.loc 1 224 0 is_stmt 1
- 4160 0126 0C4B     		ldr	r3, .L11+20
- 4161 0128 1A68     		ldr	r2, [r3, #0]
- 4162 012a 7B6A     		ldr	r3, [r7, #36]
- 4163 012c 5B68     		ldr	r3, [r3, #4]
- 4164 012e D21A     		subs	r2, r2, r3
- 4165 0130 094B     		ldr	r3, .L11+20
- 4166 0132 1A60     		str	r2, [r3, #0]
- 4167              	.L4:
+ 4193              		.loc 1 224 0 is_stmt 1
+ 4194 0126 0C4B     		ldr	r3, .L11+20
+ 4195 0128 1A68     		ldr	r2, [r3, #0]
+ 4196 012a 7B6A     		ldr	r3, [r7, #36]
+ 4197 012c 5B68     		ldr	r3, [r3, #4]
+ 4198 012e D21A     		subs	r2, r2, r3
+ 4199 0130 094B     		ldr	r3, .L11+20
+ 4200 0132 1A60     		str	r2, [r3, #0]
+ 4201              	.L4:
  225:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			}
  226:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		}
  227:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	}
  228:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	xTaskResumeAll();
- 4168              		.loc 1 228 0
- 4169 0134 FFF7FEFF 		bl	xTaskResumeAll
+ 4202              		.loc 1 228 0
+ 4203 0134 FFF7FEFF 		bl	xTaskResumeAll
  229:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  230:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	#if( configUSE_MALLOC_FAILED_HOOK == 1 )
  231:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	{
@@ -485,240 +485,240 @@
  238:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	#endif
  239:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  240:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	return pvReturn;
- 4170              		.loc 1 240 0
- 4171 0138 FB69     		ldr	r3, [r7, #28]
+ 4204              		.loc 1 240 0
+ 4205 0138 FB69     		ldr	r3, [r7, #28]
  241:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** }
- 4172              		.loc 1 241 0
- 4173 013a 1846     		mov	r0, r3
- 4174 013c 07F12807 		add	r7, r7, #40
- 4175 0140 BD46     		mov	sp, r7
- 4176 0142 80BD     		pop	{r7, pc}
- 4177              	.L12:
- 4178              		.align	2
- 4179              	.L11:
- 4180 0144 104C0000 		.word	xHeapHasBeenInitialised.5729
- 4181 0148 00000000 		.word	xHeap
- 4182 014c 004C0000 		.word	xStart
- 4183 0150 084C0000 		.word	xEnd
- 4184 0154 00000000 		.word	heapSTRUCT_SIZE
- 4185 0158 00000000 		.word	xFreeBytesRemaining
- 4186              		.cfi_endproc
- 4187              	.LFE29:
- 4189              		.align	2
- 4190              		.global	vPortFree
- 4191              		.thumb
- 4192              		.thumb_func
- 4194              	vPortFree:
- 4195              	.LFB30:
+ 4206              		.loc 1 241 0
+ 4207 013a 1846     		mov	r0, r3
+ 4208 013c 07F12807 		add	r7, r7, #40
+ 4209 0140 BD46     		mov	sp, r7
+ 4210 0142 80BD     		pop	{r7, pc}
+ 4211              	.L12:
+ 4212              		.align	2
+ 4213              	.L11:
+ 4214 0144 104C0000 		.word	xHeapHasBeenInitialised.5836
+ 4215 0148 00000000 		.word	xHeap
+ 4216 014c 004C0000 		.word	xStart
+ 4217 0150 084C0000 		.word	xEnd
+ 4218 0154 00000000 		.word	heapSTRUCT_SIZE
+ 4219 0158 00000000 		.word	xFreeBytesRemaining
+ 4220              		.cfi_endproc
+ 4221              	.LFE55:
+ 4223              		.align	2
+ 4224              		.global	vPortFree
+ 4225              		.thumb
+ 4226              		.thumb_func
+ 4228              	vPortFree:
+ 4229              	.LFB56:
  242:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** /*-----------------------------------------------------------*/
  243:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  244:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** void vPortFree( void *pv )
  245:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** {
- 4196              		.loc 1 245 0
- 4197              		.cfi_startproc
- 4198              		@ args = 0, pretend = 0, frame = 24
- 4199              		@ frame_needed = 1, uses_anonymous_args = 0
- 4200 015c 80B5     		push	{r7, lr}
- 4201              	.LCFI3:
- 4202              		.cfi_def_cfa_offset 8
- 4203 015e 86B0     		sub	sp, sp, #24
- 4204              	.LCFI4:
- 4205              		.cfi_def_cfa_offset 32
- 4206 0160 00AF     		add	r7, sp, #0
- 4207              		.cfi_offset 14, -4
- 4208              		.cfi_offset 7, -8
- 4209              	.LCFI5:
- 4210              		.cfi_def_cfa_register 7
- 4211 0162 7860     		str	r0, [r7, #4]
+ 4230              		.loc 1 245 0
+ 4231              		.cfi_startproc
+ 4232              		@ args = 0, pretend = 0, frame = 24
+ 4233              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4234 015c 80B5     		push	{r7, lr}
+ 4235              	.LCFI3:
+ 4236              		.cfi_def_cfa_offset 8
+ 4237 015e 86B0     		sub	sp, sp, #24
+ 4238              	.LCFI4:
+ 4239              		.cfi_def_cfa_offset 32
+ 4240 0160 00AF     		add	r7, sp, #0
+ 4241              		.cfi_offset 14, -4
+ 4242              		.cfi_offset 7, -8
+ 4243              	.LCFI5:
+ 4244              		.cfi_def_cfa_register 7
+ 4245 0162 7860     		str	r0, [r7, #4]
  246:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** unsigned char *puc = ( unsigned char * ) pv;
- 4212              		.loc 1 246 0
- 4213 0164 7B68     		ldr	r3, [r7, #4]
- 4214 0166 3B61     		str	r3, [r7, #16]
+ 4246              		.loc 1 246 0
+ 4247 0164 7B68     		ldr	r3, [r7, #4]
+ 4248 0166 3B61     		str	r3, [r7, #16]
  247:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** xBlockLink *pxLink;
  248:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  249:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	if( pv )
- 4215              		.loc 1 249 0
- 4216 0168 7B68     		ldr	r3, [r7, #4]
- 4217 016a 002B     		cmp	r3, #0
- 4218 016c 29D0     		beq	.L13
+ 4249              		.loc 1 249 0
+ 4250 0168 7B68     		ldr	r3, [r7, #4]
+ 4251 016a 002B     		cmp	r3, #0
+ 4252 016c 29D0     		beq	.L13
  250:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	{
  251:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		/* The memory being freed will have an xBlockLink structure immediately
  252:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		before it. */
  253:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		puc -= heapSTRUCT_SIZE;
- 4219              		.loc 1 253 0
- 4220 016e 174B     		ldr	r3, .L17
- 4221 0170 1B88     		ldrh	r3, [r3, #0]
- 4222 0172 C3F10003 		rsb	r3, r3, #0
- 4223 0176 3A69     		ldr	r2, [r7, #16]
- 4224 0178 D318     		adds	r3, r2, r3
- 4225 017a 3B61     		str	r3, [r7, #16]
+ 4253              		.loc 1 253 0
+ 4254 016e 174B     		ldr	r3, .L17
+ 4255 0170 1B88     		ldrh	r3, [r3, #0]
+ 4256 0172 C3F10003 		rsb	r3, r3, #0
+ 4257 0176 3A69     		ldr	r2, [r7, #16]
+ 4258 0178 D318     		adds	r3, r2, r3
+ 4259 017a 3B61     		str	r3, [r7, #16]
  254:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  255:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		/* This casting is to keep the compiler from issuing warnings. */
  256:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		pxLink = ( void * ) puc;
- 4226              		.loc 1 256 0
- 4227 017c 3B69     		ldr	r3, [r7, #16]
- 4228 017e FB60     		str	r3, [r7, #12]
+ 4260              		.loc 1 256 0
+ 4261 017c 3B69     		ldr	r3, [r7, #16]
+ 4262 017e FB60     		str	r3, [r7, #12]
  257:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  258:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		vTaskSuspendAll();
- 4229              		.loc 1 258 0
- 4230 0180 FFF7FEFF 		bl	vTaskSuspendAll
- 4231              	.LBB4:
+ 4263              		.loc 1 258 0
+ 4264 0180 FFF7FEFF 		bl	vTaskSuspendAll
+ 4265              	.LBB4:
  259:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		{
  260:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			/* Add this block to the list of free blocks. */
  261:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			prvInsertBlockIntoFreeList( ( ( xBlockLink * ) pxLink ) );
- 4232              		.loc 1 261 0
- 4233 0184 FB68     		ldr	r3, [r7, #12]
- 4234 0186 5B68     		ldr	r3, [r3, #4]
- 4235 0188 BB60     		str	r3, [r7, #8]
- 4236 018a 114B     		ldr	r3, .L17+4
- 4237 018c 7B61     		str	r3, [r7, #20]
- 4238 018e 02E0     		b	.L15
- 4239              	.L16:
- 4240              		.loc 1 261 0 is_stmt 0 discriminator 2
- 4241 0190 7B69     		ldr	r3, [r7, #20]
- 4242 0192 1B68     		ldr	r3, [r3, #0]
- 4243 0194 7B61     		str	r3, [r7, #20]
- 4244              	.L15:
- 4245              		.loc 1 261 0 discriminator 1
- 4246 0196 7B69     		ldr	r3, [r7, #20]
- 4247 0198 1B68     		ldr	r3, [r3, #0]
- 4248 019a 5A68     		ldr	r2, [r3, #4]
- 4249 019c BB68     		ldr	r3, [r7, #8]
- 4250 019e 9A42     		cmp	r2, r3
- 4251 01a0 F6D3     		bcc	.L16
- 4252              		.loc 1 261 0 discriminator 3
- 4253 01a2 7B69     		ldr	r3, [r7, #20]
- 4254 01a4 1A68     		ldr	r2, [r3, #0]
- 4255 01a6 FB68     		ldr	r3, [r7, #12]
- 4256 01a8 1A60     		str	r2, [r3, #0]
- 4257 01aa 7B69     		ldr	r3, [r7, #20]
- 4258 01ac FA68     		ldr	r2, [r7, #12]
- 4259 01ae 1A60     		str	r2, [r3, #0]
- 4260              	.LBE4:
+ 4266              		.loc 1 261 0
+ 4267 0184 FB68     		ldr	r3, [r7, #12]
+ 4268 0186 5B68     		ldr	r3, [r3, #4]
+ 4269 0188 BB60     		str	r3, [r7, #8]
+ 4270 018a 114B     		ldr	r3, .L17+4
+ 4271 018c 7B61     		str	r3, [r7, #20]
+ 4272 018e 02E0     		b	.L15
+ 4273              	.L16:
+ 4274              		.loc 1 261 0 is_stmt 0 discriminator 2
+ 4275 0190 7B69     		ldr	r3, [r7, #20]
+ 4276 0192 1B68     		ldr	r3, [r3, #0]
+ 4277 0194 7B61     		str	r3, [r7, #20]
+ 4278              	.L15:
+ 4279              		.loc 1 261 0 discriminator 1
+ 4280 0196 7B69     		ldr	r3, [r7, #20]
+ 4281 0198 1B68     		ldr	r3, [r3, #0]
+ 4282 019a 5A68     		ldr	r2, [r3, #4]
+ 4283 019c BB68     		ldr	r3, [r7, #8]
+ 4284 019e 9A42     		cmp	r2, r3
+ 4285 01a0 F6D3     		bcc	.L16
+ 4286              		.loc 1 261 0 discriminator 3
+ 4287 01a2 7B69     		ldr	r3, [r7, #20]
+ 4288 01a4 1A68     		ldr	r2, [r3, #0]
+ 4289 01a6 FB68     		ldr	r3, [r7, #12]
+ 4290 01a8 1A60     		str	r2, [r3, #0]
+ 4291 01aa 7B69     		ldr	r3, [r7, #20]
+ 4292 01ac FA68     		ldr	r2, [r7, #12]
+ 4293 01ae 1A60     		str	r2, [r3, #0]
+ 4294              	.LBE4:
  262:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 			xFreeBytesRemaining += pxLink->xBlockSize;
- 4261              		.loc 1 262 0 is_stmt 1 discriminator 3
- 4262 01b0 FB68     		ldr	r3, [r7, #12]
- 4263 01b2 5A68     		ldr	r2, [r3, #4]
- 4264 01b4 074B     		ldr	r3, .L17+8
- 4265 01b6 1B68     		ldr	r3, [r3, #0]
- 4266 01b8 D218     		adds	r2, r2, r3
- 4267 01ba 064B     		ldr	r3, .L17+8
- 4268 01bc 1A60     		str	r2, [r3, #0]
+ 4295              		.loc 1 262 0 is_stmt 1 discriminator 3
+ 4296 01b0 FB68     		ldr	r3, [r7, #12]
+ 4297 01b2 5A68     		ldr	r2, [r3, #4]
+ 4298 01b4 074B     		ldr	r3, .L17+8
+ 4299 01b6 1B68     		ldr	r3, [r3, #0]
+ 4300 01b8 D218     		adds	r2, r2, r3
+ 4301 01ba 064B     		ldr	r3, .L17+8
+ 4302 01bc 1A60     		str	r2, [r3, #0]
  263:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		}
  264:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 		xTaskResumeAll();
- 4269              		.loc 1 264 0 discriminator 3
- 4270 01be FFF7FEFF 		bl	xTaskResumeAll
- 4271              	.L13:
+ 4303              		.loc 1 264 0 discriminator 3
+ 4304 01be FFF7FEFF 		bl	xTaskResumeAll
+ 4305              	.L13:
  265:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	}
  266:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** }
- 4272              		.loc 1 266 0
- 4273 01c2 07F11807 		add	r7, r7, #24
- 4274 01c6 BD46     		mov	sp, r7
- 4275 01c8 80BD     		pop	{r7, pc}
- 4276              	.L18:
- 4277 01ca 00BF     		.align	2
- 4278              	.L17:
- 4279 01cc 00000000 		.word	heapSTRUCT_SIZE
- 4280 01d0 004C0000 		.word	xStart
- 4281 01d4 00000000 		.word	xFreeBytesRemaining
- 4282              		.cfi_endproc
- 4283              	.LFE30:
- 4285              		.align	2
- 4286              		.global	xPortGetFreeHeapSize
- 4287              		.thumb
- 4288              		.thumb_func
- 4290              	xPortGetFreeHeapSize:
- 4291              	.LFB31:
+ 4306              		.loc 1 266 0
+ 4307 01c2 07F11807 		add	r7, r7, #24
+ 4308 01c6 BD46     		mov	sp, r7
+ 4309 01c8 80BD     		pop	{r7, pc}
+ 4310              	.L18:
+ 4311 01ca 00BF     		.align	2
+ 4312              	.L17:
+ 4313 01cc 00000000 		.word	heapSTRUCT_SIZE
+ 4314 01d0 004C0000 		.word	xStart
+ 4315 01d4 00000000 		.word	xFreeBytesRemaining
+ 4316              		.cfi_endproc
+ 4317              	.LFE56:
+ 4319              		.align	2
+ 4320              		.global	xPortGetFreeHeapSize
+ 4321              		.thumb
+ 4322              		.thumb_func
+ 4324              	xPortGetFreeHeapSize:
+ 4325              	.LFB57:
  267:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** /*-----------------------------------------------------------*/
  268:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
  269:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** size_t xPortGetFreeHeapSize( void )
  270:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** {
- 4292              		.loc 1 270 0
- 4293              		.cfi_startproc
- 4294              		@ args = 0, pretend = 0, frame = 0
- 4295              		@ frame_needed = 1, uses_anonymous_args = 0
- 4296              		@ link register save eliminated.
- 4297 01d8 80B4     		push	{r7}
- 4298              	.LCFI6:
- 4299              		.cfi_def_cfa_offset 4
- 4300 01da 00AF     		add	r7, sp, #0
- 4301              		.cfi_offset 7, -4
- 4302              	.LCFI7:
- 4303              		.cfi_def_cfa_register 7
- 271:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	return xFreeBytesRemaining;
- 4304              		.loc 1 271 0
- 4305 01dc 024B     		ldr	r3, .L20
- 4306 01de 1B68     		ldr	r3, [r3, #0]
- 272:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** }
- 4307              		.loc 1 272 0
- 4308 01e0 1846     		mov	r0, r3
- 4309 01e2 BD46     		mov	sp, r7
- 4310 01e4 80BC     		pop	{r7}
- 4311 01e6 7047     		bx	lr
- 4312              	.L21:
- 4313              		.align	2
- 4314              	.L20:
- 4315 01e8 00000000 		.word	xFreeBytesRemaining
- 4316              		.cfi_endproc
- 4317              	.LFE31:
- 4319              		.align	2
- 4320              		.global	vPortInitialiseBlocks
- 4321              		.thumb
- 4322              		.thumb_func
- 4324              	vPortInitialiseBlocks:
- 4325              	.LFB32:
- 273:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** /*-----------------------------------------------------------*/
- 274:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
- 275:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** void vPortInitialiseBlocks( void )
- 276:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** {
- 4326              		.loc 1 276 0
+ 4326              		.loc 1 270 0
  4327              		.cfi_startproc
  4328              		@ args = 0, pretend = 0, frame = 0
  4329              		@ frame_needed = 1, uses_anonymous_args = 0
  4330              		@ link register save eliminated.
- 4331 01ec 80B4     		push	{r7}
- 4332              	.LCFI8:
+ 4331 01d8 80B4     		push	{r7}
+ 4332              	.LCFI6:
  4333              		.cfi_def_cfa_offset 4
- 4334 01ee 00AF     		add	r7, sp, #0
+ 4334 01da 00AF     		add	r7, sp, #0
  4335              		.cfi_offset 7, -4
- 4336              	.LCFI9:
+ 4336              	.LCFI7:
  4337              		.cfi_def_cfa_register 7
+ 271:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	return xFreeBytesRemaining;
+ 4338              		.loc 1 271 0
+ 4339 01dc 024B     		ldr	r3, .L20
+ 4340 01de 1B68     		ldr	r3, [r3, #0]
+ 272:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** }
+ 4341              		.loc 1 272 0
+ 4342 01e0 1846     		mov	r0, r3
+ 4343 01e2 BD46     		mov	sp, r7
+ 4344 01e4 80BC     		pop	{r7}
+ 4345 01e6 7047     		bx	lr
+ 4346              	.L21:
+ 4347              		.align	2
+ 4348              	.L20:
+ 4349 01e8 00000000 		.word	xFreeBytesRemaining
+ 4350              		.cfi_endproc
+ 4351              	.LFE57:
+ 4353              		.align	2
+ 4354              		.global	vPortInitialiseBlocks
+ 4355              		.thumb
+ 4356              		.thumb_func
+ 4358              	vPortInitialiseBlocks:
+ 4359              	.LFB58:
+ 273:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** /*-----------------------------------------------------------*/
+ 274:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 
+ 275:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** void vPortInitialiseBlocks( void )
+ 276:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** {
+ 4360              		.loc 1 276 0
+ 4361              		.cfi_startproc
+ 4362              		@ args = 0, pretend = 0, frame = 0
+ 4363              		@ frame_needed = 1, uses_anonymous_args = 0
+ 4364              		@ link register save eliminated.
+ 4365 01ec 80B4     		push	{r7}
+ 4366              	.LCFI8:
+ 4367              		.cfi_def_cfa_offset 4
+ 4368 01ee 00AF     		add	r7, sp, #0
+ 4369              		.cfi_offset 7, -4
+ 4370              	.LCFI9:
+ 4371              		.cfi_def_cfa_register 7
  277:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** 	/* This just exists to keep the linker quiet. */
  278:../3rdParty/FreeRTOS/portable/MemMang/heap_2.c **** }
- 4338              		.loc 1 278 0
- 4339 01f0 BD46     		mov	sp, r7
- 4340 01f2 80BC     		pop	{r7}
- 4341 01f4 7047     		bx	lr
- 4342              		.cfi_endproc
- 4343              	.LFE32:
- 4345              		.bss
- 4346              		.align	2
- 4347              	xHeapHasBeenInitialised.5729:
- 4348 4c10 00000000 		.space	4
- 4349 4c14 00000000 		.text
- 4350              	.Letext0:
+ 4372              		.loc 1 278 0
+ 4373 01f0 BD46     		mov	sp, r7
+ 4374 01f2 80BC     		pop	{r7}
+ 4375 01f4 7047     		bx	lr
+ 4376              		.cfi_endproc
+ 4377              	.LFE58:
+ 4379              		.bss
+ 4380              		.align	2
+ 4381              	xHeapHasBeenInitialised.5836:
+ 4382 4c10 00000000 		.space	4
+ 4383 4c14 00000000 		.text
+ 4384              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 heap_2.c
-     /tmp/cclt4D2E.s:3941   .bss:00000000 $d
-     /tmp/cclt4D2E.s:3942   .bss:00000000 xHeap
-     /tmp/cclt4D2E.s:3945   .rodata:00000000 $d
-     /tmp/cclt4D2E.s:3948   .rodata:00000000 heapSTRUCT_SIZE
-     /tmp/cclt4D2E.s:3952   .bss:00004c00 xStart
-     /tmp/cclt4D2E.s:3955   .bss:00004c08 xEnd
-     /tmp/cclt4D2E.s:3958   .data:00000000 $d
-     /tmp/cclt4D2E.s:3961   .data:00000000 xFreeBytesRemaining
-     /tmp/cclt4D2E.s:3964   .text:00000000 $t
-     /tmp/cclt4D2E.s:3969   .text:00000000 pvPortMalloc
-     /tmp/cclt4D2E.s:4180   .text:00000144 $d
-     /tmp/cclt4D2E.s:4347   .bss:00004c10 xHeapHasBeenInitialised.5729
-     /tmp/cclt4D2E.s:4189   .text:0000015c $t
-     /tmp/cclt4D2E.s:4194   .text:0000015c vPortFree
-     /tmp/cclt4D2E.s:4279   .text:000001cc $d
-     /tmp/cclt4D2E.s:4285   .text:000001d8 $t
-     /tmp/cclt4D2E.s:4290   .text:000001d8 xPortGetFreeHeapSize
-     /tmp/cclt4D2E.s:4315   .text:000001e8 $d
-     /tmp/cclt4D2E.s:4319   .text:000001ec $t
-     /tmp/cclt4D2E.s:4324   .text:000001ec vPortInitialiseBlocks
+     /tmp/ccaG8zZ6.s:3975   .bss:00000000 $d
+     /tmp/ccaG8zZ6.s:3976   .bss:00000000 xHeap
+     /tmp/ccaG8zZ6.s:3979   .rodata:00000000 $d
+     /tmp/ccaG8zZ6.s:3982   .rodata:00000000 heapSTRUCT_SIZE
+     /tmp/ccaG8zZ6.s:3986   .bss:00004c00 xStart
+     /tmp/ccaG8zZ6.s:3989   .bss:00004c08 xEnd
+     /tmp/ccaG8zZ6.s:3992   .data:00000000 $d
+     /tmp/ccaG8zZ6.s:3995   .data:00000000 xFreeBytesRemaining
+     /tmp/ccaG8zZ6.s:3998   .text:00000000 $t
+     /tmp/ccaG8zZ6.s:4003   .text:00000000 pvPortMalloc
+     /tmp/ccaG8zZ6.s:4214   .text:00000144 $d
+     /tmp/ccaG8zZ6.s:4381   .bss:00004c10 xHeapHasBeenInitialised.5836
+     /tmp/ccaG8zZ6.s:4223   .text:0000015c $t
+     /tmp/ccaG8zZ6.s:4228   .text:0000015c vPortFree
+     /tmp/ccaG8zZ6.s:4313   .text:000001cc $d
+     /tmp/ccaG8zZ6.s:4319   .text:000001d8 $t
+     /tmp/ccaG8zZ6.s:4324   .text:000001d8 xPortGetFreeHeapSize
+     /tmp/ccaG8zZ6.s:4349   .text:000001e8 $d
+     /tmp/ccaG8zZ6.s:4353   .text:000001ec $t
+     /tmp/ccaG8zZ6.s:4358   .text:000001ec vPortInitialiseBlocks
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

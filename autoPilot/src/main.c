@@ -54,6 +54,9 @@
 /* Standard includes. */
 #include "stdio.h"
 
+#define ARM_MATH_CM3
+
+
 /* Scheduler includes. */
 #include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"

@@ -5,18 +5,22 @@
  *      Author: jenya
  */
 
-#include "LPC17xx.h"
+#include "lpc17xx.h"
 #include "hwConfig.h"
+#include "platformConfig.h"
+#include "lpc17xx_clkpwr.h"
+#include "lpc17xx_gpio.h"
+#include "lpc17xx_uart.h"
 
 void setSystem(void)
 {
-	/* Disable peripherals power. */
+	// disable peripherals power
 	LPC_SC->PCONP = 0;
 
-	/* Enable GPIO power. */
-	LPC_SC->PCONP = PCONP_PCGPIO;
+	// enable GPIO power
+	LPC_SC->PCONP = CLKPWR_PCONP_PCGPIO;
 
-	/* Disable TPIU. */
+	// disable TPIU
 	LPC_PINCON->PINSEL10 = 0;
 
 	if ( LPC_SC->PLL0STAT & ( 1 << 25 ) )
@@ -106,9 +110,35 @@ void setSystem(void)
 
 void configRedLed(void)
 {
-	/* LEDs on port 1. */
+	// RED LED on port 3
 	LPC_GPIO3->FIODIR  = RED_LED;
 
-	/* Start will all LEDs off. */
+	// start with the LED OFF
 	LPC_GPIO3->FIOCLR = RED_LED;
+}
+
+void configPwm(void)
+{
+	// enable the PWM power
+	LPC_SC->PCONP |= CLKPWR_PCONP_PCPWM1;
+
+	// set the clock divider to 1
+	LPC_SC->PCLKSEL0 |= CLKPWR_PCLKSEL_PWM1;
+}
+
+void configUART(void)
+{
+	UART_CFG_Type UART_initStructure;
+
+	UART_initStructure.Baud_rate = 115200;
+	UART_initStructure.Databits = UART_DATABIT_8;
+	UART_initStructure.Parity = UART_PARITY_NONE;
+	UART_initStructure.Stopbits = UART_STOPBIT_1;
+
+	// configure the UART
+	//UART_Init(UART, &UART_initStructure);
+
+	// enable the UART
+
+
 }

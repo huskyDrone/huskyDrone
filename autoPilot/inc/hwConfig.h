@@ -8,13 +8,6 @@
 #ifndef HW_CONFIG_H_
 #define HW_CONFIG_H_
 
-/* Bit definitions. */
-#define PCONP_PCGPIO    0x00008000
-#define PLLFEED_FEED1   0x000000AA
-#define PLLFEED_FEED2   0x00000055
-
-#define RED_LED ( 1UL << 25UL )
-
 
         /***************************************************************
          ***************** Command Function Prototypes *****************
@@ -39,6 +32,10 @@ void setSystem(void);
  * Return			: None
  ------------------------------------------------------------------------------*/
 void configRedLed(void);
+
+void configPwd(void);
+
+void configUSART(void);
 
 
 #endif /* HW_CONFIG_H_ */

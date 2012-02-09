@@ -1173,18 +1173,18 @@
  1911              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 printf-stdarg.c
-     /tmp/ccUnIO7g.s:1047   .text:00000000 $t
-     /tmp/ccUnIO7g.s:1051   .text:00000000 printchar
-     /tmp/ccUnIO7g.s:1099   .text:00000030 prints
-     /tmp/ccUnIO7g.s:1249   .text:00000100 printi
-     /tmp/ccUnIO7g.s:1401   .rodata:00000000 $d
-     /tmp/ccUnIO7g.s:1409   .text:000001f4 print
-     /tmp/ccUnIO7g.s:1725   .text:00000408 $d
-     /tmp/ccUnIO7g.s:1729   .text:0000040c $t
-     /tmp/ccUnIO7g.s:1734   .text:0000040c printf
-     /tmp/ccUnIO7g.s:1782   .text:00000438 sprintf
-     /tmp/ccUnIO7g.s:1831   .text:00000468 snprintf
-     /tmp/ccUnIO7g.s:1880   .text:0000049c write
+     /tmp/cc351TXf.s:1047   .text:00000000 $t
+     /tmp/cc351TXf.s:1051   .text:00000000 printchar
+     /tmp/cc351TXf.s:1099   .text:00000030 prints
+     /tmp/cc351TXf.s:1249   .text:00000100 printi
+     /tmp/cc351TXf.s:1401   .rodata:00000000 $d
+     /tmp/cc351TXf.s:1409   .text:000001f4 print
+     /tmp/cc351TXf.s:1725   .text:00000408 $d
+     /tmp/cc351TXf.s:1729   .text:0000040c $t
+     /tmp/cc351TXf.s:1734   .text:0000040c printf
+     /tmp/cc351TXf.s:1782   .text:00000438 sprintf
+     /tmp/cc351TXf.s:1831   .text:00000468 snprintf
+     /tmp/cc351TXf.s:1880   .text:0000049c write
                      .debug_frame:00000010 $d
 
 NO UNDEFINED SYMBOLS

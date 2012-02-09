@@ -12,6 +12,7 @@
 #include "semphr.h"
 
 #include "hwConfig.h"
+#include "platformConfig.h"
 #include "taskLed.h"
 
 void vLedTask( void *pvParameters )

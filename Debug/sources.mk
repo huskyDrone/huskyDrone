@@ -21,8 +21,11 @@ S_UPPER_DEPS :=
 SUBDIRS := \
 autoPilot/src \
 3rdParty/printf \
-3rdParty/LPX17xx/CM3 \
 3rdParty/FreeRTOS \
 3rdParty/FreeRTOS/portable/MemMang \
 3rdParty/FreeRTOS/portable/GCC/ARM_CM3 \
+3rdParty/Drivers/source \
+3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx \
+3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm \
+3rdParty/Core/CM3/CoreSupport \
 

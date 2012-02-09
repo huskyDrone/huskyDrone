@@ -10,10 +10,13 @@ RM := rm -rf
 -include sources.mk
 -include autoPilot/src/subdir.mk
 -include 3rdParty/printf/subdir.mk
--include 3rdParty/LPX17xx/CM3/subdir.mk
 -include 3rdParty/FreeRTOS/portable/MemMang/subdir.mk
 -include 3rdParty/FreeRTOS/portable/GCC/ARM_CM3/subdir.mk
 -include 3rdParty/FreeRTOS/subdir.mk
+-include 3rdParty/Drivers/source/subdir.mk
+-include 3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/subdir.mk
+-include 3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/subdir.mk
+-include 3rdParty/Core/CM3/CoreSupport/subdir.mk
 -include subdir.mk
 -include objects.mk
 
@@ -55,7 +58,7 @@ ee542.elf: $(OBJS) $(USER_OBJS)
 
 ee542.hex: ee542.elf
 	@echo 'Invoking: ARM Sourcery Linux GNU Create Flash Image'
-	arm-none-eabi-objcopy -O ihex ee542.elf  "ee542.hex"
+	arm-none-eabi-objcopy -O binary ee542.elf  "ee542.hex"
 	@echo 'Finished building: $@'
 	@echo ' '
 
