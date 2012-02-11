@@ -33,9 +33,7 @@ void setSystem(void);
  ------------------------------------------------------------------------------*/
 void configRedLed(void);
 
-void configPwd(void);
-
-void configUSART(void);
+void configPwm(void);
 
 
 #endif /* HW_CONFIG_H_ */

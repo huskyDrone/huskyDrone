@@ -11,6 +11,7 @@
 #include "lpc17xx_clkpwr.h"
 #include "lpc17xx_gpio.h"
 #include "lpc17xx_uart.h"
+#include "lpc17xx_pinsel.h"
 
 void setSystem(void)
 {
@@ -124,21 +125,4 @@ void configPwm(void)
 
 	// set the clock divider to 1
 	LPC_SC->PCLKSEL0 |= CLKPWR_PCLKSEL_PWM1;
-}
-
-void configUART(void)
-{
-	UART_CFG_Type UART_initStructure;
-
-	UART_initStructure.Baud_rate = 115200;
-	UART_initStructure.Databits = UART_DATABIT_8;
-	UART_initStructure.Parity = UART_PARITY_NONE;
-	UART_initStructure.Stopbits = UART_STOPBIT_1;
-
-	// configure the UART
-	//UART_Init(UART, &UART_initStructure);
-
-	// enable the UART
-
-
 }

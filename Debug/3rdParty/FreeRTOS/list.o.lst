@@ -518,12 +518,12 @@
  4217              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 list.c
-     /tmp/ccJ48psr.s:3894   .text:00000000 $t
-     /tmp/ccJ48psr.s:3899   .text:00000000 vListInitialise
-     /tmp/ccJ48psr.s:3956   .text:00000048 vListInitialiseItem
-     /tmp/ccJ48psr.s:3991   .text:00000064 vListInsertEnd
-     /tmp/ccJ48psr.s:4060   .text:000000b4 vListInsert
-     /tmp/ccJ48psr.s:4153   .text:00000128 vListRemove
+     /tmp/ccsham27.s:3894   .text:00000000 $t
+     /tmp/ccsham27.s:3899   .text:00000000 vListInitialise
+     /tmp/ccsham27.s:3956   .text:00000048 vListInitialiseItem
+     /tmp/ccsham27.s:3991   .text:00000064 vListInsertEnd
+     /tmp/ccsham27.s:4060   .text:000000b4 vListInsert
+     /tmp/ccsham27.s:4153   .text:00000128 vListRemove
                      .debug_frame:00000010 $d
 
 NO UNDEFINED SYMBOLS

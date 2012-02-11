@@ -699,26 +699,26 @@
  4384              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 heap_2.c
-     /tmp/ccaG8zZ6.s:3975   .bss:00000000 $d
-     /tmp/ccaG8zZ6.s:3976   .bss:00000000 xHeap
-     /tmp/ccaG8zZ6.s:3979   .rodata:00000000 $d
-     /tmp/ccaG8zZ6.s:3982   .rodata:00000000 heapSTRUCT_SIZE
-     /tmp/ccaG8zZ6.s:3986   .bss:00004c00 xStart
-     /tmp/ccaG8zZ6.s:3989   .bss:00004c08 xEnd
-     /tmp/ccaG8zZ6.s:3992   .data:00000000 $d
-     /tmp/ccaG8zZ6.s:3995   .data:00000000 xFreeBytesRemaining
-     /tmp/ccaG8zZ6.s:3998   .text:00000000 $t
-     /tmp/ccaG8zZ6.s:4003   .text:00000000 pvPortMalloc
-     /tmp/ccaG8zZ6.s:4214   .text:00000144 $d
-     /tmp/ccaG8zZ6.s:4381   .bss:00004c10 xHeapHasBeenInitialised.5836
-     /tmp/ccaG8zZ6.s:4223   .text:0000015c $t
-     /tmp/ccaG8zZ6.s:4228   .text:0000015c vPortFree
-     /tmp/ccaG8zZ6.s:4313   .text:000001cc $d
-     /tmp/ccaG8zZ6.s:4319   .text:000001d8 $t
-     /tmp/ccaG8zZ6.s:4324   .text:000001d8 xPortGetFreeHeapSize
-     /tmp/ccaG8zZ6.s:4349   .text:000001e8 $d
-     /tmp/ccaG8zZ6.s:4353   .text:000001ec $t
-     /tmp/ccaG8zZ6.s:4358   .text:000001ec vPortInitialiseBlocks
+     /tmp/ccia76Fv.s:3975   .bss:00000000 $d
+     /tmp/ccia76Fv.s:3976   .bss:00000000 xHeap
+     /tmp/ccia76Fv.s:3979   .rodata:00000000 $d
+     /tmp/ccia76Fv.s:3982   .rodata:00000000 heapSTRUCT_SIZE
+     /tmp/ccia76Fv.s:3986   .bss:00004c00 xStart
+     /tmp/ccia76Fv.s:3989   .bss:00004c08 xEnd
+     /tmp/ccia76Fv.s:3992   .data:00000000 $d
+     /tmp/ccia76Fv.s:3995   .data:00000000 xFreeBytesRemaining
+     /tmp/ccia76Fv.s:3998   .text:00000000 $t
+     /tmp/ccia76Fv.s:4003   .text:00000000 pvPortMalloc
+     /tmp/ccia76Fv.s:4214   .text:00000144 $d
+     /tmp/ccia76Fv.s:4381   .bss:00004c10 xHeapHasBeenInitialised.5836
+     /tmp/ccia76Fv.s:4223   .text:0000015c $t
+     /tmp/ccia76Fv.s:4228   .text:0000015c vPortFree
+     /tmp/ccia76Fv.s:4313   .text:000001cc $d
+     /tmp/ccia76Fv.s:4319   .text:000001d8 $t
+     /tmp/ccia76Fv.s:4324   .text:000001d8 xPortGetFreeHeapSize
+     /tmp/ccia76Fv.s:4349   .text:000001e8 $d
+     /tmp/ccia76Fv.s:4353   .text:000001ec $t
+     /tmp/ccia76Fv.s:4358   .text:000001ec vPortInitialiseBlocks
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

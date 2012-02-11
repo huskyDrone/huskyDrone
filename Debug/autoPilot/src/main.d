@@ -17,7 +17,12 @@ autoPilot/src/main.d autoPilot/src/main.o: ../autoPilot/src/main.c \
  /home/jenya/Documents/DEV/ee542/3rdParty/FreeRTOS/include/semphr.h \
  /home/jenya/Documents/DEV/ee542/3rdParty/FreeRTOS/include/queue.h \
  /home/jenya/Documents/DEV/ee542/autoPilot/inc/hwConfig.h \
- /home/jenya/Documents/DEV/ee542/autoPilot/inc/taskLed.h
+ /home/jenya/Documents/DEV/ee542/autoPilot/inc/taskLed.h \
+ /home/jenya/Documents/DEV/ee542/autoPilot/inc/driverGps.h \
+ /home/jenya/Documents/DEV/ee542/3rdParty/Drivers/include/lpc17xx_gpio.h \
+ /home/jenya/Documents/DEV/ee542/3rdParty/Drivers/include/lpc_types.h \
+ /home/jenya/Documents/DEV/ee542/3rdParty/Drivers/include/lpc17xx_uart.h \
+ /home/jenya/Documents/DEV/ee542/3rdParty/Drivers/include/lpc17xx_pinsel.h
 
 /home/jenya/Documents/DEV/ee542/3rdParty/FreeRTOS/include/FreeRTOSConfig.h:
 
@@ -56,3 +61,13 @@ autoPilot/src/main.d autoPilot/src/main.o: ../autoPilot/src/main.c \
 /home/jenya/Documents/DEV/ee542/autoPilot/inc/hwConfig.h:
 
 /home/jenya/Documents/DEV/ee542/autoPilot/inc/taskLed.h:
+
+/home/jenya/Documents/DEV/ee542/autoPilot/inc/driverGps.h:
+
+/home/jenya/Documents/DEV/ee542/3rdParty/Drivers/include/lpc17xx_gpio.h:
+
+/home/jenya/Documents/DEV/ee542/3rdParty/Drivers/include/lpc_types.h:
+
+/home/jenya/Documents/DEV/ee542/3rdParty/Drivers/include/lpc17xx_uart.h:
+
+/home/jenya/Documents/DEV/ee542/3rdParty/Drivers/include/lpc17xx_pinsel.h:

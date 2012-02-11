@@ -4,19 +4,28 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../autoPilot/src/driverGps.c \
 ../autoPilot/src/hwConfig.c \
 ../autoPilot/src/main.c \
-../autoPilot/src/taskLed.c 
+../autoPilot/src/taskGps.c \
+../autoPilot/src/taskLed.c \
+../autoPilot/src/util.c 
 
 OBJS += \
+./autoPilot/src/driverGps.o \
 ./autoPilot/src/hwConfig.o \
 ./autoPilot/src/main.o \
-./autoPilot/src/taskLed.o 
+./autoPilot/src/taskGps.o \
+./autoPilot/src/taskLed.o \
+./autoPilot/src/util.o 
 
 C_DEPS += \
+./autoPilot/src/driverGps.d \
 ./autoPilot/src/hwConfig.d \
 ./autoPilot/src/main.d \
-./autoPilot/src/taskLed.d 
+./autoPilot/src/taskGps.d \
+./autoPilot/src/taskLed.d \
+./autoPilot/src/util.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

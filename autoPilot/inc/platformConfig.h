@@ -8,6 +8,8 @@
 #ifndef PLATFORMCONFIG_H_
 #define PLATFORMCONFIG_H_
 
+#include "lpc17xx_pinsel.h"
+
         /***************************************************************
          ****************** Registers Bits Definition ******************
          **************************************************************/

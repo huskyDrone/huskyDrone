@@ -66,6 +66,7 @@
 
 #include "hwConfig.h"
 #include "taskLed.h"
+#include "driverGps.h"
 
 /*-----------------------------------------------------------*/
 
@@ -78,6 +79,9 @@ tick hook. */
 // contains the handles for all tasks
 // define one more taskHandle than you need, zero the last entry
 xTaskHandle taskHandles[5];  //TODO: need to know how many there will be
+
+// current GPS Rx status
+__IO SetState gpsRxReady;
 
 int main( void )
 {
