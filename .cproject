@@ -53,7 +53,7 @@
 								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.level.387465886" name="Optimization level" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.optimization.level.none" valueType="enumerated"/>
 							</tool>
 							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.elf.c.linker.debug.106423943" name="ARM Sourcery Linux GCC C Linker" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.elf.c.linker.debug">
-								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile.1896598702" name="Script file (-T)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile" value="/home/jenya/Documents/DEV/ee542/autoPilot/rtosdemo_rdb1768_Debug.ld" valueType="string"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile.1896598702" name="Script file (-T)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile" value="/Users/ymaksime/Documents/UW/EE542/huskyDrone/autoPilot/rtosdemo_rdb1768_Debug.ld" valueType="string"/>
 								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.libs.2136215480" name="Libraries (-l)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.libs"/>
 								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.paths.1178056115" name="Library search path (-L)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/3rdParty/LPX17xx/DSP_LIB}&quot;"/>

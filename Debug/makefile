@@ -52,7 +52,7 @@ all: ee542.elf secondary-outputs
 ee542.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Sourcery Linux GCC C Linker'
-	arm-none-eabi-gcc -T"/home/jenya/Documents/DEV/ee542/autoPilot/rtosdemo_rdb1768_Debug.ld" -nostartfiles -Wl,-Map,ee542.map -mcpu=cortex-m3 -mthumb -g3 -gdwarf-2 -o "ee542.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -T"/Users/ymaksime/Documents/UW/EE542/huskyDrone/autoPilot/rtosdemo_rdb1768_Debug.ld" -nostartfiles -Wl,-Map,ee542.map -mcpu=cortex-m3 -mthumb -g3 -gdwarf-2 -o "ee542.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
