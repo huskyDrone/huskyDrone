@@ -94,397 +94,397 @@ LOAD /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../.
 END GROUP
                 0x10008000                _vRamTop = 0x10008000
 
-.text           0x00000000     0xa8a0
+.text           0x00000000     0xa9d8
  *(.isr_vector)
  .isr_vector    0x00000000       0xc8 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
                 0x00000000                g_pfnVectors
  *(.text*)
- .text          0x000000c8      0x2a0 ./autoPilot/src/driverGps.o
+ .text          0x000000c8      0x2a4 ./autoPilot/src/driverGps.o
                 0x00000154                configGpsUART
-                0x00000234                UART1_IRQHandler
-                0x00000278                GPS_IntReceive
-                0x000002e8                GPSReceive
- .text          0x00000368      0x250 ./autoPilot/src/hwConfig.o
-                0x00000368                setSystem
-                0x00000568                configRedLed
-                0x00000588                configPwm
- .text          0x000005b8       0xd8 ./autoPilot/src/main.o
-                0x000005b8                main
-                0x0000060c                vApplicationTickHook
-                0x00000618                vApplicationStackOverflowHook
-                0x00000624                vConfigureTimerForRunTimeStats
- .text          0x00000690       0x3c ./autoPilot/src/taskGps.o
-                0x00000690                vGpsTask
- .text          0x000006cc       0x44 ./autoPilot/src/taskLed.o
-                0x000006cc                vLedTask
- .text          0x00000710      0x194 ./autoPilot/src/util.o
-                0x00000710                isDigit
-                0x00000740                strCmp
-                0x00000780                a2l
-                0x000007d4                a2d
- .text          0x000008a4      0x4b8 ./3rdParty/printf/printf-stdarg.o
-                0x00000cb0                printf
-                0x00000cdc                sprintf
-                0x00000d0c                snprintf
-                0x00000d40                write
- .text          0x00000d5c      0x1f8 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
-                0x00000d5c                pvPortMalloc
-                0x00000eb8                vPortFree
-                0x00000f34                xPortGetFreeHeapSize
-                0x00000f48                vPortInitialiseBlocks
- .text          0x00000f54      0x1d8 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
-                0x00000f54                pxPortInitialiseStack
-                0x00000fb4                vPortSVCHandler
-                0x00000fd4                vPortStartFirstTask
-                0x00000fe4                xPortStartScheduler
-                0x00001020                vPortEndScheduler
-                0x0000102c                vPortYieldFromISR
-                0x00001044                vPortEnterCritical
-                0x00001068                vPortExitCritical
-                0x00001094                xPortPendSVHandler
-                0x000010d0                xPortSysTickHandler
- .text          0x0000112c      0x17c ./3rdParty/FreeRTOS/list.o
-                0x0000112c                vListInitialise
-                0x00001174                vListInitialiseItem
-                0x00001190                vListInsertEnd
-                0x000011e0                vListInsert
-                0x00001254                vListRemove
- .text          0x000012a8      0x9bc ./3rdParty/FreeRTOS/queue.o
-                0x000012a8                xQueueGenericCreate
-                0x00001384                xQueueCreateMutex
-                0x00001428                xQueueGiveMutexRecursive
-                0x00001480                xQueueTakeMutexRecursive
-                0x000014dc                xQueueGenericSend
-                0x000015fc                xQueueGenericSendFromISR
-                0x0000168c                xQueueGenericReceive
-                0x00001814                xQueueReceiveFromISR
-                0x000018a8                uxQueueMessagesWaiting
-                0x000018cc                uxQueueMessagesWaitingFromISR
-                0x000018e8                vQueueDelete
-                0x00001910                ucQueueGetQueueNumber
-                0x0000192c                vQueueSetQueueNumber
-                0x0000194c                ucQueueGetQueueType
-                0x00001b48                xQueueIsQueueEmptyFromISR
-                0x00001b9c                xQueueIsQueueFullFromISR
-                0x00001bc4                vQueueAddToRegistry
- .text          0x00001c64     0x15a0 ./3rdParty/FreeRTOS/tasks.o
-                0x00001c64                xTaskGenericCreate
-                0x00001dcc                vTaskDelete
-                0x00001e70                vTaskDelayUntil
-                0x00001f10                vTaskDelay
-                0x00001f68                uxTaskPriorityGet
-                0x00001fa0                vTaskPrioritySet
-                0x000020b4                vTaskSuspend
-                0x00002158                xTaskIsTaskSuspended
-                0x000021a4                vTaskResume
-                0x00002240                xTaskResumeFromISR
-                0x00002304                vTaskStartScheduler
-                0x00002374                vTaskEndScheduler
-                0x00002394                vTaskSuspendAll
-                0x000023b0                xTaskResumeAll
-                0x000024c4                xTaskGetTickCount
-                0x000024e8                xTaskGetTickCountFromISR
-                0x0000251c                uxTaskGetNumberOfTasks
-                0x00002530                vTaskList
-                0x00002634                vTaskGetRunTimeStats
-                0x00002748                vTaskIncrementTick
-                0x00002888                vTaskSwitchContext
-                0x000029ac                vTaskPlaceOnEventList
-                0x00002a14                xTaskRemoveFromEventList
-                0x00002ac8                vTaskSetTimeOutState
-                0x00002af4                xTaskCheckForTimeOut
-                0x00002b88                vTaskMissedYield
-                0x00002ba0                uxTaskGetTaskNumber
-                0x00002bd0                vTaskSetTaskNumber
-                0x00003050                uxTaskGetStackHighWaterMark
-                0x000030a8                xTaskGetCurrentTaskHandle
-                0x000030c8                vTaskPriorityInherit
-                0x0000317c                vTaskPriorityDisinherit
- .text          0x00003204      0x75c ./3rdParty/Drivers/source/debug_frmwrk.o
-                0x00003204                UARTPutChar
-                0x0000322c                UARTGetChar
-                0x0000325c                UARTPuts
-                0x00003290                UARTPuts_
-                0x000032b8                UARTPutDec
-                0x00003370                UARTPutDec16
-                0x000034ac                UARTPutDec32
-                0x00003710                UARTPutHex
-                0x00003784                UARTPutHex16
-                0x000037f8                UARTPutHex32
-                0x00003868                debug_frmwrk_init
- .text          0x00003960      0x250 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
-                0x00003960                CLKPWR_SetPCLKDiv
-                0x00003a00                CLKPWR_GetPCLKSEL
-                0x00003a4c                CLKPWR_GetPCLK
-                0x00003abc                CLKPWR_ConfigPPWR
-                0x00003b1c                CLKPWR_Sleep
-                0x00003b38                CLKPWR_DeepSleep
-                0x00003b60                CLKPWR_PowerDown
-                0x00003b88                CLKPWR_DeepPowerDown
- .text          0x00003bb0      0x174 ./3rdParty/Drivers/source/lpc17xx_exti.o
-                0x00003bb0                EXTI_Init
-                0x00003bdc                EXTI_DeInit
-                0x00003be8                EXTI_Config
-                0x00003c28                EXTI_SetMode
-                0x00003c8c                EXTI_SetPolarity
-                0x00003cf0                EXTI_ClearEXTIFlag
- .text          0x00003d24      0x860 ./3rdParty/Drivers/source/lpc17xx_gpio.o
-                0x00003e80                GPIO_SetDir
-                0x00003ecc                GPIO_SetValue
-                0x00003ef8                GPIO_ClearValue
-                0x00003f24                GPIO_ReadValue
-                0x00003f54                GPIO_IntCmd
-                0x00003fc4                GPIO_GetIntStatus
-                0x00004068                GPIO_ClearInt
-                0x000040a0                FIO_SetDir
-                0x000040c8                FIO_SetValue
-                0x000040e8                FIO_ClearValue
-                0x00004108                FIO_ReadValue
-                0x00004128                FIO_IntCmd
-                0x00004150                FIO_GetIntStatus
-                0x0000417c                FIO_ClearInt
-                0x0000419c                FIO_SetMask
-                0x000041e8                FIO_HalfWordSetDir
-                0x00004284                FIO_HalfWordSetMask
-                0x00004320                FIO_HalfWordSetValue
-                0x00004360                FIO_HalfWordClearValue
-                0x000043a0                FIO_HalfWordReadValue
-                0x000043e4                FIO_ByteSetDir
-                0x00004454                FIO_ByteSetMask
-                0x000044cc                FIO_ByteSetValue
-                0x00004508                FIO_ByteClearValue
-                0x00004544                FIO_ByteReadValue
- .text          0x00004584     0x1348 ./3rdParty/Drivers/source/lpc17xx_i2c.o
-                0x00004814                I2C_Init
-                0x000048d0                I2C_DeInit
-                0x0000495c                I2C_Cmd
-                0x000049d0                I2C_IntCmd
-                0x00004a60                I2C_MasterHandler
-                0x00004e24                I2C_SlaveHandler
-                0x00004ff8                I2C_MasterTransferData
-                0x0000532c                I2C_SlaveTransferData
-                0x0000558c                I2C_SetOwnSlaveAddr
-                0x00005690                I2C_MonitorModeConfig
-                0x00005718                I2C_MonitorModeCmd
-                0x000057b8                I2C_MonitorGetDatabuffer
-                0x00005804                I2C_MonitorHandler
-                0x0000585c                I2C_MasterTransferComplete
-                0x00005894                I2C_SlaveTransferComplete
- .text          0x000058cc        0xc ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
-                0x000058cc                check_failed
- .text          0x000058d8      0x7dc ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
-                0x000058d8                MCPWM_Init
-                0x0000590c                MCPWM_ConfigChannel
-                0x00005b30                MCPWM_WriteToShadow
-                0x00005b8c                MCPWM_ConfigCapture
-                0x00005d2c                MCPWM_ClearCapture
-                0x00005d5c                MCPWM_GetCapture
-                0x00005d9c                MCPWM_CountConfig
-                0x00005ef0                MCPWM_Start
-                0x00005f4c                MCPWM_Stop
-                0x00005fa8                MCPWM_ACMode
-                0x00005fd4                MCPWM_DCMode
-                0x00006024                MCPWM_IntConfig
-                0x00006050                MCPWM_IntSet
-                0x0000606c                MCPWM_IntClear
-                0x00006088                MCPWM_GetIntStatus
- .text          0x000060b4      0x284 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
-                0x00006268                PINSEL_ConfigTraceFunc
-                0x000062a8                PINSEL_SetI2C0Pins
-                0x000062e4                PINSEL_ConfigPin
- .text          0x00006338      0xb9c ./3rdParty/Drivers/source/lpc17xx_pwm.o
-                0x00006338                PWM_GetIntStatus
-                0x000063c0                PWM_ClearIntPending
-                0x00006438                PWM_ConfigStructInit
-                0x0000649c                PWM_Init
-                0x00006630                PWM_DeInit
-                0x00006670                PWM_Cmd
-                0x000066d4                PWM_CounterCmd
-                0x00006738                PWM_ResetCounter
-                0x0000677c                PWM_ConfigMatch
-                0x00006950                PWM_ConfigCapture
-                0x00006b20                PWM_GetCaptureValue
-                0x00006b84                PWM_MatchUpdate
-                0x00006c7c                PWM_MultiMatchUpdate
-                0x00006d6c                PWM_ChannelConfig
-                0x00006e28                PWM_ChannelCmd
- .text          0x00006ed4      0x58c ./3rdParty/Drivers/source/lpc17xx_spi.o
-                0x00006ed4                SPI_SetClock
-                0x00006f50                SPI_DeInit
-                0x00006f90                SPI_GetDataSize
-                0x00006fcc                SPI_Init
-                0x00007064                SPI_ConfigStructInit
-                0x000070a8                SPI_SendData
-                0x000070dc                SPI_ReceiveData
-                0x00007110                SPI_ReadWrite
-                0x00007304                SPI_IntCmd
-                0x0000736c                SPI_GetIntStatus
-                0x000073a4                SPI_ClearIntPending
-                0x000073d8                SPI_GetStatus
-                0x0000740c                SPI_CheckStatus
- .text          0x00007460      0xab0 ./3rdParty/Drivers/source/lpc17xx_timer.o
-                0x0000758c                TIM_GetIntStatus
-                0x00007634                TIM_GetIntCaptureStatus
-                0x000076e0                TIM_ClearIntPending
-                0x0000776c                TIM_ClearIntCapturePending
-                0x000077fc                TIM_ConfigStructInit
-                0x0000783c                TIM_Init
-                0x000079e4                TIM_DeInit
-                0x00007a8c                TIM_Cmd
-                0x00007afc                TIM_ResetCounter
-                0x00007b60                TIM_ConfigMatch
-                0x00007d10                TIM_UpdateMatchValue
-                0x00007da0                TIM_ConfigCapture
-                0x00007e98                TIM_GetCaptureValue
- .text          0x00007f10     0x16c0 ./3rdParty/Drivers/source/lpc17xx_uart.o
-                0x00008218                UART_Init
-                0x0000853c                UART_DeInit
-                0x000085e4                UART_ConfigStructInit
-                0x00008618                UART_SendByte
-                0x00008680                UART_ReceiveByte
-                0x000086e8                UART_Send
-                0x000087f4                UART_Receive
-                0x000088cc                UART_ForceBreak
-                0x00008944                UART_IntConfig
-                0x00008adc                UART_GetLineStatus
-                0x00008b44                UART_GetIntId
-                0x00008ba0                UART_CheckBusy
-                0x00008bcc                UART_FIFOConfig
-                0x00008d28                UART_FIFOConfigStructInit
-                0x00008d5c                UART_ABCmd
-                0x00008ea4                UART_ABClearIntPending
-                0x00008f18                UART_TxCmd
-                0x00008fe4                UART_IrDAInvtInputCmd
-                0x00009060                UART_IrDACmd
-                0x000090d4                UART_IrDAPulseDivConfig
-                0x00009174                UART_FullModemForcePinState
-                0x00009230                UART_FullModemConfigMode
-                0x000092f8                UART_FullModemGetStatus
-                0x0000932c                UART_RS485Config
-                0x000094b4                UART_RS485ReceiverCmd
-                0x000094fc                UART_RS485Send
-                0x00009580                UART_RS485SendSlvAddr
-                0x000095a8                UART_RS485SendData
- .text          0x000095d0       0x94 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
-                0x000095d0                ResetISR
-                0x00009624                NMI_Handler
-                0x0000962c                HardFault_Handler
-                0x00009634                MemManage_Handler
-                0x0000963c                BusFault_Handler
-                0x00009644                UsageFault_Handler
-                0x0000964c                DebugMon_Handler
-                0x00009654                TIMER2_IRQHandler
-                0x00009654                RIT_IRQHandler
-                0x00009654                I2C0_IRQHandler
-                0x00009654                USBActivity_IRQHandler
-                0x00009654                PWM1_IRQHandler
-                0x00009654                I2C1_IRQHandler
-                0x00009654                EINT2_IRQHandler
-                0x00009654                EINT3_IRQHandler
-                0x00009654                CANActivity_IRQHandler
-                0x00009654                TIMER3_IRQHandler
-                0x00009654                UART0_IRQHandler
-                0x00009654                IntDefaultHandler
-                0x00009654                PLL0_IRQHandler
-                0x00009654                CAN_IRQHandler
-                0x00009654                PLL1_IRQHandler
-                0x00009654                SSP0_IRQHandler
-                0x00009654                I2S_IRQHandler
-                0x00009654                I2C2_IRQHandler
-                0x00009654                RTC_IRQHandler
-                0x00009654                TIMER0_IRQHandler
-                0x00009654                SPI_IRQHandler
-                0x00009654                EINT1_IRQHandler
-                0x00009654                TIMER1_IRQHandler
-                0x00009654                UART2_IRQHandler
-                0x00009654                ADC_IRQHandler
-                0x00009654                SSP1_IRQHandler
-                0x00009654                USB_IRQHandler
-                0x00009654                BOD_IRQHandler
-                0x00009654                WDT_IRQHandler
-                0x00009654                QEI_IRQHandler
-                0x00009654                EINT0_IRQHandler
-                0x00009654                DMA_IRQHandler
-                0x00009654                UART3_IRQHandler
-                0x00009654                MCPWM_IRQHandler
-                0x00009654                ENET_IRQHandler
- .text          0x00009664      0x328 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
-                0x00009664                SystemCoreClockUpdate
-                0x0000980c                SystemInit
- .text          0x0000998c        0x0 ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
- .text          0x0000998c       0x2c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_aeabi_uldivmod.o)
-                0x0000998c                __aeabi_uldivmod
- .text          0x000099b8       0x60 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(bpabi.o)
-                0x000099b8                __gnu_ldivmod_helper
-                0x000099e8                __gnu_uldivmod_helper
- .text          0x00009a18        0x4 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_dvmd_tls.o)
-                0x00009a18                __aeabi_ldiv0
-                0x00009a18                __aeabi_idiv0
- .text          0x00009a1c      0x360 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_divdi3.o)
-                0x00009a1c                __divdi3
- .text          0x00009d7c      0x308 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivdi3.o)
-                0x00009d7c                __udivdi3
- *fill*         0x0000a084        0x4 00
- .text          0x0000a088      0x278 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivsi3.o)
-                0x0000a088                __udivsi3
-                0x0000a088                __aeabi_uidiv
-                0x0000a2e4                __aeabi_uidivmod
- .text          0x0000a300       0x64 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memcmp.o)
-                0x0000a300                memcmp
- .text          0x0000a364      0x150 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memcpy.o)
-                0x0000a364                memcpy
- .text          0x0000a4b4       0xb4 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memset.o)
-                0x0000a4b4                memset
- .text          0x0000a568       0x48 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strcat.o)
-                0x0000a568                strcat
- .text          0x0000a5b0       0xbc /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strcpy.o)
-                0x0000a5b0                strcpy
- .text          0x0000a66c       0x60 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strlen.o)
-                0x0000a66c                strlen
- .text          0x0000a6cc       0x78 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strncpy.o)
-                0x0000a6cc                strncpy
+                0x00000238                UART1_IRQHandler
+                0x0000027c                GPS_IntReceive
+                0x000002ec                GPSReceive
+ .text          0x0000036c      0x38c ./autoPilot/src/hwConfig.o
+                0x000003f8                setSystem
+                0x000005f8                configRedLed
+                0x00000618                configPwm
+                0x00000648                configUART0
+ .text          0x000006f8       0xd8 ./autoPilot/src/main.o
+                0x000006f8                main
+                0x0000074c                vApplicationTickHook
+                0x00000758                vApplicationStackOverflowHook
+                0x00000764                vConfigureTimerForRunTimeStats
+ .text          0x000007d0       0x38 ./autoPilot/src/taskGps.o
+                0x000007d0                vGpsTask
+ .text          0x00000808       0x44 ./autoPilot/src/taskLed.o
+                0x00000808                vLedTask
+ .text          0x0000084c      0x194 ./autoPilot/src/util.o
+                0x0000084c                isDigit
+                0x0000087c                strCmp
+                0x000008bc                a2l
+                0x00000910                a2d
+ .text          0x000009e0      0x4b8 ./3rdParty/printf/printf-stdarg.o
+                0x00000dec                printf
+                0x00000e18                sprintf
+                0x00000e48                snprintf
+                0x00000e7c                write
+ .text          0x00000e98      0x1f8 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
+                0x00000e98                pvPortMalloc
+                0x00000ff4                vPortFree
+                0x00001070                xPortGetFreeHeapSize
+                0x00001084                vPortInitialiseBlocks
+ .text          0x00001090      0x1d8 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
+                0x00001090                pxPortInitialiseStack
+                0x000010f0                vPortSVCHandler
+                0x00001110                vPortStartFirstTask
+                0x00001120                xPortStartScheduler
+                0x0000115c                vPortEndScheduler
+                0x00001168                vPortYieldFromISR
+                0x00001180                vPortEnterCritical
+                0x000011a4                vPortExitCritical
+                0x000011d0                xPortPendSVHandler
+                0x0000120c                xPortSysTickHandler
+ .text          0x00001268      0x17c ./3rdParty/FreeRTOS/list.o
+                0x00001268                vListInitialise
+                0x000012b0                vListInitialiseItem
+                0x000012cc                vListInsertEnd
+                0x0000131c                vListInsert
+                0x00001390                vListRemove
+ .text          0x000013e4      0x9bc ./3rdParty/FreeRTOS/queue.o
+                0x000013e4                xQueueGenericCreate
+                0x000014c0                xQueueCreateMutex
+                0x00001564                xQueueGiveMutexRecursive
+                0x000015bc                xQueueTakeMutexRecursive
+                0x00001618                xQueueGenericSend
+                0x00001738                xQueueGenericSendFromISR
+                0x000017c8                xQueueGenericReceive
+                0x00001950                xQueueReceiveFromISR
+                0x000019e4                uxQueueMessagesWaiting
+                0x00001a08                uxQueueMessagesWaitingFromISR
+                0x00001a24                vQueueDelete
+                0x00001a4c                ucQueueGetQueueNumber
+                0x00001a68                vQueueSetQueueNumber
+                0x00001a88                ucQueueGetQueueType
+                0x00001c84                xQueueIsQueueEmptyFromISR
+                0x00001cd8                xQueueIsQueueFullFromISR
+                0x00001d00                vQueueAddToRegistry
+ .text          0x00001da0     0x15a0 ./3rdParty/FreeRTOS/tasks.o
+                0x00001da0                xTaskGenericCreate
+                0x00001f08                vTaskDelete
+                0x00001fac                vTaskDelayUntil
+                0x0000204c                vTaskDelay
+                0x000020a4                uxTaskPriorityGet
+                0x000020dc                vTaskPrioritySet
+                0x000021f0                vTaskSuspend
+                0x00002294                xTaskIsTaskSuspended
+                0x000022e0                vTaskResume
+                0x0000237c                xTaskResumeFromISR
+                0x00002440                vTaskStartScheduler
+                0x000024b0                vTaskEndScheduler
+                0x000024d0                vTaskSuspendAll
+                0x000024ec                xTaskResumeAll
+                0x00002600                xTaskGetTickCount
+                0x00002624                xTaskGetTickCountFromISR
+                0x00002658                uxTaskGetNumberOfTasks
+                0x0000266c                vTaskList
+                0x00002770                vTaskGetRunTimeStats
+                0x00002884                vTaskIncrementTick
+                0x000029c4                vTaskSwitchContext
+                0x00002ae8                vTaskPlaceOnEventList
+                0x00002b50                xTaskRemoveFromEventList
+                0x00002c04                vTaskSetTimeOutState
+                0x00002c30                xTaskCheckForTimeOut
+                0x00002cc4                vTaskMissedYield
+                0x00002cdc                uxTaskGetTaskNumber
+                0x00002d0c                vTaskSetTaskNumber
+                0x0000318c                uxTaskGetStackHighWaterMark
+                0x000031e4                xTaskGetCurrentTaskHandle
+                0x00003204                vTaskPriorityInherit
+                0x000032b8                vTaskPriorityDisinherit
+ .text          0x00003340      0x75c ./3rdParty/Drivers/source/debug_frmwrk.o
+                0x00003340                UARTPutChar
+                0x00003368                UARTGetChar
+                0x00003398                UARTPuts
+                0x000033cc                UARTPuts_
+                0x000033f4                UARTPutDec
+                0x000034ac                UARTPutDec16
+                0x000035e8                UARTPutDec32
+                0x0000384c                UARTPutHex
+                0x000038c0                UARTPutHex16
+                0x00003934                UARTPutHex32
+                0x000039a4                debug_frmwrk_init
+ .text          0x00003a9c      0x250 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
+                0x00003a9c                CLKPWR_SetPCLKDiv
+                0x00003b3c                CLKPWR_GetPCLKSEL
+                0x00003b88                CLKPWR_GetPCLK
+                0x00003bf8                CLKPWR_ConfigPPWR
+                0x00003c58                CLKPWR_Sleep
+                0x00003c74                CLKPWR_DeepSleep
+                0x00003c9c                CLKPWR_PowerDown
+                0x00003cc4                CLKPWR_DeepPowerDown
+ .text          0x00003cec      0x174 ./3rdParty/Drivers/source/lpc17xx_exti.o
+                0x00003cec                EXTI_Init
+                0x00003d18                EXTI_DeInit
+                0x00003d24                EXTI_Config
+                0x00003d64                EXTI_SetMode
+                0x00003dc8                EXTI_SetPolarity
+                0x00003e2c                EXTI_ClearEXTIFlag
+ .text          0x00003e60      0x860 ./3rdParty/Drivers/source/lpc17xx_gpio.o
+                0x00003fbc                GPIO_SetDir
+                0x00004008                GPIO_SetValue
+                0x00004034                GPIO_ClearValue
+                0x00004060                GPIO_ReadValue
+                0x00004090                GPIO_IntCmd
+                0x00004100                GPIO_GetIntStatus
+                0x000041a4                GPIO_ClearInt
+                0x000041dc                FIO_SetDir
+                0x00004204                FIO_SetValue
+                0x00004224                FIO_ClearValue
+                0x00004244                FIO_ReadValue
+                0x00004264                FIO_IntCmd
+                0x0000428c                FIO_GetIntStatus
+                0x000042b8                FIO_ClearInt
+                0x000042d8                FIO_SetMask
+                0x00004324                FIO_HalfWordSetDir
+                0x000043c0                FIO_HalfWordSetMask
+                0x0000445c                FIO_HalfWordSetValue
+                0x0000449c                FIO_HalfWordClearValue
+                0x000044dc                FIO_HalfWordReadValue
+                0x00004520                FIO_ByteSetDir
+                0x00004590                FIO_ByteSetMask
+                0x00004608                FIO_ByteSetValue
+                0x00004644                FIO_ByteClearValue
+                0x00004680                FIO_ByteReadValue
+ .text          0x000046c0     0x1348 ./3rdParty/Drivers/source/lpc17xx_i2c.o
+                0x00004950                I2C_Init
+                0x00004a0c                I2C_DeInit
+                0x00004a98                I2C_Cmd
+                0x00004b0c                I2C_IntCmd
+                0x00004b9c                I2C_MasterHandler
+                0x00004f60                I2C_SlaveHandler
+                0x00005134                I2C_MasterTransferData
+                0x00005468                I2C_SlaveTransferData
+                0x000056c8                I2C_SetOwnSlaveAddr
+                0x000057cc                I2C_MonitorModeConfig
+                0x00005854                I2C_MonitorModeCmd
+                0x000058f4                I2C_MonitorGetDatabuffer
+                0x00005940                I2C_MonitorHandler
+                0x00005998                I2C_MasterTransferComplete
+                0x000059d0                I2C_SlaveTransferComplete
+ .text          0x00005a08        0xc ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
+                0x00005a08                check_failed
+ .text          0x00005a14      0x7dc ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
+                0x00005a14                MCPWM_Init
+                0x00005a48                MCPWM_ConfigChannel
+                0x00005c6c                MCPWM_WriteToShadow
+                0x00005cc8                MCPWM_ConfigCapture
+                0x00005e68                MCPWM_ClearCapture
+                0x00005e98                MCPWM_GetCapture
+                0x00005ed8                MCPWM_CountConfig
+                0x0000602c                MCPWM_Start
+                0x00006088                MCPWM_Stop
+                0x000060e4                MCPWM_ACMode
+                0x00006110                MCPWM_DCMode
+                0x00006160                MCPWM_IntConfig
+                0x0000618c                MCPWM_IntSet
+                0x000061a8                MCPWM_IntClear
+                0x000061c4                MCPWM_GetIntStatus
+ .text          0x000061f0      0x284 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
+                0x000063a4                PINSEL_ConfigTraceFunc
+                0x000063e4                PINSEL_SetI2C0Pins
+                0x00006420                PINSEL_ConfigPin
+ .text          0x00006474      0xb9c ./3rdParty/Drivers/source/lpc17xx_pwm.o
+                0x00006474                PWM_GetIntStatus
+                0x000064fc                PWM_ClearIntPending
+                0x00006574                PWM_ConfigStructInit
+                0x000065d8                PWM_Init
+                0x0000676c                PWM_DeInit
+                0x000067ac                PWM_Cmd
+                0x00006810                PWM_CounterCmd
+                0x00006874                PWM_ResetCounter
+                0x000068b8                PWM_ConfigMatch
+                0x00006a8c                PWM_ConfigCapture
+                0x00006c5c                PWM_GetCaptureValue
+                0x00006cc0                PWM_MatchUpdate
+                0x00006db8                PWM_MultiMatchUpdate
+                0x00006ea8                PWM_ChannelConfig
+                0x00006f64                PWM_ChannelCmd
+ .text          0x00007010      0x58c ./3rdParty/Drivers/source/lpc17xx_spi.o
+                0x00007010                SPI_SetClock
+                0x0000708c                SPI_DeInit
+                0x000070cc                SPI_GetDataSize
+                0x00007108                SPI_Init
+                0x000071a0                SPI_ConfigStructInit
+                0x000071e4                SPI_SendData
+                0x00007218                SPI_ReceiveData
+                0x0000724c                SPI_ReadWrite
+                0x00007440                SPI_IntCmd
+                0x000074a8                SPI_GetIntStatus
+                0x000074e0                SPI_ClearIntPending
+                0x00007514                SPI_GetStatus
+                0x00007548                SPI_CheckStatus
+ .text          0x0000759c      0xab0 ./3rdParty/Drivers/source/lpc17xx_timer.o
+                0x000076c8                TIM_GetIntStatus
+                0x00007770                TIM_GetIntCaptureStatus
+                0x0000781c                TIM_ClearIntPending
+                0x000078a8                TIM_ClearIntCapturePending
+                0x00007938                TIM_ConfigStructInit
+                0x00007978                TIM_Init
+                0x00007b20                TIM_DeInit
+                0x00007bc8                TIM_Cmd
+                0x00007c38                TIM_ResetCounter
+                0x00007c9c                TIM_ConfigMatch
+                0x00007e4c                TIM_UpdateMatchValue
+                0x00007edc                TIM_ConfigCapture
+                0x00007fd4                TIM_GetCaptureValue
+ .text          0x0000804c     0x16c0 ./3rdParty/Drivers/source/lpc17xx_uart.o
+                0x00008354                UART_Init
+                0x00008678                UART_DeInit
+                0x00008720                UART_ConfigStructInit
+                0x00008754                UART_SendByte
+                0x000087bc                UART_ReceiveByte
+                0x00008824                UART_Send
+                0x00008930                UART_Receive
+                0x00008a08                UART_ForceBreak
+                0x00008a80                UART_IntConfig
+                0x00008c18                UART_GetLineStatus
+                0x00008c80                UART_GetIntId
+                0x00008cdc                UART_CheckBusy
+                0x00008d08                UART_FIFOConfig
+                0x00008e64                UART_FIFOConfigStructInit
+                0x00008e98                UART_ABCmd
+                0x00008fe0                UART_ABClearIntPending
+                0x00009054                UART_TxCmd
+                0x00009120                UART_IrDAInvtInputCmd
+                0x0000919c                UART_IrDACmd
+                0x00009210                UART_IrDAPulseDivConfig
+                0x000092b0                UART_FullModemForcePinState
+                0x0000936c                UART_FullModemConfigMode
+                0x00009434                UART_FullModemGetStatus
+                0x00009468                UART_RS485Config
+                0x000095f0                UART_RS485ReceiverCmd
+                0x00009638                UART_RS485Send
+                0x000096bc                UART_RS485SendSlvAddr
+                0x000096e4                UART_RS485SendData
+ .text          0x0000970c       0x94 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
+                0x0000970c                ResetISR
+                0x00009760                NMI_Handler
+                0x00009768                HardFault_Handler
+                0x00009770                MemManage_Handler
+                0x00009778                BusFault_Handler
+                0x00009780                UsageFault_Handler
+                0x00009788                DebugMon_Handler
+                0x00009790                TIMER2_IRQHandler
+                0x00009790                RIT_IRQHandler
+                0x00009790                I2C0_IRQHandler
+                0x00009790                USBActivity_IRQHandler
+                0x00009790                PWM1_IRQHandler
+                0x00009790                I2C1_IRQHandler
+                0x00009790                EINT2_IRQHandler
+                0x00009790                EINT3_IRQHandler
+                0x00009790                CANActivity_IRQHandler
+                0x00009790                TIMER3_IRQHandler
+                0x00009790                UART0_IRQHandler
+                0x00009790                IntDefaultHandler
+                0x00009790                PLL0_IRQHandler
+                0x00009790                CAN_IRQHandler
+                0x00009790                PLL1_IRQHandler
+                0x00009790                SSP0_IRQHandler
+                0x00009790                I2S_IRQHandler
+                0x00009790                I2C2_IRQHandler
+                0x00009790                RTC_IRQHandler
+                0x00009790                TIMER0_IRQHandler
+                0x00009790                SPI_IRQHandler
+                0x00009790                EINT1_IRQHandler
+                0x00009790                TIMER1_IRQHandler
+                0x00009790                UART2_IRQHandler
+                0x00009790                ADC_IRQHandler
+                0x00009790                SSP1_IRQHandler
+                0x00009790                USB_IRQHandler
+                0x00009790                BOD_IRQHandler
+                0x00009790                WDT_IRQHandler
+                0x00009790                QEI_IRQHandler
+                0x00009790                EINT0_IRQHandler
+                0x00009790                DMA_IRQHandler
+                0x00009790                UART3_IRQHandler
+                0x00009790                MCPWM_IRQHandler
+                0x00009790                ENET_IRQHandler
+ .text          0x000097a0      0x328 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
+                0x000097a0                SystemCoreClockUpdate
+                0x00009948                SystemInit
+ .text          0x00009ac8        0x0 ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
+ .text          0x00009ac8       0x2c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_aeabi_uldivmod.o)
+                0x00009ac8                __aeabi_uldivmod
+ .text          0x00009af4       0x60 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(bpabi.o)
+                0x00009af4                __gnu_ldivmod_helper
+                0x00009b24                __gnu_uldivmod_helper
+ .text          0x00009b54        0x4 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_dvmd_tls.o)
+                0x00009b54                __aeabi_ldiv0
+                0x00009b54                __aeabi_idiv0
+ .text          0x00009b58      0x360 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_divdi3.o)
+                0x00009b58                __divdi3
+ .text          0x00009eb8      0x308 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivdi3.o)
+                0x00009eb8                __udivdi3
+ .text          0x0000a1c0      0x278 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivsi3.o)
+                0x0000a1c0                __udivsi3
+                0x0000a1c0                __aeabi_uidiv
+                0x0000a41c                __aeabi_uidivmod
+ .text          0x0000a438       0x64 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memcmp.o)
+                0x0000a438                memcmp
+ .text          0x0000a49c      0x150 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memcpy.o)
+                0x0000a49c                memcpy
+ .text          0x0000a5ec       0xb4 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memset.o)
+                0x0000a5ec                memset
+ .text          0x0000a6a0       0x48 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strcat.o)
+                0x0000a6a0                strcat
+ .text          0x0000a6e8       0xbc /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strcpy.o)
+                0x0000a6e8                strcpy
+ .text          0x0000a7a4       0x60 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strlen.o)
+                0x0000a7a4                strlen
+ .text          0x0000a804       0x78 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strncpy.o)
+                0x0000a804                strncpy
  *(.rodata*)
- .rodata        0x0000a744        0x4 ./autoPilot/src/main.o
- .rodata        0x0000a748        0x8 ./3rdParty/printf/printf-stdarg.o
- .rodata        0x0000a750        0x2 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
- *fill*         0x0000a752        0x2 00
- .rodata        0x0000a754        0x4 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
-                0x0000a754                ulKernelPriority
- .rodata        0x0000a758       0x64 ./3rdParty/FreeRTOS/tasks.o
- .rodata        0x0000a7bc        0x8 ./3rdParty/Drivers/source/debug_frmwrk.o
- .rodata        0x0000a7c4       0x2c ./3rdParty/Drivers/source/lpc17xx_i2c.o
- .rodata        0x0000a7f0       0x2c ./3rdParty/Drivers/source/lpc17xx_pwm.o
- .rodata        0x0000a81c       0x2c ./3rdParty/Drivers/source/lpc17xx_spi.o
- .rodata        0x0000a848       0x2c ./3rdParty/Drivers/source/lpc17xx_timer.o
- .rodata        0x0000a874       0x2c ./3rdParty/Drivers/source/lpc17xx_uart.o
+ .rodata        0x0000a87c        0x4 ./autoPilot/src/main.o
+ .rodata        0x0000a880        0x8 ./3rdParty/printf/printf-stdarg.o
+ .rodata        0x0000a888        0x2 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
+ *fill*         0x0000a88a        0x2 00
+ .rodata        0x0000a88c        0x4 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
+                0x0000a88c                ulKernelPriority
+ .rodata        0x0000a890       0x64 ./3rdParty/FreeRTOS/tasks.o
+ .rodata        0x0000a8f4        0x8 ./3rdParty/Drivers/source/debug_frmwrk.o
+ .rodata        0x0000a8fc       0x2c ./3rdParty/Drivers/source/lpc17xx_i2c.o
+ .rodata        0x0000a928       0x2c ./3rdParty/Drivers/source/lpc17xx_pwm.o
+ .rodata        0x0000a954       0x2c ./3rdParty/Drivers/source/lpc17xx_spi.o
+ .rodata        0x0000a980       0x2c ./3rdParty/Drivers/source/lpc17xx_timer.o
+ .rodata        0x0000a9ac       0x2c ./3rdParty/Drivers/source/lpc17xx_uart.o
 
-.glue_7         0x0000a8a0        0x0
+.glue_7         0x0000a9d8        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x0000a8a0        0x0
+.glue_7t        0x0000a9d8        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x0000a8a0        0x0
+.vfp11_veneer   0x0000a9d8        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x0000a8a0        0x0
+.v4_bx          0x0000a9d8        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.ARM.extab      0x0000a8a0        0x0
+.ARM.extab      0x0000a9d8        0x0
  *(.ARM.extab* .gnu.linkonce.armextab.*)
- .ARM.extab     0x0000a8a0        0x0 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_divdi3.o)
- .ARM.extab     0x0000a8a0        0x0 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivdi3.o)
-                0x0000a8a0                __exidx_start = .
+ .ARM.extab     0x0000a9d8        0x0 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_divdi3.o)
+ .ARM.extab     0x0000a9d8        0x0 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivdi3.o)
+                0x0000a9d8                __exidx_start = .
 
-.ARM.exidx      0x0000a8a0        0x8
+.ARM.exidx      0x0000a9d8        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x0000a8a0        0x8 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_divdi3.o)
- .ARM.exidx     0x0000a8a8        0x0 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivdi3.o)
+ .ARM.exidx     0x0000a9d8        0x8 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_divdi3.o)
+ .ARM.exidx     0x0000a9e0        0x0 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivdi3.o)
                                   0x8 (size before relaxing)
-                0x0000a8a8                __exidx_end = .
-                0x0000a8a8                _etext = .
+                0x0000a9e0                __exidx_end = .
+                0x0000a9e0                _etext = .
 
-.data           0x10000000       0x10 load address 0x0000a8a8
+.data           0x10000000       0x10 load address 0x0000a9e0
                 0x10000000                _data = .
  *(vtable)
  *(.data*)
@@ -531,7 +531,7 @@ END GROUP
  .data          0x10000010        0x0 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strncpy.o)
                 0x10000010                _edata = .
 
-.bss            0x10000010     0x5064 load address 0x0000a8b8
+.bss            0x10000010     0x5064 load address 0x0000a9f0
                 0x10000010                _bss = .
  *(.bss*)
  .bss           0x10000010        0x0 ./autoPilot/src/driverGps.o
@@ -609,286 +609,286 @@ END GROUP
 .USBRAM
 OUTPUT(ee542.elf elf32-littlearm)
 
-.debug_abbrev   0x00000000     0x2266
+.debug_abbrev   0x00000000     0x232e
  .debug_abbrev  0x00000000      0x1fa ./autoPilot/src/driverGps.o
- .debug_abbrev  0x000001fa       0xfd ./autoPilot/src/hwConfig.o
- .debug_abbrev  0x000002f7      0x16a ./autoPilot/src/main.o
- .debug_abbrev  0x00000461      0x13c ./autoPilot/src/taskGps.o
- .debug_abbrev  0x0000059d      0x101 ./autoPilot/src/taskLed.o
- .debug_abbrev  0x0000069e       0xe4 ./autoPilot/src/util.o
- .debug_abbrev  0x00000782      0x140 ./3rdParty/printf/printf-stdarg.o
- .debug_abbrev  0x000008c2      0x16f ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
- .debug_abbrev  0x00000a31      0x13a ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
- .debug_abbrev  0x00000b6b       0xb4 ./3rdParty/FreeRTOS/list.o
- .debug_abbrev  0x00000c1f      0x148 ./3rdParty/FreeRTOS/queue.o
- .debug_abbrev  0x00000d67      0x1cb ./3rdParty/FreeRTOS/tasks.o
- .debug_abbrev  0x00000f32      0x1d7 ./3rdParty/Drivers/source/debug_frmwrk.o
- .debug_abbrev  0x00001109      0x16a ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
- .debug_abbrev  0x00001273       0xfc ./3rdParty/Drivers/source/lpc17xx_exti.o
- .debug_abbrev  0x0000136f      0x1c9 ./3rdParty/Drivers/source/lpc17xx_gpio.o
- .debug_abbrev  0x00001538      0x1fd ./3rdParty/Drivers/source/lpc17xx_i2c.o
- .debug_abbrev  0x00001735       0x68 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
- .debug_abbrev  0x0000179d      0x152 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
- .debug_abbrev  0x000018ef      0x11d ./3rdParty/Drivers/source/lpc17xx_pinsel.o
- .debug_abbrev  0x00001a0c      0x1a5 ./3rdParty/Drivers/source/lpc17xx_pwm.o
- .debug_abbrev  0x00001bb1      0x187 ./3rdParty/Drivers/source/lpc17xx_spi.o
- .debug_abbrev  0x00001d38      0x1b4 ./3rdParty/Drivers/source/lpc17xx_timer.o
- .debug_abbrev  0x00001eec      0x1ce ./3rdParty/Drivers/source/lpc17xx_uart.o
- .debug_abbrev  0x000020ba       0xa7 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
- .debug_abbrev  0x00002161       0xd9 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
- .debug_abbrev  0x0000223a       0x2c ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
+ .debug_abbrev  0x000001fa      0x1c5 ./autoPilot/src/hwConfig.o
+ .debug_abbrev  0x000003bf      0x16a ./autoPilot/src/main.o
+ .debug_abbrev  0x00000529      0x13c ./autoPilot/src/taskGps.o
+ .debug_abbrev  0x00000665      0x101 ./autoPilot/src/taskLed.o
+ .debug_abbrev  0x00000766       0xe4 ./autoPilot/src/util.o
+ .debug_abbrev  0x0000084a      0x140 ./3rdParty/printf/printf-stdarg.o
+ .debug_abbrev  0x0000098a      0x16f ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
+ .debug_abbrev  0x00000af9      0x13a ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
+ .debug_abbrev  0x00000c33       0xb4 ./3rdParty/FreeRTOS/list.o
+ .debug_abbrev  0x00000ce7      0x148 ./3rdParty/FreeRTOS/queue.o
+ .debug_abbrev  0x00000e2f      0x1cb ./3rdParty/FreeRTOS/tasks.o
+ .debug_abbrev  0x00000ffa      0x1d7 ./3rdParty/Drivers/source/debug_frmwrk.o
+ .debug_abbrev  0x000011d1      0x16a ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
+ .debug_abbrev  0x0000133b       0xfc ./3rdParty/Drivers/source/lpc17xx_exti.o
+ .debug_abbrev  0x00001437      0x1c9 ./3rdParty/Drivers/source/lpc17xx_gpio.o
+ .debug_abbrev  0x00001600      0x1fd ./3rdParty/Drivers/source/lpc17xx_i2c.o
+ .debug_abbrev  0x000017fd       0x68 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
+ .debug_abbrev  0x00001865      0x152 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
+ .debug_abbrev  0x000019b7      0x11d ./3rdParty/Drivers/source/lpc17xx_pinsel.o
+ .debug_abbrev  0x00001ad4      0x1a5 ./3rdParty/Drivers/source/lpc17xx_pwm.o
+ .debug_abbrev  0x00001c79      0x187 ./3rdParty/Drivers/source/lpc17xx_spi.o
+ .debug_abbrev  0x00001e00      0x1b4 ./3rdParty/Drivers/source/lpc17xx_timer.o
+ .debug_abbrev  0x00001fb4      0x1ce ./3rdParty/Drivers/source/lpc17xx_uart.o
+ .debug_abbrev  0x00002182       0xa7 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
+ .debug_abbrev  0x00002229       0xd9 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
+ .debug_abbrev  0x00002302       0x2c ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
 
-.debug_info     0x00000000     0xbbea
- .debug_info    0x00000000      0xcf7 ./autoPilot/src/driverGps.o
- .debug_info    0x00000cf7      0x844 ./autoPilot/src/hwConfig.o
- .debug_info    0x0000153b      0x5af ./autoPilot/src/main.o
- .debug_info    0x00001aea      0x542 ./autoPilot/src/taskGps.o
- .debug_info    0x0000202c      0x408 ./autoPilot/src/taskLed.o
- .debug_info    0x00002434      0x184 ./autoPilot/src/util.o
- .debug_info    0x000025b8      0x3e7 ./3rdParty/printf/printf-stdarg.o
- .debug_info    0x0000299f      0x2e3 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
- .debug_info    0x00002c82      0x223 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
- .debug_info    0x00002ea5      0x2da ./3rdParty/FreeRTOS/list.o
- .debug_info    0x0000317f      0x9ce ./3rdParty/FreeRTOS/queue.o
- .debug_info    0x00003b4d     0x12ca ./3rdParty/FreeRTOS/tasks.o
- .debug_info    0x00004e17      0x936 ./3rdParty/Drivers/source/debug_frmwrk.o
- .debug_info    0x0000574d      0x6c0 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
- .debug_info    0x00005e0d      0x4dd ./3rdParty/Drivers/source/lpc17xx_exti.o
- .debug_info    0x000062ea      0xe29 ./3rdParty/Drivers/source/lpc17xx_gpio.o
- .debug_info    0x00007113      0xdb1 ./3rdParty/Drivers/source/lpc17xx_i2c.o
- .debug_info    0x00007ec4       0xc9 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
- .debug_info    0x00007f8d      0x816 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
- .debug_info    0x000087a3      0x4b5 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
- .debug_info    0x00008c58      0x8d6 ./3rdParty/Drivers/source/lpc17xx_pwm.o
- .debug_info    0x0000952e      0x5cc ./3rdParty/Drivers/source/lpc17xx_spi.o
- .debug_info    0x00009afa      0x892 ./3rdParty/Drivers/source/lpc17xx_timer.o
- .debug_info    0x0000a38c     0x115b ./3rdParty/Drivers/source/lpc17xx_uart.o
- .debug_info    0x0000b4e7      0x18b ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
- .debug_info    0x0000b672      0x508 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
- .debug_info    0x0000bb7a       0x70 ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
+.debug_info     0x00000000     0xbfdb
+ .debug_info    0x00000000      0xae2 ./autoPilot/src/driverGps.o
+ .debug_info    0x00000ae2     0x105f ./autoPilot/src/hwConfig.o
+ .debug_info    0x00001b41      0x5af ./autoPilot/src/main.o
+ .debug_info    0x000020f0      0x32d ./autoPilot/src/taskGps.o
+ .debug_info    0x0000241d      0x408 ./autoPilot/src/taskLed.o
+ .debug_info    0x00002825      0x184 ./autoPilot/src/util.o
+ .debug_info    0x000029a9      0x3e7 ./3rdParty/printf/printf-stdarg.o
+ .debug_info    0x00002d90      0x2e3 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
+ .debug_info    0x00003073      0x223 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
+ .debug_info    0x00003296      0x2da ./3rdParty/FreeRTOS/list.o
+ .debug_info    0x00003570      0x9ce ./3rdParty/FreeRTOS/queue.o
+ .debug_info    0x00003f3e     0x12ca ./3rdParty/FreeRTOS/tasks.o
+ .debug_info    0x00005208      0x936 ./3rdParty/Drivers/source/debug_frmwrk.o
+ .debug_info    0x00005b3e      0x6c0 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
+ .debug_info    0x000061fe      0x4dd ./3rdParty/Drivers/source/lpc17xx_exti.o
+ .debug_info    0x000066db      0xe29 ./3rdParty/Drivers/source/lpc17xx_gpio.o
+ .debug_info    0x00007504      0xdb1 ./3rdParty/Drivers/source/lpc17xx_i2c.o
+ .debug_info    0x000082b5       0xc9 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
+ .debug_info    0x0000837e      0x816 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
+ .debug_info    0x00008b94      0x4b5 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
+ .debug_info    0x00009049      0x8d6 ./3rdParty/Drivers/source/lpc17xx_pwm.o
+ .debug_info    0x0000991f      0x5cc ./3rdParty/Drivers/source/lpc17xx_spi.o
+ .debug_info    0x00009eeb      0x892 ./3rdParty/Drivers/source/lpc17xx_timer.o
+ .debug_info    0x0000a77d     0x115b ./3rdParty/Drivers/source/lpc17xx_uart.o
+ .debug_info    0x0000b8d8      0x18b ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
+ .debug_info    0x0000ba63      0x508 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
+ .debug_info    0x0000bf6b       0x70 ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
 
-.debug_line     0x00000000     0x6a8f
- .debug_line    0x00000000      0x408 ./autoPilot/src/driverGps.o
- .debug_line    0x00000408      0x329 ./autoPilot/src/hwConfig.o
- .debug_line    0x00000731      0x57f ./autoPilot/src/main.o
- .debug_line    0x00000cb0      0x3e0 ./autoPilot/src/taskGps.o
- .debug_line    0x00001090      0x3d4 ./autoPilot/src/taskLed.o
- .debug_line    0x00001464      0x1f0 ./autoPilot/src/util.o
- .debug_line    0x00001654      0x1dc ./3rdParty/printf/printf-stdarg.o
- .debug_line    0x00001830      0x4de ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
- .debug_line    0x00001d0e      0x33c ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
- .debug_line    0x0000204a      0x48d ./3rdParty/FreeRTOS/list.o
- .debug_line    0x000024d7      0x60f ./3rdParty/FreeRTOS/queue.o
- .debug_line    0x00002ae6      0x8ed ./3rdParty/FreeRTOS/tasks.o
- .debug_line    0x000033d3      0x366 ./3rdParty/Drivers/source/debug_frmwrk.o
- .debug_line    0x00003739      0x2db ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
- .debug_line    0x00003a14      0x293 ./3rdParty/Drivers/source/lpc17xx_exti.o
- .debug_line    0x00003ca7      0x3b1 ./3rdParty/Drivers/source/lpc17xx_gpio.o
- .debug_line    0x00004058      0x62f ./3rdParty/Drivers/source/lpc17xx_i2c.o
- .debug_line    0x00004687      0x190 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
- .debug_line    0x00004817      0x569 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
- .debug_line    0x00004d80      0x293 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
- .debug_line    0x00005013      0x57a ./3rdParty/Drivers/source/lpc17xx_pwm.o
- .debug_line    0x0000558d      0x3b0 ./3rdParty/Drivers/source/lpc17xx_spi.o
- .debug_line    0x0000593d      0x535 ./3rdParty/Drivers/source/lpc17xx_timer.o
- .debug_line    0x00005e72      0x819 ./3rdParty/Drivers/source/lpc17xx_uart.o
- .debug_line    0x0000668b       0xbf ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
- .debug_line    0x0000674a      0x235 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
- .debug_line    0x0000697f      0x110 ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
+.debug_line     0x00000000     0x6b43
+ .debug_line    0x00000000      0x41c ./autoPilot/src/driverGps.o
+ .debug_line    0x0000041c      0x355 ./autoPilot/src/hwConfig.o
+ .debug_line    0x00000771      0x5a7 ./autoPilot/src/main.o
+ .debug_line    0x00000d18      0x3f4 ./autoPilot/src/taskGps.o
+ .debug_line    0x0000110c      0x40c ./autoPilot/src/taskLed.o
+ .debug_line    0x00001518      0x1f0 ./autoPilot/src/util.o
+ .debug_line    0x00001708      0x1dc ./3rdParty/printf/printf-stdarg.o
+ .debug_line    0x000018e4      0x4de ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
+ .debug_line    0x00001dc2      0x33c ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
+ .debug_line    0x000020fe      0x48d ./3rdParty/FreeRTOS/list.o
+ .debug_line    0x0000258b      0x60f ./3rdParty/FreeRTOS/queue.o
+ .debug_line    0x00002b9a      0x8ed ./3rdParty/FreeRTOS/tasks.o
+ .debug_line    0x00003487      0x366 ./3rdParty/Drivers/source/debug_frmwrk.o
+ .debug_line    0x000037ed      0x2db ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
+ .debug_line    0x00003ac8      0x293 ./3rdParty/Drivers/source/lpc17xx_exti.o
+ .debug_line    0x00003d5b      0x3b1 ./3rdParty/Drivers/source/lpc17xx_gpio.o
+ .debug_line    0x0000410c      0x62f ./3rdParty/Drivers/source/lpc17xx_i2c.o
+ .debug_line    0x0000473b      0x190 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
+ .debug_line    0x000048cb      0x569 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
+ .debug_line    0x00004e34      0x293 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
+ .debug_line    0x000050c7      0x57a ./3rdParty/Drivers/source/lpc17xx_pwm.o
+ .debug_line    0x00005641      0x3b0 ./3rdParty/Drivers/source/lpc17xx_spi.o
+ .debug_line    0x000059f1      0x535 ./3rdParty/Drivers/source/lpc17xx_timer.o
+ .debug_line    0x00005f26      0x819 ./3rdParty/Drivers/source/lpc17xx_uart.o
+ .debug_line    0x0000673f       0xbf ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
+ .debug_line    0x000067fe      0x235 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
+ .debug_line    0x00006a33      0x110 ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
 
-.debug_macinfo  0x00000000    0xe49d9
+.debug_macinfo  0x00000000    0xea209
  .debug_macinfo
-                0x00000000     0xb5b8 ./autoPilot/src/driverGps.o
+                0x00000000     0xb61f ./autoPilot/src/driverGps.o
  .debug_macinfo
-                0x0000b5b8     0xa5d6 ./autoPilot/src/hwConfig.o
+                0x0000b61f     0xa730 ./autoPilot/src/hwConfig.o
  .debug_macinfo
-                0x00015b8e     0xecbb ./autoPilot/src/main.o
+                0x00015d4f    0x1005b ./autoPilot/src/main.o
  .debug_macinfo
-                0x00024849     0xb643 ./autoPilot/src/taskGps.o
+                0x00025daa     0xc97a ./autoPilot/src/taskGps.o
  .debug_macinfo
-                0x0002fe8c     0xa81d ./autoPilot/src/taskLed.o
+                0x00032724     0xd7b5 ./autoPilot/src/taskLed.o
  .debug_macinfo
-                0x0003a6a9     0x2c57 ./autoPilot/src/util.o
+                0x0003fed9     0x2c57 ./autoPilot/src/util.o
  .debug_macinfo
-                0x0003d300     0x2344 ./3rdParty/printf/printf-stdarg.o
+                0x00042b30     0x2344 ./3rdParty/printf/printf-stdarg.o
  .debug_macinfo
-                0x0003f644     0xb28a ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
+                0x00044e74     0xb28a ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
  .debug_macinfo
-                0x0004a8ce     0x943b ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
+                0x000500fe     0x943b ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
  .debug_macinfo
-                0x00053d09     0xabdc ./3rdParty/FreeRTOS/list.o
+                0x00059539     0xabdc ./3rdParty/FreeRTOS/list.o
  .debug_macinfo
-                0x0005e8e5     0xb3a7 ./3rdParty/FreeRTOS/queue.o
+                0x00064115     0xb3a7 ./3rdParty/FreeRTOS/queue.o
  .debug_macinfo
-                0x00069c8c     0xca97 ./3rdParty/FreeRTOS/tasks.o
+                0x0006f4bc     0xca97 ./3rdParty/FreeRTOS/tasks.o
  .debug_macinfo
-                0x00076723     0x935a ./3rdParty/Drivers/source/debug_frmwrk.o
+                0x0007bf53     0x935a ./3rdParty/Drivers/source/debug_frmwrk.o
  .debug_macinfo
-                0x0007fa7d     0x8544 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
+                0x000852ad     0x8544 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
  .debug_macinfo
-                0x00087fc1     0x743c ./3rdParty/Drivers/source/lpc17xx_exti.o
+                0x0008d7f1     0x743c ./3rdParty/Drivers/source/lpc17xx_exti.o
  .debug_macinfo
-                0x0008f3fd     0x760a ./3rdParty/Drivers/source/lpc17xx_gpio.o
+                0x00094c2d     0x760a ./3rdParty/Drivers/source/lpc17xx_gpio.o
  .debug_macinfo
-                0x00096a07     0x9523 ./3rdParty/Drivers/source/lpc17xx_i2c.o
+                0x0009c237     0x9523 ./3rdParty/Drivers/source/lpc17xx_i2c.o
  .debug_macinfo
-                0x0009ff2a     0x2df6 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
+                0x000a575a     0x2df6 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
  .debug_macinfo
-                0x000a2d20     0x90ac ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
+                0x000a8550     0x90ac ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
  .debug_macinfo
-                0x000abdcc     0x771f ./3rdParty/Drivers/source/lpc17xx_pinsel.o
+                0x000b15fc     0x771f ./3rdParty/Drivers/source/lpc17xx_pinsel.o
  .debug_macinfo
-                0x000b34eb     0x8fd4 ./3rdParty/Drivers/source/lpc17xx_pwm.o
+                0x000b8d1b     0x8fd4 ./3rdParty/Drivers/source/lpc17xx_pwm.o
  .debug_macinfo
-                0x000bc4bf     0x915f ./3rdParty/Drivers/source/lpc17xx_spi.o
+                0x000c1cef     0x915f ./3rdParty/Drivers/source/lpc17xx_spi.o
  .debug_macinfo
-                0x000c561e     0x9424 ./3rdParty/Drivers/source/lpc17xx_timer.o
+                0x000cae4e     0x9424 ./3rdParty/Drivers/source/lpc17xx_timer.o
  .debug_macinfo
-                0x000cea42     0x9fa2 ./3rdParty/Drivers/source/lpc17xx_uart.o
+                0x000d4272     0x9fa2 ./3rdParty/Drivers/source/lpc17xx_uart.o
  .debug_macinfo
-                0x000d89e4     0x2204 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
+                0x000de214     0x2204 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
  .debug_macinfo
-                0x000dabe8     0x7343 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
+                0x000e0418     0x7343 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
  .debug_macinfo
-                0x000e1f2b     0x2aae ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
+                0x000e775b     0x2aae ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
 
-.debug_loc      0x00000000     0x3e26
+.debug_loc      0x00000000     0x3ece
  .debug_loc     0x00000000      0x150 ./autoPilot/src/driverGps.o
- .debug_loc     0x00000150       0x84 ./autoPilot/src/hwConfig.o
- .debug_loc     0x000001d4       0xd4 ./autoPilot/src/main.o
- .debug_loc     0x000002a8       0x38 ./autoPilot/src/taskGps.o
- .debug_loc     0x000002e0       0x38 ./autoPilot/src/taskLed.o
- .debug_loc     0x00000318       0xe0 ./autoPilot/src/util.o
- .debug_loc     0x000003f8      0x1e7 ./3rdParty/printf/printf-stdarg.o
- .debug_loc     0x000005df       0xc8 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
- .debug_loc     0x000006a7      0x178 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
- .debug_loc     0x0000081f      0x118 ./3rdParty/FreeRTOS/list.o
- .debug_loc     0x00000937      0x508 ./3rdParty/FreeRTOS/queue.o
- .debug_loc     0x00000e3f      0x901 ./3rdParty/FreeRTOS/tasks.o
- .debug_loc     0x00001740      0x268 ./3rdParty/Drivers/source/debug_frmwrk.o
- .debug_loc     0x000019a8      0x190 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
- .debug_loc     0x00001b38      0x138 ./3rdParty/Drivers/source/lpc17xx_exti.o
- .debug_loc     0x00001c70      0x620 ./3rdParty/Drivers/source/lpc17xx_gpio.o
- .debug_loc     0x00002290      0x508 ./3rdParty/Drivers/source/lpc17xx_i2c.o
- .debug_loc     0x00002798       0x38 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
- .debug_loc     0x000027d0      0x348 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
- .debug_loc     0x00002b18      0x150 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
- .debug_loc     0x00002c68      0x348 ./3rdParty/Drivers/source/lpc17xx_pwm.o
- .debug_loc     0x00002fb0      0x2d8 ./3rdParty/Drivers/source/lpc17xx_spi.o
- .debug_loc     0x00003288      0x380 ./3rdParty/Drivers/source/lpc17xx_timer.o
- .debug_loc     0x00003608      0x65a ./3rdParty/Drivers/source/lpc17xx_uart.o
- .debug_loc     0x00003c62      0x16c ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
- .debug_loc     0x00003dce       0x58 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
+ .debug_loc     0x00000150      0x12c ./autoPilot/src/hwConfig.o
+ .debug_loc     0x0000027c       0xd4 ./autoPilot/src/main.o
+ .debug_loc     0x00000350       0x38 ./autoPilot/src/taskGps.o
+ .debug_loc     0x00000388       0x38 ./autoPilot/src/taskLed.o
+ .debug_loc     0x000003c0       0xe0 ./autoPilot/src/util.o
+ .debug_loc     0x000004a0      0x1e7 ./3rdParty/printf/printf-stdarg.o
+ .debug_loc     0x00000687       0xc8 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
+ .debug_loc     0x0000074f      0x178 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
+ .debug_loc     0x000008c7      0x118 ./3rdParty/FreeRTOS/list.o
+ .debug_loc     0x000009df      0x508 ./3rdParty/FreeRTOS/queue.o
+ .debug_loc     0x00000ee7      0x901 ./3rdParty/FreeRTOS/tasks.o
+ .debug_loc     0x000017e8      0x268 ./3rdParty/Drivers/source/debug_frmwrk.o
+ .debug_loc     0x00001a50      0x190 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
+ .debug_loc     0x00001be0      0x138 ./3rdParty/Drivers/source/lpc17xx_exti.o
+ .debug_loc     0x00001d18      0x620 ./3rdParty/Drivers/source/lpc17xx_gpio.o
+ .debug_loc     0x00002338      0x508 ./3rdParty/Drivers/source/lpc17xx_i2c.o
+ .debug_loc     0x00002840       0x38 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
+ .debug_loc     0x00002878      0x348 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
+ .debug_loc     0x00002bc0      0x150 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
+ .debug_loc     0x00002d10      0x348 ./3rdParty/Drivers/source/lpc17xx_pwm.o
+ .debug_loc     0x00003058      0x2d8 ./3rdParty/Drivers/source/lpc17xx_spi.o
+ .debug_loc     0x00003330      0x380 ./3rdParty/Drivers/source/lpc17xx_timer.o
+ .debug_loc     0x000036b0      0x65a ./3rdParty/Drivers/source/lpc17xx_uart.o
+ .debug_loc     0x00003d0a      0x16c ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
+ .debug_loc     0x00003e76       0x58 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
 
 .debug_pubnames
-                0x00000000     0x175a
+                0x00000000     0x176a
  .debug_pubnames
                 0x00000000       0x73 ./autoPilot/src/driverGps.o
  .debug_pubnames
-                0x00000073       0x3f ./autoPilot/src/hwConfig.o
+                0x00000073       0x4f ./autoPilot/src/hwConfig.o
  .debug_pubnames
-                0x000000b2       0x98 ./autoPilot/src/main.o
+                0x000000c2       0x98 ./autoPilot/src/main.o
  .debug_pubnames
-                0x0000014a       0x1f ./autoPilot/src/taskGps.o
+                0x0000015a       0x1f ./autoPilot/src/taskGps.o
  .debug_pubnames
-                0x00000169       0x1f ./autoPilot/src/taskLed.o
+                0x00000179       0x1f ./autoPilot/src/taskLed.o
  .debug_pubnames
-                0x00000188       0x39 ./autoPilot/src/util.o
+                0x00000198       0x39 ./autoPilot/src/util.o
  .debug_pubnames
-                0x000001c1       0x40 ./3rdParty/printf/printf-stdarg.o
+                0x000001d1       0x40 ./3rdParty/printf/printf-stdarg.o
  .debug_pubnames
-                0x00000201       0x64 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
+                0x00000211       0x64 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
  .debug_pubnames
-                0x00000265      0x10d ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
+                0x00000275      0x10d ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
  .debug_pubnames
-                0x00000372       0x71 ./3rdParty/FreeRTOS/list.o
+                0x00000382       0x71 ./3rdParty/FreeRTOS/list.o
  .debug_pubnames
-                0x000003e3      0x1de ./3rdParty/FreeRTOS/queue.o
+                0x000003f3      0x1de ./3rdParty/FreeRTOS/queue.o
  .debug_pubnames
-                0x000005c1      0x301 ./3rdParty/FreeRTOS/tasks.o
+                0x000005d1      0x301 ./3rdParty/FreeRTOS/tasks.o
  .debug_pubnames
-                0x000008c2      0x150 ./3rdParty/Drivers/source/debug_frmwrk.o
+                0x000008d2      0x150 ./3rdParty/Drivers/source/debug_frmwrk.o
  .debug_pubnames
-                0x00000a12       0xbb ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
+                0x00000a22       0xbb ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
  .debug_pubnames
-                0x00000acd       0x7d ./3rdParty/Drivers/source/lpc17xx_exti.o
+                0x00000add       0x7d ./3rdParty/Drivers/source/lpc17xx_exti.o
  .debug_pubnames
-                0x00000b4a      0x203 ./3rdParty/Drivers/source/lpc17xx_gpio.o
+                0x00000b5a      0x203 ./3rdParty/Drivers/source/lpc17xx_gpio.o
  .debug_pubnames
-                0x00000d4d      0x163 ./3rdParty/Drivers/source/lpc17xx_i2c.o
+                0x00000d5d      0x163 ./3rdParty/Drivers/source/lpc17xx_i2c.o
  .debug_pubnames
-                0x00000eb0       0x23 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
+                0x00000ec0       0x23 ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
  .debug_pubnames
-                0x00000ed3      0x13b ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
+                0x00000ee3      0x13b ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
  .debug_pubnames
-                0x0000100e       0x59 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
+                0x0000101e       0x59 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
  .debug_pubnames
-                0x00001067      0x140 ./3rdParty/Drivers/source/lpc17xx_pwm.o
+                0x00001077      0x140 ./3rdParty/Drivers/source/lpc17xx_pwm.o
  .debug_pubnames
-                0x000011a7      0x105 ./3rdParty/Drivers/source/lpc17xx_spi.o
+                0x000011b7      0x105 ./3rdParty/Drivers/source/lpc17xx_spi.o
  .debug_pubnames
-                0x000012ac      0x12b ./3rdParty/Drivers/source/lpc17xx_timer.o
+                0x000012bc      0x12b ./3rdParty/Drivers/source/lpc17xx_timer.o
  .debug_pubnames
-                0x000013d7      0x271 ./3rdParty/Drivers/source/lpc17xx_uart.o
+                0x000013e7      0x271 ./3rdParty/Drivers/source/lpc17xx_uart.o
  .debug_pubnames
-                0x00001648       0xc3 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
+                0x00001658       0xc3 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
  .debug_pubnames
-                0x0000170b       0x4f ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
+                0x0000171b       0x4f ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
 
 .debug_pubtypes
-                0x00000000     0x114c
+                0x00000000     0x1212
  .debug_pubtypes
-                0x00000000      0x174 ./autoPilot/src/driverGps.o
+                0x00000000      0x15e ./autoPilot/src/driverGps.o
  .debug_pubtypes
-                0x00000174       0x83 ./autoPilot/src/hwConfig.o
+                0x0000015e      0x175 ./autoPilot/src/hwConfig.o
  .debug_pubtypes
-                0x000001f7       0x7b ./autoPilot/src/main.o
+                0x000002d3       0x7b ./autoPilot/src/main.o
  .debug_pubtypes
-                0x00000272       0x6f ./autoPilot/src/taskGps.o
+                0x0000034e       0x59 ./autoPilot/src/taskGps.o
  .debug_pubtypes
-                0x000002e1       0x6a ./autoPilot/src/taskLed.o
+                0x000003a7       0x6a ./autoPilot/src/taskLed.o
  .debug_pubtypes
-                0x0000034b       0x1b ./autoPilot/src/util.o
+                0x00000411       0x1b ./autoPilot/src/util.o
  .debug_pubtypes
-                0x00000366       0x3f ./3rdParty/printf/printf-stdarg.o
+                0x0000042c       0x3f ./3rdParty/printf/printf-stdarg.o
  .debug_pubtypes
-                0x000003a5       0x58 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
+                0x0000046b       0x58 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
  .debug_pubtypes
-                0x000003fd       0x3f ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
+                0x000004c3       0x3f ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
  .debug_pubtypes
-                0x0000043c       0x86 ./3rdParty/FreeRTOS/list.o
+                0x00000502       0x86 ./3rdParty/FreeRTOS/list.o
  .debug_pubtypes
-                0x000004c2      0x10f ./3rdParty/FreeRTOS/queue.o
+                0x00000588      0x10f ./3rdParty/FreeRTOS/queue.o
  .debug_pubtypes
-                0x000005d1      0x139 ./3rdParty/FreeRTOS/tasks.o
+                0x00000697      0x139 ./3rdParty/FreeRTOS/tasks.o
  .debug_pubtypes
-                0x0000070a       0xc0 ./3rdParty/Drivers/source/debug_frmwrk.o
+                0x000007d0       0xc0 ./3rdParty/Drivers/source/debug_frmwrk.o
  .debug_pubtypes
-                0x000007ca       0x6b ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
+                0x00000890       0x6b ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
  .debug_pubtypes
-                0x00000835       0x90 ./3rdParty/Drivers/source/lpc17xx_exti.o
+                0x000008fb       0x90 ./3rdParty/Drivers/source/lpc17xx_exti.o
  .debug_pubtypes
-                0x000008c5       0xb5 ./3rdParty/Drivers/source/lpc17xx_gpio.o
+                0x0000098b       0xb5 ./3rdParty/Drivers/source/lpc17xx_gpio.o
  .debug_pubtypes
-                0x0000097a      0x113 ./3rdParty/Drivers/source/lpc17xx_i2c.o
+                0x00000a40      0x113 ./3rdParty/Drivers/source/lpc17xx_i2c.o
  .debug_pubtypes
-                0x00000a8d       0x2b ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
+                0x00000b53       0x2b ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
  .debug_pubtypes
-                0x00000ab8       0xb3 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
+                0x00000b7e       0xb3 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
  .debug_pubtypes
-                0x00000b6b       0x76 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
+                0x00000c31       0x76 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
  .debug_pubtypes
-                0x00000be1       0xf5 ./3rdParty/Drivers/source/lpc17xx_pwm.o
+                0x00000ca7       0xf5 ./3rdParty/Drivers/source/lpc17xx_pwm.o
  .debug_pubtypes
-                0x00000cd6       0xc8 ./3rdParty/Drivers/source/lpc17xx_spi.o
+                0x00000d9c       0xc8 ./3rdParty/Drivers/source/lpc17xx_spi.o
  .debug_pubtypes
-                0x00000d9e      0x113 ./3rdParty/Drivers/source/lpc17xx_timer.o
+                0x00000e64      0x113 ./3rdParty/Drivers/source/lpc17xx_timer.o
  .debug_pubtypes
-                0x00000eb1      0x232 ./3rdParty/Drivers/source/lpc17xx_uart.o
+                0x00000f77      0x232 ./3rdParty/Drivers/source/lpc17xx_uart.o
  .debug_pubtypes
-                0x000010e3       0x57 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
+                0x000011a9       0x57 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
  .debug_pubtypes
-                0x0000113a       0x12 ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
+                0x00001200       0x12 ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
 
 .debug_aranges  0x00000000      0x340
  .debug_aranges
@@ -944,60 +944,60 @@ OUTPUT(ee542.elf elf32-littlearm)
  .debug_aranges
                 0x00000320       0x20 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
 
-.debug_str      0x00000000     0x408a
- .debug_str     0x00000000      0x7ad ./autoPilot/src/driverGps.o
-                                0x80e (size before relaxing)
- .debug_str     0x000007ad      0x368 ./autoPilot/src/hwConfig.o
-                                0x4a8 (size before relaxing)
- .debug_str     0x00000b15       0xf6 ./autoPilot/src/main.o
+.debug_str      0x00000000     0x4096
+ .debug_str     0x00000000      0x74b ./autoPilot/src/driverGps.o
+                                0x7ac (size before relaxing)
+ .debug_str     0x0000074b      0x388 ./autoPilot/src/hwConfig.o
+                                0xa39 (size before relaxing)
+ .debug_str     0x00000ad3       0xf6 ./autoPilot/src/main.o
                                 0x33b (size before relaxing)
- .debug_str     0x00000c0b       0x31 ./autoPilot/src/taskGps.o
-                                0x270 (size before relaxing)
- .debug_str     0x00000c3c       0x3f ./autoPilot/src/taskLed.o
+ .debug_str     0x00000bc9       0x31 ./autoPilot/src/taskGps.o
+                                0x20e (size before relaxing)
+ .debug_str     0x00000bfa       0x3f ./autoPilot/src/taskLed.o
                                 0x26b (size before relaxing)
- .debug_str     0x00000c7b       0x47 ./autoPilot/src/util.o
+ .debug_str     0x00000c39       0x47 ./autoPilot/src/util.o
                                 0x102 (size before relaxing)
- .debug_str     0x00000cc2       0xa9 ./3rdParty/printf/printf-stdarg.o
+ .debug_str     0x00000c80       0xa9 ./3rdParty/printf/printf-stdarg.o
                                 0x102 (size before relaxing)
- .debug_str     0x00000d6b      0x178 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
+ .debug_str     0x00000d29      0x178 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
                                 0x248 (size before relaxing)
- .debug_str     0x00000ee3      0x151 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
+ .debug_str     0x00000ea1      0x151 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
                                 0x236 (size before relaxing)
- .debug_str     0x00001034      0x12f ./3rdParty/FreeRTOS/list.o
+ .debug_str     0x00000ff2      0x12f ./3rdParty/FreeRTOS/list.o
                                 0x21d (size before relaxing)
- .debug_str     0x00001163      0x425 ./3rdParty/FreeRTOS/queue.o
+ .debug_str     0x00001121      0x425 ./3rdParty/FreeRTOS/queue.o
                                 0x5c7 (size before relaxing)
- .debug_str     0x00001588      0x809 ./3rdParty/FreeRTOS/tasks.o
+ .debug_str     0x00001546      0x809 ./3rdParty/FreeRTOS/tasks.o
                                 0xa6c (size before relaxing)
- .debug_str     0x00001d91      0x147 ./3rdParty/Drivers/source/debug_frmwrk.o
+ .debug_str     0x00001d4f      0x147 ./3rdParty/Drivers/source/debug_frmwrk.o
                                 0x403 (size before relaxing)
- .debug_str     0x00001ed8       0xf8 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
+ .debug_str     0x00001e96       0xf8 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
                                 0x390 (size before relaxing)
- .debug_str     0x00001fd0      0x1a3 ./3rdParty/Drivers/source/lpc17xx_exti.o
+ .debug_str     0x00001f8e      0x1a3 ./3rdParty/Drivers/source/lpc17xx_exti.o
                                 0x3d4 (size before relaxing)
- .debug_str     0x00002173      0x30d ./3rdParty/Drivers/source/lpc17xx_gpio.o
+ .debug_str     0x00002131      0x30d ./3rdParty/Drivers/source/lpc17xx_gpio.o
                                 0x555 (size before relaxing)
- .debug_str     0x00002480      0x4a0 ./3rdParty/Drivers/source/lpc17xx_i2c.o
+ .debug_str     0x0000243e      0x4a0 ./3rdParty/Drivers/source/lpc17xx_i2c.o
                                 0x850 (size before relaxing)
- .debug_str     0x00002920       0x4b ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
+ .debug_str     0x000028de       0x4b ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
                                 0x117 (size before relaxing)
- .debug_str     0x0000296b      0x41c ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
+ .debug_str     0x00002929      0x41c ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
                                 0x52e (size before relaxing)
- .debug_str     0x00002d87      0x103 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
+ .debug_str     0x00002d45      0x103 ./3rdParty/Drivers/source/lpc17xx_pinsel.o
                                 0x369 (size before relaxing)
- .debug_str     0x00002e8a      0x477 ./3rdParty/Drivers/source/lpc17xx_pwm.o
+ .debug_str     0x00002e48      0x477 ./3rdParty/Drivers/source/lpc17xx_pwm.o
                                 0x5f7 (size before relaxing)
- .debug_str     0x00003301      0x221 ./3rdParty/Drivers/source/lpc17xx_spi.o
+ .debug_str     0x000032bf      0x221 ./3rdParty/Drivers/source/lpc17xx_spi.o
                                 0x39c (size before relaxing)
- .debug_str     0x00003522      0x355 ./3rdParty/Drivers/source/lpc17xx_timer.o
+ .debug_str     0x000034e0      0x355 ./3rdParty/Drivers/source/lpc17xx_timer.o
                                 0x597 (size before relaxing)
- .debug_str     0x00003877      0x68e ./3rdParty/Drivers/source/lpc17xx_uart.o
+ .debug_str     0x00003835      0x6dc ./3rdParty/Drivers/source/lpc17xx_uart.o
                                 0xb03 (size before relaxing)
- .debug_str     0x00003f05       0xf8 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
+ .debug_str     0x00003f11       0xf8 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
                                 0x14f (size before relaxing)
- .debug_str     0x00003ffd       0x61 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
+ .debug_str     0x00004009       0x61 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
                                 0x2e5 (size before relaxing)
- .debug_str     0x0000405e       0x2c ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
+ .debug_str     0x0000406a       0x2c ./3rdParty/Core/CM3/CoreSupport/core_cm3.o
                                  0xe2 (size before relaxing)
 
 .comment        0x00000000       0x2a
@@ -1113,41 +1113,41 @@ OUTPUT(ee542.elf elf32-littlearm)
  .ARM.attributes
                 0x000006ed       0x29 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strncpy.o)
 
-.debug_frame    0x00000000     0x26e4
+.debug_frame    0x00000000     0x273c
  .debug_frame   0x00000000       0xc4 ./autoPilot/src/driverGps.o
- .debug_frame   0x000000c4       0x64 ./autoPilot/src/hwConfig.o
- .debug_frame   0x00000128       0x84 ./autoPilot/src/main.o
- .debug_frame   0x000001ac       0x30 ./autoPilot/src/taskGps.o
- .debug_frame   0x000001dc       0x30 ./autoPilot/src/taskLed.o
- .debug_frame   0x0000020c       0x88 ./autoPilot/src/util.o
- .debug_frame   0x00000294      0x154 ./3rdParty/printf/printf-stdarg.o
- .debug_frame   0x000003e8       0x88 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
- .debug_frame   0x00000470      0x124 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
- .debug_frame   0x00000594       0x9c ./3rdParty/FreeRTOS/list.o
- .debug_frame   0x00000630      0x2d8 ./3rdParty/FreeRTOS/queue.o
- .debug_frame   0x00000908      0x538 ./3rdParty/FreeRTOS/tasks.o
- .debug_frame   0x00000e40      0x170 ./3rdParty/Drivers/source/debug_frmwrk.o
- .debug_frame   0x00000fb0       0xf4 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
- .debug_frame   0x000010a4       0xbc ./3rdParty/Drivers/source/lpc17xx_exti.o
- .debug_frame   0x00001160      0x378 ./3rdParty/Drivers/source/lpc17xx_gpio.o
- .debug_frame   0x000014d8      0x2d0 ./3rdParty/Drivers/source/lpc17xx_i2c.o
- .debug_frame   0x000017a8       0x2c ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
- .debug_frame   0x000017d4      0x1b8 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
- .debug_frame   0x0000198c       0xbc ./3rdParty/Drivers/source/lpc17xx_pinsel.o
- .debug_frame   0x00001a48      0x1f0 ./3rdParty/Drivers/source/lpc17xx_pwm.o
- .debug_frame   0x00001c38      0x1ac ./3rdParty/Drivers/source/lpc17xx_spi.o
- .debug_frame   0x00001de4      0x208 ./3rdParty/Drivers/source/lpc17xx_timer.o
- .debug_frame   0x00001fec      0x3b4 ./3rdParty/Drivers/source/lpc17xx_uart.o
- .debug_frame   0x000023a0       0xf4 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
- .debug_frame   0x00002494       0x48 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
- .debug_frame   0x000024dc       0x50 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(bpabi.o)
- .debug_frame   0x0000252c       0x3c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_divdi3.o)
- .debug_frame   0x00002568       0x3c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivdi3.o)
- .debug_frame   0x000025a4       0x20 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivsi3.o)
- .debug_frame   0x000025c4       0x2c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memcmp.o)
- .debug_frame   0x000025f0       0x30 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memcpy.o)
- .debug_frame   0x00002620       0x2c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memset.o)
- .debug_frame   0x0000264c       0x2c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strcat.o)
- .debug_frame   0x00002678       0x20 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strcpy.o)
- .debug_frame   0x00002698       0x20 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strlen.o)
- .debug_frame   0x000026b8       0x2c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strncpy.o)
+ .debug_frame   0x000000c4       0xbc ./autoPilot/src/hwConfig.o
+ .debug_frame   0x00000180       0x84 ./autoPilot/src/main.o
+ .debug_frame   0x00000204       0x30 ./autoPilot/src/taskGps.o
+ .debug_frame   0x00000234       0x30 ./autoPilot/src/taskLed.o
+ .debug_frame   0x00000264       0x88 ./autoPilot/src/util.o
+ .debug_frame   0x000002ec      0x154 ./3rdParty/printf/printf-stdarg.o
+ .debug_frame   0x00000440       0x88 ./3rdParty/FreeRTOS/portable/MemMang/heap_2.o
+ .debug_frame   0x000004c8      0x124 ./3rdParty/FreeRTOS/portable/GCC/ARM_CM3/port.o
+ .debug_frame   0x000005ec       0x9c ./3rdParty/FreeRTOS/list.o
+ .debug_frame   0x00000688      0x2d8 ./3rdParty/FreeRTOS/queue.o
+ .debug_frame   0x00000960      0x538 ./3rdParty/FreeRTOS/tasks.o
+ .debug_frame   0x00000e98      0x170 ./3rdParty/Drivers/source/debug_frmwrk.o
+ .debug_frame   0x00001008       0xf4 ./3rdParty/Drivers/source/lpc17xx_clkpwr.o
+ .debug_frame   0x000010fc       0xbc ./3rdParty/Drivers/source/lpc17xx_exti.o
+ .debug_frame   0x000011b8      0x378 ./3rdParty/Drivers/source/lpc17xx_gpio.o
+ .debug_frame   0x00001530      0x2d0 ./3rdParty/Drivers/source/lpc17xx_i2c.o
+ .debug_frame   0x00001800       0x2c ./3rdParty/Drivers/source/lpc17xx_libcfg_default.o
+ .debug_frame   0x0000182c      0x1b8 ./3rdParty/Drivers/source/lpc17xx_mcpwm.o
+ .debug_frame   0x000019e4       0xbc ./3rdParty/Drivers/source/lpc17xx_pinsel.o
+ .debug_frame   0x00001aa0      0x1f0 ./3rdParty/Drivers/source/lpc17xx_pwm.o
+ .debug_frame   0x00001c90      0x1ac ./3rdParty/Drivers/source/lpc17xx_spi.o
+ .debug_frame   0x00001e3c      0x208 ./3rdParty/Drivers/source/lpc17xx_timer.o
+ .debug_frame   0x00002044      0x3b4 ./3rdParty/Drivers/source/lpc17xx_uart.o
+ .debug_frame   0x000023f8       0xf4 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/startup/arm/cr_startup_lpc17.o
+ .debug_frame   0x000024ec       0x48 ./3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.o
+ .debug_frame   0x00002534       0x50 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(bpabi.o)
+ .debug_frame   0x00002584       0x3c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_divdi3.o)
+ .debug_frame   0x000025c0       0x3c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivdi3.o)
+ .debug_frame   0x000025fc       0x20 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2/libgcc.a(_udivsi3.o)
+ .debug_frame   0x0000261c       0x2c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memcmp.o)
+ .debug_frame   0x00002648       0x30 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memcpy.o)
+ .debug_frame   0x00002678       0x2c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-memset.o)
+ .debug_frame   0x000026a4       0x2c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strcat.o)
+ .debug_frame   0x000026d0       0x20 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strcpy.o)
+ .debug_frame   0x000026f0       0x20 /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strlen.o)
+ .debug_frame   0x00002710       0x2c /home/jenya/Tools/arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2/libc.a(lib_a-strncpy.o)

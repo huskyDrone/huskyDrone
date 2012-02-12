@@ -11,29 +11,14 @@
 #include "lpc17xx_gpio.h"
 #include "lpc17xx_uart.h"
 #include "lpc17xx_pinsel.h"
+#include "platformConfig.h"
 
 /*--- GPS Related Defines ---*/
 #define GPS_PIN_FUNC   PINSEL_FUNC_1
 #define GPS_PORT       PINSEL_PORT_0
 #define GPS_PIN_TX     PINSEL_PIN_15
 #define GPS_PIN_RX     PINSEL_PIN_16
-#define GPS_UART       LPC_UART1
-
-// buffer size, will be used as a ring buffer
-#define GPS_RING_BUFSIZE    256
-
-// buf mask
-#define __BUF_MASK (GPS_RING_BUFSIZE - 1)
-// check if buf is full
-#define __BUF_IS_FULL(head, tail) ((tail&__BUF_MASK)==((head+1)&__BUF_MASK))
-// check buf will be full in next receiving or not
-#define __BUF_WILL_FULL(hea, tail) ((tail&__BUF_MASK)==((head+2)&__BUF_MASK))
-// check if buf is empty
-#define __BUF_IS_EMPTY(head, tail) ((head&__BUF_MASK)==(tail&__BUF_MASK))
-// reset the buf
-#define __BUF_RESET(bufidx) (bufidx=0)
-#define __BUF_INCR(bufidx)  (bufidx=(bufidx+1)&__BUF_MASK)
-
+#define GPS_UART       PINSEL_PORT_1
 
 typedef struct
 {
@@ -41,8 +26,8 @@ typedef struct
 	__IO uint32_t tx_tail;               // Tx ring buffer tail index
 	__IO uint32_t rx_head;               // Rx ring buffer head index
 	__IO uint32_t rx_tail;               // Rx ring buffer tail index
-	__IO uint8_t  tx[GPS_RING_BUFSIZE];  // Tx data ring buffer
-	__IO uint8_t  rx[GPS_RING_BUFSIZE];  // Rx data ring buffer
+	__IO uint8_t  tx[RING_BUF_SIZE];  // Tx data ring buffer
+	__IO uint8_t  rx[RING_BUF_SIZE];  // Rx data ring buffer
 } GPS_RING_BUFFER_TYPE;
 
 

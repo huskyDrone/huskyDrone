@@ -9,6 +9,13 @@
 #define HW_CONFIG_H_
 
 
+#include "lpc17xx.h"
+#include "platformConfig.h"
+#include "lpc17xx_clkpwr.h"
+#include "lpc17xx_gpio.h"
+#include "lpc17xx_uart.h"
+#include "lpc17xx_pinsel.h"
+
         /***************************************************************
          ***************** Command Function Prototypes *****************
          **************************************************************/

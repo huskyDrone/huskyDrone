@@ -5,13 +5,7 @@
  *      Author: jenya
  */
 
-#include "lpc17xx.h"
 #include "hwConfig.h"
-#include "platformConfig.h"
-#include "lpc17xx_clkpwr.h"
-#include "lpc17xx_gpio.h"
-#include "lpc17xx_uart.h"
-#include "lpc17xx_pinsel.h"
 
 void setSystem(void)
 {
@@ -125,4 +119,66 @@ void configPwm(void)
 
 	// set the clock divider to 1
 	LPC_SC->PCLKSEL0 |= CLKPWR_PCLKSEL_PWM1;
+}
+
+void configUART0(void)
+{
+	// GPS UART configuration structure
+	UART_CFG_Type   UART_initStructure;
+	// GPS UART FIFO configuration structure
+	UART_FIFO_CFG_Type UARTFIFO_initStructure;
+	// Pin configuration for GPS UART
+	PINSEL_CFG_Type pin_initStructure;
+
+	// initialize UART1 pin connect
+	pin_initStructure.Funcnum   = PINSEL_FUNC_1;
+	pin_initStructure.OpenDrain = PINSEL_PINMODE_NORMAL;
+	pin_initStructure.Pinmode   = PINSEL_PINMODE_PULLUP;
+	pin_initStructure.Pinnum    = PINSEL_PIN_3;
+	pin_initStructure.Portnum   = PINSEL_PORT_0;
+	PINSEL_ConfigPin(&pin_initStructure);
+	pin_initStructure.Pinnum    = PINSEL_PIN_4;
+	PINSEL_ConfigPin(&pin_initStructure);
+
+	// initialize GPS UART
+	UART_initStructure.Baud_rate = 115200;
+	UART_initStructure.Databits  = UART_DATABIT_8;
+	UART_initStructure.Parity    = UART_PARITY_NONE;
+	UART_initStructure.Stopbits  = UART_STOPBIT_1;
+
+	// configure the UART
+	UART_Init((LPC_UART_TypeDef *)LPC_UART0, &UART_initStructure);
+
+	// initialize FIFO to default state:
+	//          -FIFO_DMAMode = DISABLE
+	//          -FIFO_Level = UART_FIFO_TRGLEV0
+	//          -FIFO_ResetRxBuf = ENABLE
+	//          -FIFO_ResetTxBuf = ENABLE
+	//          -FIFO_State = ENABLE
+	UART_FIFOConfigStructInit(&UARTFIFO_initStructure);
+
+	// initialize FIFO for GPS UART
+	UART_FIFOConfig((LPC_UART_TypeDef *)LPC_UART0, &UARTFIFO_initStructure);
+
+	// enable the UART
+	UART_TxCmd((LPC_UART_TypeDef *)LPC_UART0, ENABLE);
+
+	// enable GPS_UART Rx interrupt
+	UART_IntConfig((LPC_UART_TypeDef *)LPC_UART0, UART_INTCFG_RBR, ENABLE);
+
+	/*
+	// reset ring buf head and tail idx
+	__BUF_RESET(gpsRb.rx_head);
+	__BUF_RESET(gpsRb.rx_tail);
+	__BUF_RESET(gpsRb.tx_head);
+	__BUF_RESET(gpsRb.tx_tail);
+	*/
+
+	// preemption = 1, sub-priority = 1
+	NVIC_SetPriority(UART0_IRQn, ((0x01<<3)|0x01));
+	// enable interrupt for GPS UART channel
+	NVIC_EnableIRQ(UART0_IRQn);
+
+	// reset the Rx state
+	//gpsRxReady = RESET;
 }

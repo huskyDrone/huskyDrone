@@ -13,16 +13,16 @@
   13              		.file	"main.c"
   23              	.Ltext0:
   24              		.file 1 "../autoPilot/src/main.c"
- 5125              		.align	2
- 5126              	.LC0:
- 5127 0000 4C454400 		.ascii	"LED\000"
- 5128              		.text
- 5129              		.align	2
- 5130              		.global	main
- 5131              		.thumb
- 5132              		.thumb_func
- 5134              	main:
- 5135              	.LFB55:
+ 5489              		.align	2
+ 5490              	.LC0:
+ 5491 0000 4C454400 		.ascii	"LED\000"
+ 5492              		.text
+ 5493              		.align	2
+ 5494              		.global	main
+ 5495              		.thumb
+ 5496              		.thumb_func
+ 5498              	main:
+ 5499              	.LFB55:
    1:../autoPilot/src/main.c **** /*
    2:../autoPilot/src/main.c ****     FreeRTOS V7.1.0 - Copyright (C) 2011 Real Time Engineers Ltd.
    3:../autoPilot/src/main.c **** 	
@@ -110,88 +110,88 @@
   85:../autoPilot/src/main.c **** 
   86:../autoPilot/src/main.c **** int main( void )
   87:../autoPilot/src/main.c **** {
- 5136              		.loc 1 87 0
- 5137              		.cfi_startproc
- 5138              		@ args = 0, pretend = 0, frame = 0
- 5139              		@ frame_needed = 1, uses_anonymous_args = 0
- 5140 0000 80B5     		push	{r7, lr}
- 5141              	.LCFI0:
- 5142              		.cfi_def_cfa_offset 8
- 5143 0002 84B0     		sub	sp, sp, #16
- 5144              	.LCFI1:
- 5145              		.cfi_def_cfa_offset 24
- 5146 0004 04AF     		add	r7, sp, #16
- 5147              		.cfi_offset 14, -4
- 5148              		.cfi_offset 7, -8
- 5149              	.LCFI2:
- 5150              		.cfi_def_cfa 7, 8
+ 5500              		.loc 1 87 0
+ 5501              		.cfi_startproc
+ 5502              		@ args = 0, pretend = 0, frame = 0
+ 5503              		@ frame_needed = 1, uses_anonymous_args = 0
+ 5504 0000 80B5     		push	{r7, lr}
+ 5505              	.LCFI0:
+ 5506              		.cfi_def_cfa_offset 8
+ 5507 0002 84B0     		sub	sp, sp, #16
+ 5508              	.LCFI1:
+ 5509              		.cfi_def_cfa_offset 24
+ 5510 0004 04AF     		add	r7, sp, #16
+ 5511              		.cfi_offset 14, -4
+ 5512              		.cfi_offset 7, -8
+ 5513              	.LCFI2:
+ 5514              		.cfi_def_cfa 7, 8
   88:../autoPilot/src/main.c **** 	// configure the system
   89:../autoPilot/src/main.c ****     setSystem();
- 5151              		.loc 1 89 0
- 5152 0006 FFF7FEFF 		bl	setSystem
+ 5515              		.loc 1 89 0
+ 5516 0006 FFF7FEFF 		bl	setSystem
   90:../autoPilot/src/main.c **** 
   91:../autoPilot/src/main.c ****     // create the LED task
   92:../autoPilot/src/main.c ****     if(xTaskCreate(vLedTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[0]) != pdPASS)
- 5153              		.loc 1 92 0
- 5154 000a 0F4B     		ldr	r3, .L3
- 5155 000c 4FF00102 		mov	r2, #1
- 5156 0010 0092     		str	r2, [sp, #0]
- 5157 0012 0E4A     		ldr	r2, .L3+4
- 5158 0014 0192     		str	r2, [sp, #4]
- 5159 0016 4FF00002 		mov	r2, #0
- 5160 001a 0292     		str	r2, [sp, #8]
- 5161 001c 4FF00002 		mov	r2, #0
- 5162 0020 0392     		str	r2, [sp, #12]
- 5163 0022 0B48     		ldr	r0, .L3+8
- 5164 0024 1946     		mov	r1, r3
- 5165 0026 4FF08002 		mov	r2, #128
- 5166 002a 4FF00003 		mov	r3, #0
- 5167 002e FFF7FEFF 		bl	xTaskGenericCreate
+ 5517              		.loc 1 92 0
+ 5518 000a 0F4B     		ldr	r3, .L3
+ 5519 000c 4FF00102 		mov	r2, #1
+ 5520 0010 0092     		str	r2, [sp, #0]
+ 5521 0012 0E4A     		ldr	r2, .L3+4
+ 5522 0014 0192     		str	r2, [sp, #4]
+ 5523 0016 4FF00002 		mov	r2, #0
+ 5524 001a 0292     		str	r2, [sp, #8]
+ 5525 001c 4FF00002 		mov	r2, #0
+ 5526 0020 0392     		str	r2, [sp, #12]
+ 5527 0022 0B48     		ldr	r0, .L3+8
+ 5528 0024 1946     		mov	r1, r3
+ 5529 0026 4FF08002 		mov	r2, #128
+ 5530 002a 4FF00003 		mov	r3, #0
+ 5531 002e FFF7FEFF 		bl	xTaskGenericCreate
   93:../autoPilot/src/main.c ****     {
   94:../autoPilot/src/main.c ****     	//TODO: the task was not created, do something
   95:../autoPilot/src/main.c ****     }
   96:../autoPilot/src/main.c **** 
   97:../autoPilot/src/main.c ****     taskHandles[4] = 0; //TODO: will need to change when we know how many tasks there will be
- 5168              		.loc 1 97 0
- 5169 0032 064B     		ldr	r3, .L3+4
- 5170 0034 4FF00002 		mov	r2, #0
- 5171 0038 1A61     		str	r2, [r3, #16]
+ 5532              		.loc 1 97 0
+ 5533 0032 064B     		ldr	r3, .L3+4
+ 5534 0034 4FF00002 		mov	r2, #0
+ 5535 0038 1A61     		str	r2, [r3, #16]
   98:../autoPilot/src/main.c **** 
   99:../autoPilot/src/main.c ****     // enable the interrupts
  100:../autoPilot/src/main.c ****     portENABLE_INTERRUPTS();
- 5172              		.loc 1 100 0
- 5173              	@ 100 "../autoPilot/src/main.c" 1
- 5174 003a 4FF00000 			mov r0, #0					
- 5175 003e 80F31188 		msr basepri, r0				
- 5176              	
- 5177              	@ 0 "" 2
+ 5536              		.loc 1 100 0
+ 5537              	@ 100 "../autoPilot/src/main.c" 1
+ 5538 003a 4FF00000 			mov r0, #0					
+ 5539 003e 80F31188 		msr basepri, r0				
+ 5540              	
+ 5541              	@ 0 "" 2
  101:../autoPilot/src/main.c **** 
  102:../autoPilot/src/main.c ****     // start the scheduler
  103:../autoPilot/src/main.c **** 	vTaskStartScheduler();
- 5178              		.loc 1 103 0
- 5179              		.thumb
- 5180 0042 FFF7FEFF 		bl	vTaskStartScheduler
- 5181              	.L2:
+ 5542              		.loc 1 103 0
+ 5543              		.thumb
+ 5544 0042 FFF7FEFF 		bl	vTaskStartScheduler
+ 5545              	.L2:
  104:../autoPilot/src/main.c **** 
  105:../autoPilot/src/main.c ****     // will only get here if there was insufficient memory to create the idle
  106:../autoPilot/src/main.c ****     // task.  The idle task is created within vTaskStartScheduler().
  107:../autoPilot/src/main.c **** 	for( ;; );
- 5182              		.loc 1 107 0 discriminator 1
- 5183 0046 FEE7     		b	.L2
- 5184              	.L4:
- 5185              		.align	2
- 5186              	.L3:
- 5187 0048 00000000 		.word	.LC0
- 5188 004c 00000000 		.word	taskHandles
- 5189 0050 00000000 		.word	vLedTask
- 5190              		.cfi_endproc
- 5191              	.LFE55:
- 5193              		.align	2
- 5194              		.global	vApplicationTickHook
- 5195              		.thumb
- 5196              		.thumb_func
- 5198              	vApplicationTickHook:
- 5199              	.LFB56:
+ 5546              		.loc 1 107 0 discriminator 1
+ 5547 0046 FEE7     		b	.L2
+ 5548              	.L4:
+ 5549              		.align	2
+ 5550              	.L3:
+ 5551 0048 00000000 		.word	.LC0
+ 5552 004c 00000000 		.word	taskHandles
+ 5553 0050 00000000 		.word	vLedTask
+ 5554              		.cfi_endproc
+ 5555              	.LFE55:
+ 5557              		.align	2
+ 5558              		.global	vApplicationTickHook
+ 5559              		.thumb
+ 5560              		.thumb_func
+ 5562              	vApplicationTickHook:
+ 5563              	.LFB56:
  108:../autoPilot/src/main.c **** 
  109:../autoPilot/src/main.c **** 	return 0; // never gets here
  110:../autoPilot/src/main.c **** }
@@ -199,18 +199,18 @@
  112:../autoPilot/src/main.c **** 
  113:../autoPilot/src/main.c **** void vApplicationTickHook( void )
  114:../autoPilot/src/main.c **** {
- 5200              		.loc 1 114 0
- 5201              		.cfi_startproc
- 5202              		@ args = 0, pretend = 0, frame = 0
- 5203              		@ frame_needed = 1, uses_anonymous_args = 0
- 5204              		@ link register save eliminated.
- 5205 0054 80B4     		push	{r7}
- 5206              	.LCFI3:
- 5207              		.cfi_def_cfa_offset 4
- 5208 0056 00AF     		add	r7, sp, #0
- 5209              		.cfi_offset 7, -4
- 5210              	.LCFI4:
- 5211              		.cfi_def_cfa_register 7
+ 5564              		.loc 1 114 0
+ 5565              		.cfi_startproc
+ 5566              		@ args = 0, pretend = 0, frame = 0
+ 5567              		@ frame_needed = 1, uses_anonymous_args = 0
+ 5568              		@ link register save eliminated.
+ 5569 0054 80B4     		push	{r7}
+ 5570              	.LCFI3:
+ 5571              		.cfi_def_cfa_offset 4
+ 5572 0056 00AF     		add	r7, sp, #0
+ 5573              		.cfi_offset 7, -4
+ 5574              	.LCFI4:
+ 5575              		.cfi_def_cfa_register 7
  115:../autoPilot/src/main.c **** static unsigned long ulTicksSinceLastDisplay = 0;
  116:../autoPilot/src/main.c **** 
  117:../autoPilot/src/main.c **** 	// Called from every tick interrupt as described in the comments at the top
@@ -261,85 +261,85 @@
  162:../autoPilot/src/main.c **** 	}
  163:../autoPilot/src/main.c **** 	*/
  164:../autoPilot/src/main.c **** }
- 5212              		.loc 1 164 0
- 5213 0058 BD46     		mov	sp, r7
- 5214 005a 80BC     		pop	{r7}
- 5215 005c 7047     		bx	lr
- 5216              		.cfi_endproc
- 5217              	.LFE56:
- 5219 005e 00BF     		.align	2
- 5220              		.global	vApplicationStackOverflowHook
- 5221              		.thumb
- 5222              		.thumb_func
- 5224              	vApplicationStackOverflowHook:
- 5225              	.LFB57:
+ 5576              		.loc 1 164 0
+ 5577 0058 BD46     		mov	sp, r7
+ 5578 005a 80BC     		pop	{r7}
+ 5579 005c 7047     		bx	lr
+ 5580              		.cfi_endproc
+ 5581              	.LFE56:
+ 5583 005e 00BF     		.align	2
+ 5584              		.global	vApplicationStackOverflowHook
+ 5585              		.thumb
+ 5586              		.thumb_func
+ 5588              	vApplicationStackOverflowHook:
+ 5589              	.LFB57:
  165:../autoPilot/src/main.c **** 
  166:../autoPilot/src/main.c **** /*-----------------------------------------------------------*/
  167:../autoPilot/src/main.c **** 
  168:../autoPilot/src/main.c **** void vApplicationStackOverflowHook( xTaskHandle pxTask, signed char *pcTaskName )
  169:../autoPilot/src/main.c **** {
- 5226              		.loc 1 169 0
- 5227              		.cfi_startproc
- 5228              		@ args = 0, pretend = 0, frame = 8
- 5229              		@ frame_needed = 1, uses_anonymous_args = 0
- 5230              		@ link register save eliminated.
- 5231 0060 80B4     		push	{r7}
- 5232              	.LCFI5:
- 5233              		.cfi_def_cfa_offset 4
- 5234 0062 83B0     		sub	sp, sp, #12
- 5235              	.LCFI6:
- 5236              		.cfi_def_cfa_offset 16
- 5237 0064 00AF     		add	r7, sp, #0
- 5238              		.cfi_offset 7, -4
- 5239              	.LCFI7:
- 5240              		.cfi_def_cfa_register 7
- 5241 0066 7860     		str	r0, [r7, #4]
- 5242 0068 3960     		str	r1, [r7, #0]
- 5243              	.L7:
+ 5590              		.loc 1 169 0
+ 5591              		.cfi_startproc
+ 5592              		@ args = 0, pretend = 0, frame = 8
+ 5593              		@ frame_needed = 1, uses_anonymous_args = 0
+ 5594              		@ link register save eliminated.
+ 5595 0060 80B4     		push	{r7}
+ 5596              	.LCFI5:
+ 5597              		.cfi_def_cfa_offset 4
+ 5598 0062 83B0     		sub	sp, sp, #12
+ 5599              	.LCFI6:
+ 5600              		.cfi_def_cfa_offset 16
+ 5601 0064 00AF     		add	r7, sp, #0
+ 5602              		.cfi_offset 7, -4
+ 5603              	.LCFI7:
+ 5604              		.cfi_def_cfa_register 7
+ 5605 0066 7860     		str	r0, [r7, #4]
+ 5606 0068 3960     		str	r1, [r7, #0]
+ 5607              	.L7:
  170:../autoPilot/src/main.c **** 	/* This function will get called if a task overflows its stack. */
  171:../autoPilot/src/main.c **** 
  172:../autoPilot/src/main.c **** 	( void ) pxTask;
  173:../autoPilot/src/main.c **** 	( void ) pcTaskName;
  174:../autoPilot/src/main.c **** 
  175:../autoPilot/src/main.c **** 	for( ;; );
- 5244              		.loc 1 175 0 discriminator 1
- 5245 006a FEE7     		b	.L7
- 5246              		.cfi_endproc
- 5247              	.LFE57:
- 5249              		.align	2
- 5250              		.global	vConfigureTimerForRunTimeStats
- 5251              		.thumb
- 5252              		.thumb_func
- 5254              	vConfigureTimerForRunTimeStats:
- 5255              	.LFB58:
+ 5608              		.loc 1 175 0 discriminator 1
+ 5609 006a FEE7     		b	.L7
+ 5610              		.cfi_endproc
+ 5611              	.LFE57:
+ 5613              		.align	2
+ 5614              		.global	vConfigureTimerForRunTimeStats
+ 5615              		.thumb
+ 5616              		.thumb_func
+ 5618              	vConfigureTimerForRunTimeStats:
+ 5619              	.LFB58:
  176:../autoPilot/src/main.c **** }
  177:../autoPilot/src/main.c **** /*-----------------------------------------------------------*/
  178:../autoPilot/src/main.c **** 
  179:../autoPilot/src/main.c **** void vConfigureTimerForRunTimeStats( void )
  180:../autoPilot/src/main.c **** {
- 5256              		.loc 1 180 0
- 5257              		.cfi_startproc
- 5258              		@ args = 0, pretend = 0, frame = 16
- 5259              		@ frame_needed = 1, uses_anonymous_args = 0
- 5260              		@ link register save eliminated.
- 5261 006c 80B4     		push	{r7}
- 5262              	.LCFI8:
- 5263              		.cfi_def_cfa_offset 4
- 5264 006e 85B0     		sub	sp, sp, #20
- 5265              	.LCFI9:
- 5266              		.cfi_def_cfa_offset 24
- 5267 0070 00AF     		add	r7, sp, #0
- 5268              		.cfi_offset 7, -4
- 5269              	.LCFI10:
- 5270              		.cfi_def_cfa_register 7
+ 5620              		.loc 1 180 0
+ 5621              		.cfi_startproc
+ 5622              		@ args = 0, pretend = 0, frame = 16
+ 5623              		@ frame_needed = 1, uses_anonymous_args = 0
+ 5624              		@ link register save eliminated.
+ 5625 006c 80B4     		push	{r7}
+ 5626              	.LCFI8:
+ 5627              		.cfi_def_cfa_offset 4
+ 5628 006e 85B0     		sub	sp, sp, #20
+ 5629              	.LCFI9:
+ 5630              		.cfi_def_cfa_offset 24
+ 5631 0070 00AF     		add	r7, sp, #0
+ 5632              		.cfi_offset 7, -4
+ 5633              	.LCFI10:
+ 5634              		.cfi_def_cfa_register 7
  181:../autoPilot/src/main.c **** const unsigned long TCR_COUNT_RESET = 2, CTCR_CTM_TIMER = 0x00, TCR_COUNT_ENABLE = 0x01;
- 5271              		.loc 1 181 0
- 5272 0072 4FF00203 		mov	r3, #2
- 5273 0076 FB60     		str	r3, [r7, #12]
- 5274 0078 4FF00003 		mov	r3, #0
- 5275 007c BB60     		str	r3, [r7, #8]
- 5276 007e 4FF00103 		mov	r3, #1
- 5277 0082 7B60     		str	r3, [r7, #4]
+ 5635              		.loc 1 181 0
+ 5636 0072 4FF00203 		mov	r3, #2
+ 5637 0076 FB60     		str	r3, [r7, #12]
+ 5638 0078 4FF00003 		mov	r3, #0
+ 5639 007c BB60     		str	r3, [r7, #8]
+ 5640 007e 4FF00103 		mov	r3, #1
+ 5641 0082 7B60     		str	r3, [r7, #4]
  182:../autoPilot/src/main.c **** 
  183:../autoPilot/src/main.c **** 	/* This function configures a timer that is used as the time base when
  184:../autoPilot/src/main.c **** 	collecting run time statistical information - basically the percentage
@@ -349,82 +349,82 @@
  188:../autoPilot/src/main.c **** 
  189:../autoPilot/src/main.c **** 	/* Power up and feed the timer. */
  190:../autoPilot/src/main.c **** 	LPC_SC->PCONP |= 0x02UL;
- 5278              		.loc 1 190 0
- 5279 0084 134B     		ldr	r3, .L9
- 5280 0086 134A     		ldr	r2, .L9
- 5281 0088 D2F8C420 		ldr	r2, [r2, #196]
- 5282 008c 42F00202 		orr	r2, r2, #2
- 5283 0090 C3F8C420 		str	r2, [r3, #196]
+ 5642              		.loc 1 190 0
+ 5643 0084 134B     		ldr	r3, .L9
+ 5644 0086 134A     		ldr	r2, .L9
+ 5645 0088 D2F8C420 		ldr	r2, [r2, #196]
+ 5646 008c 42F00202 		orr	r2, r2, #2
+ 5647 0090 C3F8C420 		str	r2, [r3, #196]
  191:../autoPilot/src/main.c **** 	LPC_SC->PCLKSEL0 = (LPC_SC->PCLKSEL0 & (~(0x3<<2))) | (0x01 << 2);
- 5284              		.loc 1 191 0
- 5285 0094 0F4B     		ldr	r3, .L9
- 5286 0096 0F4A     		ldr	r2, .L9
- 5287 0098 D2F8A821 		ldr	r2, [r2, #424]
- 5288 009c 22F00C02 		bic	r2, r2, #12
- 5289 00a0 42F00402 		orr	r2, r2, #4
- 5290 00a4 C3F8A821 		str	r2, [r3, #424]
+ 5648              		.loc 1 191 0
+ 5649 0094 0F4B     		ldr	r3, .L9
+ 5650 0096 0F4A     		ldr	r2, .L9
+ 5651 0098 D2F8A821 		ldr	r2, [r2, #424]
+ 5652 009c 22F00C02 		bic	r2, r2, #12
+ 5653 00a0 42F00402 		orr	r2, r2, #4
+ 5654 00a4 C3F8A821 		str	r2, [r3, #424]
  192:../autoPilot/src/main.c **** 
  193:../autoPilot/src/main.c **** 	/* Reset Timer 0 */
  194:../autoPilot/src/main.c **** 	LPC_TIM0->TCR = TCR_COUNT_RESET;
- 5291              		.loc 1 194 0
- 5292 00a8 4FF04023 		mov	r3, #1073758208
- 5293 00ac FA68     		ldr	r2, [r7, #12]
- 5294 00ae 5A60     		str	r2, [r3, #4]
+ 5655              		.loc 1 194 0
+ 5656 00a8 4FF04023 		mov	r3, #1073758208
+ 5657 00ac FA68     		ldr	r2, [r7, #12]
+ 5658 00ae 5A60     		str	r2, [r3, #4]
  195:../autoPilot/src/main.c **** 
  196:../autoPilot/src/main.c **** 	/* Just count up. */
  197:../autoPilot/src/main.c **** 	LPC_TIM0->CTCR = CTCR_CTM_TIMER;
- 5295              		.loc 1 197 0
- 5296 00b0 4FF04023 		mov	r3, #1073758208
- 5297 00b4 BA68     		ldr	r2, [r7, #8]
- 5298 00b6 1A67     		str	r2, [r3, #112]
+ 5659              		.loc 1 197 0
+ 5660 00b0 4FF04023 		mov	r3, #1073758208
+ 5661 00b4 BA68     		ldr	r2, [r7, #8]
+ 5662 00b6 1A67     		str	r2, [r3, #112]
  198:../autoPilot/src/main.c **** 
  199:../autoPilot/src/main.c **** 	/* Prescale to a frequency that is good enough to get a decent resolution,
  200:../autoPilot/src/main.c **** 	but not too fast so as to overflow all the time. */
  201:../autoPilot/src/main.c **** 	LPC_TIM0->PR =  ( configCPU_CLOCK_HZ / 10000UL ) - 1UL;
- 5299              		.loc 1 201 0
- 5300 00b8 4FF04023 		mov	r3, #1073758208
- 5301 00bc 42F2AB62 		movw	r2, #9899
- 5302 00c0 DA60     		str	r2, [r3, #12]
+ 5663              		.loc 1 201 0
+ 5664 00b8 4FF04023 		mov	r3, #1073758208
+ 5665 00bc 42F2AB62 		movw	r2, #9899
+ 5666 00c0 DA60     		str	r2, [r3, #12]
  202:../autoPilot/src/main.c **** 
  203:../autoPilot/src/main.c **** 	/* Start the counter. */
  204:../autoPilot/src/main.c **** 	LPC_TIM0->TCR = TCR_COUNT_ENABLE;
- 5303              		.loc 1 204 0
- 5304 00c2 4FF04023 		mov	r3, #1073758208
- 5305 00c6 7A68     		ldr	r2, [r7, #4]
- 5306 00c8 5A60     		str	r2, [r3, #4]
+ 5667              		.loc 1 204 0
+ 5668 00c2 4FF04023 		mov	r3, #1073758208
+ 5669 00c6 7A68     		ldr	r2, [r7, #4]
+ 5670 00c8 5A60     		str	r2, [r3, #4]
  205:../autoPilot/src/main.c **** }
- 5307              		.loc 1 205 0
- 5308 00ca 07F11407 		add	r7, r7, #20
- 5309 00ce BD46     		mov	sp, r7
- 5310 00d0 80BC     		pop	{r7}
- 5311 00d2 7047     		bx	lr
- 5312              	.L10:
- 5313              		.align	2
- 5314              	.L9:
- 5315 00d4 00C00F40 		.word	1074774016
- 5316              		.cfi_endproc
- 5317              	.LFE58:
- 5319              		.bss
- 5320              		.align	2
- 5321              	ulTicksSinceLastDisplay.6610:
- 5322 0000 00000000 		.space	4
- 5323              		.text
- 5324              	.Letext0:
+ 5671              		.loc 1 205 0
+ 5672 00ca 07F11407 		add	r7, r7, #20
+ 5673 00ce BD46     		mov	sp, r7
+ 5674 00d0 80BC     		pop	{r7}
+ 5675 00d2 7047     		bx	lr
+ 5676              	.L10:
+ 5677              		.align	2
+ 5678              	.L9:
+ 5679 00d4 00C00F40 		.word	1074774016
+ 5680              		.cfi_endproc
+ 5681              	.LFE58:
+ 5683              		.bss
+ 5684              		.align	2
+ 5685              	ulTicksSinceLastDisplay.6628:
+ 5686 0000 00000000 		.space	4
+ 5687              		.text
+ 5688              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
                             *COM*:00000014 taskHandles
                             *COM*:00000001 gpsRxReady
-     /tmp/ccOpMDOo.s:5125   .rodata:00000000 $d
-     /tmp/ccOpMDOo.s:5129   .text:00000000 $t
-     /tmp/ccOpMDOo.s:5134   .text:00000000 main
-     /tmp/ccOpMDOo.s:5187   .text:00000048 $d
-     /tmp/ccOpMDOo.s:5193   .text:00000054 $t
-     /tmp/ccOpMDOo.s:5198   .text:00000054 vApplicationTickHook
-     /tmp/ccOpMDOo.s:5224   .text:00000060 vApplicationStackOverflowHook
-     /tmp/ccOpMDOo.s:5254   .text:0000006c vConfigureTimerForRunTimeStats
-     /tmp/ccOpMDOo.s:5315   .text:000000d4 $d
-     /tmp/ccOpMDOo.s:5320   .bss:00000000 $d
-     /tmp/ccOpMDOo.s:5321   .bss:00000000 ulTicksSinceLastDisplay.6610
+     /tmp/cc0r0BKZ.s:5489   .rodata:00000000 $d
+     /tmp/cc0r0BKZ.s:5493   .text:00000000 $t
+     /tmp/cc0r0BKZ.s:5498   .text:00000000 main
+     /tmp/cc0r0BKZ.s:5551   .text:00000048 $d
+     /tmp/cc0r0BKZ.s:5557   .text:00000054 $t
+     /tmp/cc0r0BKZ.s:5562   .text:00000054 vApplicationTickHook
+     /tmp/cc0r0BKZ.s:5588   .text:00000060 vApplicationStackOverflowHook
+     /tmp/cc0r0BKZ.s:5618   .text:0000006c vConfigureTimerForRunTimeStats
+     /tmp/cc0r0BKZ.s:5679   .text:000000d4 $d
+     /tmp/cc0r0BKZ.s:5684   .bss:00000000 $d
+     /tmp/cc0r0BKZ.s:5685   .bss:00000000 ulTicksSinceLastDisplay.6628
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS
