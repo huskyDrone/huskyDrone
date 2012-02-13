@@ -8,10 +8,16 @@
 #ifndef DRIVERGPS_H_
 #define DRIVERGPS_H_
 
+/* Scheduler includes. */
+#include "FreeRTOSConfig.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
 #include "lpc17xx_gpio.h"
 #include "lpc17xx_uart.h"
 #include "lpc17xx_pinsel.h"
 #include "platformConfig.h"
+#include "util.h"
 
 /*--- GPS Related Defines ---*/
 #define GPS_PIN_FUNC   PINSEL_FUNC_1
@@ -19,17 +25,6 @@
 #define GPS_PIN_TX     PINSEL_PIN_15
 #define GPS_PIN_RX     PINSEL_PIN_16
 #define GPS_UART       PINSEL_PORT_1
-
-typedef struct
-{
-	__IO uint32_t tx_head;               // Tx ring buffer head index
-	__IO uint32_t tx_tail;               // Tx ring buffer tail index
-	__IO uint32_t rx_head;               // Rx ring buffer head index
-	__IO uint32_t rx_tail;               // Rx ring buffer tail index
-	__IO uint8_t  tx[RING_BUF_SIZE];  // Tx data ring buffer
-	__IO uint8_t  rx[RING_BUF_SIZE];  // Rx data ring buffer
-} GPS_RING_BUFFER_TYPE;
-
 
 #define GPS_DATA_SIZE    30
 #define MESS_ID_SIZE      5
@@ -46,29 +41,43 @@ enum nmeaPACKTYPE
 	GPVTG   = 0x0010,   // VTG - Actual track make good and speed over ground
 };
 
+*/
 typedef struct
 {
-	uint8_t  cmdString[GPS_DATA_SIZE];
-	double   dir;  // True track made good (degrees)
-	uint8_t  dir_t;  // Fixed text 'T' indicates that track make good is relative to true north
-	double   dec;    // Magnetic track made good
-	uint8_t  dec_m;  // Fixed text 'M'
-	double   spn;    // Ground speed, knots
-	uint8_t  spn_t;  // Fixed text 'N' indicates that speed over ground is in knots
-	double   spk;    // Ground speed, k/h
-	uint8_t  spk_t;  // Fixed text 'K' indicates that speed over ground in in K/h
+	char  cmdString[GPS_DATA_SIZE];
+	double          dir;    // True track made good (degrees)
+	uint8_t         dir_t;  // Fixed text 'T' indicates that track make good is relative to true north
+	double          dec;    // Magnetic track made good
+	uint8_t         dec_m;  // Fixed text 'M'
+	double          spn;    // Ground speed, knots
+	uint8_t         spn_t;  // Fixed text 'N' indicates that speed over ground is in knots
+	unsigned long   spk;    // Ground speed, k/h
+	uint8_t         spk_t;  // Fixed text 'K' indicates that speed over ground in in K/h
 
 } nmeaGPVTG;
 
-*/
+enum gpvtgPACK
+{
+	MESSID  = 0,    // Message ID
+	DIR     = 1,      // True track make good (degrees)
+	DIRTYPE = 2,    // True track made good type
+	DEC     = 3,    // Magnetic track made good
+	DECTYPE = 4,    // Magnetic track made good type
+	SPN     = 5,    // Speed in knots
+	SPNTYPE = 6,    // Speed type in knots
+	SPK     = 7,    // speed in km/h
+	SPKTYPE = 8,    // speed type (km/h)
+};
+
 void configGpsUART(void);
 
-void UART1_IRQHandler(void);
 void GPS_IntTransmit(void);
 void GPS_IntReceive(void);
 
 uint32_t GPSReceive(uint8_t *rxBuf, uint8_t bufLen);
 uint32_t GPSSend(LPC_UART_TypeDef *UARTPort, uint8_t *txBuf, uint8_t bufLen);
+
+//void GPS_decodeParam(uint8_t paramNum);
 
 //void nmea_zero_GPVTG(nmeaGPVTG *pack);
 

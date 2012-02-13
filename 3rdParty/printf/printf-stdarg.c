@@ -25,13 +25,13 @@
 
 */
 
-#define putchar(c) c
+#define putchar(c) outbyte(c)
 
 #include <stdarg.h>
 
 static void printchar(char **str, int c)
 {
-	//extern int putchar(int c);
+	extern int putchar(int c);
 	
 	if (str) {
 		**str = (char)c;

@@ -1,36 +1,35 @@
 /*
- * taskGps.c
+ * taskSerial.c
  *
- *  Created on: Feb 10, 2012
- *      Author: jenya
+ *  Created on: Feb 11, 2012
+ *      Author: root
  */
 
-#include "taskGps.h"
+#include "taskSerial.h"
 
 // current GPS Rx status
-extern __IO SetState gpsRxReady;
+extern __IO SetState serialRxReady;
 
-void vGpsTask( void *pvParameters )
+void vSerialTask( void *pvParameters )
 {
-
 	for( ;; )
 	{
-		if(gpsRxReady)
+		if(serialRxReady)
 		{
 			// get the message from the UART port and place it
 			// into the ring buffer (gpsRb)
-			GPS_IntReceive();
+			UART0_IntReceive();
 
 			// copy the command in the local buffer
 			//GPSReceive(&gpsData.cmdString, GPS_DATA_SIZE);
 
 			// we are done with the current message, re-enable
 			// the RX interrupt
-			UART_IntConfig((LPC_UART_TypeDef *)LPC_UART0, UART_INTCFG_RBR, ENABLE);
+			UART_IntConfig((LPC_UART_TypeDef *)LPC_UART1, UART_INTCFG_RBR, ENABLE);
 
 			// reset the RX flag, should follow right
 			// after enabling the interrupt
-			gpsRxReady = RESET;
+			serialRxReady = RESET;
 		}
 	}
 

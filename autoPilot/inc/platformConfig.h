@@ -38,5 +38,15 @@
 #define __BUF_RESET(bufidx) (bufidx=0)
 #define __BUF_INCR(bufidx)  (bufidx=(bufidx+1)&__BUF_MASK)
 
+typedef struct
+{
+	__IO uint32_t tx_head;               // Tx ring buffer head index
+	__IO uint32_t tx_tail;               // Tx ring buffer tail index
+	__IO uint32_t rx_head;               // Rx ring buffer head index
+	__IO uint32_t rx_tail;               // Rx ring buffer tail index
+	__IO uint8_t  tx[RING_BUF_SIZE];     // Tx data ring buffer
+	__IO uint8_t  rx[RING_BUF_SIZE];     // Rx data ring buffer
+} RING_BUFFER_TYPE;
+
 
 #endif /* PLATFORMCONFIG_H_ */

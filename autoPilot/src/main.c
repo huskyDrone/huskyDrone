@@ -64,9 +64,13 @@
 #include "queue.h"
 #include "semphr.h"
 
+#include "platformConfig.h"
 #include "hwConfig.h"
 #include "taskLed.h"
+#include "taskSerial.h"
 #include "driverGps.h"
+#include "driverSerial.h"
+#include "string.h"
 
 /*-----------------------------------------------------------*/
 
@@ -83,10 +87,16 @@ xTaskHandle taskHandles[5];  //TODO: need to know how many there will be
 // current GPS Rx status
 __IO SetState gpsRxReady;
 
+// current Serial port Rx status
+__IO SetState serialRxReady;
+
 int main( void )
 {
 	// configure the system
     setSystem();
+
+    // configure the general UART
+    configUART0();
 
     // create the LED task
     if(xTaskCreate(vLedTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[0]) != pdPASS)
@@ -94,10 +104,16 @@ int main( void )
     	//TODO: the task was not created, do something
     }
 
+    // create the serialPort task
+    if(xTaskCreate(vSerialTask, (signed portCHAR*) "SERIAL",1024,NULL, 1, &taskHandles[1]) != pdPASS)
+
     taskHandles[4] = 0; //TODO: will need to change when we know how many tasks there will be
 
     // enable the interrupts
     portENABLE_INTERRUPTS();
+
+    // testing printf
+    //printf("testing\r\n");
 
     // start the scheduler
 	vTaskStartScheduler();

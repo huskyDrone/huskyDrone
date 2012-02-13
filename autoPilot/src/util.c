@@ -7,6 +7,11 @@
 
 #include "util.h"
 
+Bool isDigit(char c)
+{
+	return c >= '0' && c <= '9';
+}
+
 int strCmp(const char *str1, const char *str2)
 {
 	while(*str1 && *str1 == *str2)

@@ -1,25 +1,19 @@
 /*
- * driverGps.c
+ * driverSerial.c
  *
- *  Created on: Feb 9, 2012
- *      Author: jenya
+ *  Created on: Feb 11, 2012
+ *      Author: root
  */
 
-#include "driverGps.h"
+#include "driverSerial.h"
 
-// GPS ring buffer
-RING_BUFFER_TYPE gpsRb;
+// Serial port ring buffer
+RING_BUFFER_TYPE serialRb;
 
-// current Tx Interrupt enable state
-__IO FlagStatus TxIntStat;
+// current Serail port Rx status
+extern __IO SetState serialRxReady;
 
-// current GPS Rx status
-extern __IO SetState gpsRxReady;
-
-// structure with of GPS data in GPVTG format
-nmeaGPVTG gpsData;
-
-void configGpsUART(void)
+void configUART0(void)
 {
 	// GPS UART configuration structure
 	UART_CFG_Type   UART_initStructure;
@@ -29,13 +23,13 @@ void configGpsUART(void)
 	PINSEL_CFG_Type pin_initStructure;
 
 	// initialize UART1 pin connect
-	pin_initStructure.Funcnum   = GPS_PIN_FUNC;
+	pin_initStructure.Funcnum   = PINSEL_FUNC_1;
 	pin_initStructure.OpenDrain = PINSEL_PINMODE_NORMAL;
 	pin_initStructure.Pinmode   = PINSEL_PINMODE_PULLUP;
-	pin_initStructure.Pinnum    = GPS_PIN_TX;
-	pin_initStructure.Portnum   = GPS_PORT;
+	pin_initStructure.Pinnum    = PINSEL_PIN_2;
+	pin_initStructure.Portnum   = PINSEL_PORT_0;
 	PINSEL_ConfigPin(&pin_initStructure);
-	pin_initStructure.Pinnum    = GPS_PIN_RX;
+	pin_initStructure.Pinnum    = PINSEL_PIN_3;
 	PINSEL_ConfigPin(&pin_initStructure);
 
 	// initialize GPS UART
@@ -45,7 +39,7 @@ void configGpsUART(void)
 	UART_initStructure.Stopbits  = UART_STOPBIT_1;
 
 	// configure the UART
-	UART_Init((LPC_UART_TypeDef *)LPC_UART1, &UART_initStructure);
+	UART_Init(LPC_UART0, &UART_initStructure);
 
 	// initialize FIFO to default state:
 	//          -FIFO_DMAMode = DISABLE
@@ -56,37 +50,36 @@ void configGpsUART(void)
 	UART_FIFOConfigStructInit(&UARTFIFO_initStructure);
 
 	// initialize FIFO for GPS UART
-	UART_FIFOConfig((LPC_UART_TypeDef *)LPC_UART1, &UARTFIFO_initStructure);
+	UART_FIFOConfig(LPC_UART0, &UARTFIFO_initStructure);
 
 	// enable the UART
-	UART_TxCmd((LPC_UART_TypeDef *)LPC_UART1, ENABLE);
+	UART_TxCmd(LPC_UART0, ENABLE);
 
 	// enable GPS_UART Rx interrupt
-	UART_IntConfig((LPC_UART_TypeDef *)LPC_UART1, UART_INTCFG_RBR, ENABLE);
+	UART_IntConfig(LPC_UART0, UART_INTCFG_RBR, ENABLE);
 
 	// reset ring buf head and tail idx
-	__BUF_RESET(gpsRb.rx_head);
-	__BUF_RESET(gpsRb.rx_tail);
-	__BUF_RESET(gpsRb.tx_head);
-	__BUF_RESET(gpsRb.tx_tail);
+	__BUF_RESET(serialRb.rx_head);
+	__BUF_RESET(serialRb.rx_tail);
+	__BUF_RESET(serialRb.tx_head);
+	__BUF_RESET(serialRb.tx_tail);
 
 	// preemption = 1, sub-priority = 1
-	NVIC_SetPriority(UART1_IRQn, ((0x01<<3)|0x01));
+	NVIC_SetPriority(UART0_IRQn, ((0x01<<3)|0x01));
 	// enable interrupt for GPS UART channel
-	NVIC_EnableIRQ(UART1_IRQn);
+	NVIC_EnableIRQ(UART0_IRQn);
 
 	// reset the Rx state
-	gpsRxReady = RESET;
+	serialRxReady = RESET;
 }
 
-
-void UART1_IRQHandler(void)
+void UART0_IRQHandler(void)
 {
 	//portBASE_TYPE xYieldRequired;
 	uint32_t intsrc, tmp;
 
 	// determine the interrupt source
-	intsrc = UART_GetIntId((LPC_UART_TypeDef *)LPC_UART1);
+	intsrc = UART_GetIntId(LPC_UART0);
 	tmp = intsrc & UART_IIR_INTID_MASK;
 
 	// receive data available
@@ -100,10 +93,10 @@ void UART1_IRQHandler(void)
 		//GPS_IntReceive();
 
 		// disable the interrupt
-		UART_IntConfig((LPC_UART_TypeDef *)LPC_UART1, UART_INTCFG_RBR, DISABLE);
+		UART_IntConfig(LPC_UART0, UART_INTCFG_RBR, DISABLE);
 
 		// set the Rx state flag
-		gpsRxReady = SET;
+		serialRxReady = SET;
 	}
 
 	// transmit holding empty
@@ -113,7 +106,8 @@ void UART1_IRQHandler(void)
 	}
 }
 
-void GPS_IntReceive(void)
+
+void UART0_IntReceive(void)
 {
 	uint8_t tmpc;
 	uint32_t rLen;
@@ -121,17 +115,17 @@ void GPS_IntReceive(void)
 	while(1)
 	{
 		// call UART read function in UART driver
-		rLen = UART_Receive((LPC_UART_TypeDef *)LPC_UART1, &tmpc, 1, NONE_BLOCKING);
+		rLen = UART_Receive(LPC_UART0, &tmpc, 1, NONE_BLOCKING);
 
 		// if there is data to receive
 		if(rLen)
 		{
 			// check if there is more room in the buffer to put the character
 			// if not, the rest will be trimmed off
-			if(!__BUF_IS_FULL(gpsRb.rx_head, gpsRb.rx_tail))
+			if(!__BUF_IS_FULL(serialRb.rx_head, serialRb.rx_tail))
 			{
-				gpsRb.rx[gpsRb.rx_head] = tmpc;
-				__BUF_INCR(gpsRb.rx_head);
+				serialRb.rx[serialRb.rx_head] = tmpc;
+				__BUF_INCR(serialRb.rx_head);
 			}
 		}
 		else // no more data
@@ -141,20 +135,20 @@ void GPS_IntReceive(void)
 	}
 }
 
-uint32_t GPSReceive(uint8_t *rxBuf, uint8_t bufLen)
+uint32_t UART0Receive(uint8_t *rxBuf, uint8_t bufLen)
 {
 	uint8_t *data = (uint8_t *)rxBuf;
 	uint32_t bytes = 0;
 
 	// loop until receive buffer ring is empty or until max_bytes expires
-	while((bufLen > 0) && (!(__BUF_IS_EMPTY(gpsRb.rx_head, gpsRb.rx_tail))))
+	while((bufLen > 0) && (!(__BUF_IS_EMPTY(serialRb.rx_head, serialRb.rx_tail))))
 	{
 		// read from the ring buffer into user buffer
-		*data = gpsRb.rx[gpsRb.rx_tail];
+		*data = serialRb.rx[serialRb.rx_tail];
 		data++;
 
 		// update the pointer
-		__BUF_INCR(gpsRb.rx_tail);
+		__BUF_INCR(serialRb.rx_tail);
 
 		// increment data count and decrement buffer size count
 		bytes++;
@@ -164,40 +158,11 @@ uint32_t GPSReceive(uint8_t *rxBuf, uint8_t bufLen)
 	return bytes;
 }
 
-void GPS_decodeParam(uint8_t paramNum)
+void outbyte(char c)
 {
-	uint8_t curIndx = 0;
-	uint8_t curParam = 0;
-	Bool    found = FALSE;
+	// write the character to the general UART
+	UART_SendByte(LPC_UART0, (char) c);
 
-	while(!found)
-	{
-		if(gpsData.cmdString[curIndx] == ',')
-			curParam++;
-
-		if(curParam == paramNum)
-			found = TRUE;
-
-		curIndx++;
-	}
-
-	switch(paramNum)
-	{
-	    case SPN:
-		    gpsData.spk = a2d(&gpsData.cmdString[curIndx]);
-		    break;
-	    default:
-		    break;
-	}
+	// loop until the end of transmission
+	while ((LPC_UART0->LSR & UART_LSR_THRE) == RESET);
 }
-
-/*
-void nmea_zero_GPVTG(nmeaGPVTG *pack)
-{
-	memset(pack, 0, sizeof(nmeaGPVTG));
-	pack->dir_t = 'T';
-	pack->dec_m = 'M';
-	pack->spn_t = 'N';
-	pack->spk_t = 'K';
-}
-*/

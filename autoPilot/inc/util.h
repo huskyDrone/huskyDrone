@@ -22,7 +22,7 @@
 * Output			: None
 * Return			: True if the character is a number, False otherwise
 ------------------------------------------------------------------------------*/
-Bool isDigit(char c) {return c >= '0' && c <= '9';}
+Bool isDigit(char c);
 
 /*-------------------------------------------------------------------------------
 * Function Name	    : strCmp
