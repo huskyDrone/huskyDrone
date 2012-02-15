@@ -17,7 +17,7 @@ __IO FlagStatus TxIntStat;
 extern __IO SetState gpsRxReady;
 
 // structure with of GPS data in GPVTG format
-nmeaGPVTG gpsData;
+extern nmeaGPVTG gpsData;
 
 void configGpsUART(void)
 {
@@ -45,7 +45,7 @@ void configGpsUART(void)
 	UART_initStructure.Stopbits  = UART_STOPBIT_1;
 
 	// configure the UART
-	UART_Init((LPC_UART_TypeDef *)LPC_UART1, &UART_initStructure);
+	UART_Init(GPS_UART, &UART_initStructure);
 
 	// initialize FIFO to default state:
 	//          -FIFO_DMAMode = DISABLE
@@ -56,13 +56,13 @@ void configGpsUART(void)
 	UART_FIFOConfigStructInit(&UARTFIFO_initStructure);
 
 	// initialize FIFO for GPS UART
-	UART_FIFOConfig((LPC_UART_TypeDef *)LPC_UART1, &UARTFIFO_initStructure);
+	UART_FIFOConfig(GPS_UART, &UARTFIFO_initStructure);
 
 	// enable the UART
-	UART_TxCmd((LPC_UART_TypeDef *)LPC_UART1, ENABLE);
+	UART_TxCmd(GPS_UART, ENABLE);
 
 	// enable GPS_UART Rx interrupt
-	UART_IntConfig((LPC_UART_TypeDef *)LPC_UART1, UART_INTCFG_RBR, ENABLE);
+	UART_IntConfig(GPS_UART, UART_INTCFG_RBR, ENABLE);
 
 	// reset ring buf head and tail idx
 	__BUF_RESET(gpsRb.rx_head);
@@ -71,22 +71,22 @@ void configGpsUART(void)
 	__BUF_RESET(gpsRb.tx_tail);
 
 	// preemption = 1, sub-priority = 1
-	NVIC_SetPriority(UART1_IRQn, ((0x01<<3)|0x01));
+	NVIC_SetPriority(UART0_IRQn, ((0x01<<3)|0x01));
 	// enable interrupt for GPS UART channel
-	NVIC_EnableIRQ(UART1_IRQn);
+	NVIC_EnableIRQ(UART0_IRQn);
 
 	// reset the Rx state
 	gpsRxReady = RESET;
 }
 
 
-void UART1_IRQHandler(void)
+void UART0_IRQHandler(void)
 {
 	//portBASE_TYPE xYieldRequired;
 	uint32_t intsrc, tmp;
 
 	// determine the interrupt source
-	intsrc = UART_GetIntId((LPC_UART_TypeDef *)LPC_UART1);
+	intsrc = UART_GetIntId(GPS_UART);
 	tmp = intsrc & UART_IIR_INTID_MASK;
 
 	// receive data available
@@ -100,7 +100,7 @@ void UART1_IRQHandler(void)
 		//GPS_IntReceive();
 
 		// disable the interrupt
-		UART_IntConfig((LPC_UART_TypeDef *)LPC_UART1, UART_INTCFG_RBR, DISABLE);
+		UART_IntConfig(GPS_UART, UART_INTCFG_RBR, DISABLE);
 
 		// set the Rx state flag
 		gpsRxReady = SET;
@@ -121,7 +121,7 @@ void GPS_IntReceive(void)
 	while(1)
 	{
 		// call UART read function in UART driver
-		rLen = UART_Receive((LPC_UART_TypeDef *)LPC_UART1, &tmpc, 1, NONE_BLOCKING);
+		rLen = UART_Receive(GPS_UART, &tmpc, 1, NONE_BLOCKING);
 
 		// if there is data to receive
 		if(rLen)
@@ -141,7 +141,7 @@ void GPS_IntReceive(void)
 	}
 }
 
-uint32_t GPSReceive(uint8_t *rxBuf, uint8_t bufLen)
+uint32_t GPSReceive(char *rxBuf, uint8_t bufLen)
 {
 	uint8_t *data = (uint8_t *)rxBuf;
 	uint32_t bytes = 0;

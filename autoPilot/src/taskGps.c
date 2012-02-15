@@ -10,6 +10,8 @@
 // current GPS Rx status
 extern __IO SetState gpsRxReady;
 
+extern nmeaGPVTG gpsData;
+
 void vGpsTask( void *pvParameters )
 {
 
@@ -22,11 +24,11 @@ void vGpsTask( void *pvParameters )
 			GPS_IntReceive();
 
 			// copy the command in the local buffer
-			//GPSReceive(&gpsData.cmdString, GPS_DATA_SIZE);
+			GPSReceive(&gpsData.cmdString[0], GPS_DATA_SIZE);
 
 			// we are done with the current message, re-enable
 			// the RX interrupt
-			UART_IntConfig((LPC_UART_TypeDef *)LPC_UART0, UART_INTCFG_RBR, ENABLE);
+			UART_IntConfig(GPS_UART, UART_INTCFG_RBR, ENABLE);
 
 			// reset the RX flag, should follow right
 			// after enabling the interrupt

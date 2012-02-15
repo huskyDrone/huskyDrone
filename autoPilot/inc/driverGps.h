@@ -22,9 +22,9 @@
 /*--- GPS Related Defines ---*/
 #define GPS_PIN_FUNC   PINSEL_FUNC_1
 #define GPS_PORT       PINSEL_PORT_0
-#define GPS_PIN_TX     PINSEL_PIN_15
-#define GPS_PIN_RX     PINSEL_PIN_16
-#define GPS_UART       PINSEL_PORT_1
+#define GPS_PIN_TX     PINSEL_PIN_2
+#define GPS_PIN_RX     PINSEL_PIN_3
+#define GPS_UART       LPC_UART0
 
 #define GPS_DATA_SIZE    30
 #define MESS_ID_SIZE      5
@@ -74,7 +74,7 @@ void configGpsUART(void);
 void GPS_IntTransmit(void);
 void GPS_IntReceive(void);
 
-uint32_t GPSReceive(uint8_t *rxBuf, uint8_t bufLen);
+uint32_t GPSReceive(char *rxBuf, uint8_t bufLen);
 uint32_t GPSSend(LPC_UART_TypeDef *UARTPort, uint8_t *txBuf, uint8_t bufLen);
 
 //void GPS_decodeParam(uint8_t paramNum);

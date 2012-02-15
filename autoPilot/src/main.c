@@ -90,13 +90,16 @@ __IO SetState gpsRxReady;
 // current Serial port Rx status
 __IO SetState serialRxReady;
 
+// GPS data structure
+nmeaGPVTG gpsData;
+
 int main( void )
 {
 	// configure the system
     setSystem();
 
     // configure the general UART
-    configUART0();
+    configSerial();
 
     // create the LED task
     if(xTaskCreate(vLedTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[0]) != pdPASS)
