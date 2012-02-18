@@ -96,8 +96,9 @@ nmeaGPVTG gpsData;
 int main( void )
 {
 	// configure the system
-    setSystem();
-
+	SystemInit();
+	configRedLed();
+    servoInit();
     // configure the general UART
     configSerial();
 
