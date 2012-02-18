@@ -63,13 +63,13 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
-
 #include "platformConfig.h"
 #include "hwConfig.h"
 #include "taskLed.h"
 #include "taskSerial.h"
 #include "driverGps.h"
 #include "driverSerial.h"
+#include "driverServo.h"
 #include "string.h"
 
 /*-----------------------------------------------------------*/
