@@ -70,6 +70,7 @@
 #include "driverGps.h"
 #include "driverSerial.h"
 #include "driverServo.h"
+#include "driverGenAdc.h"
 #include "string.h"
 
 /*-----------------------------------------------------------*/
@@ -101,6 +102,8 @@ int main( void )
     servoInit();
     // configure the general UART
     configSerial();
+
+    adcconfig();
 
     // create the LED task
     if(xTaskCreate(vLedTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[0]) != pdPASS)
