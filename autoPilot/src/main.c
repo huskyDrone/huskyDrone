@@ -63,13 +63,14 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
-
 #include "platformConfig.h"
 #include "hwConfig.h"
 #include "taskLed.h"
 #include "taskSerial.h"
 #include "driverGps.h"
 #include "driverSerial.h"
+#include "driverServo.h"
+#include "driverGenAdc.h"
 #include "string.h"
 
 /*-----------------------------------------------------------*/
@@ -96,10 +97,13 @@ nmeaGPVTG gpsData;
 int main( void )
 {
 	// configure the system
-    setSystem();
-
+	SystemInit();
+	configRedLed();
+    servoInit();
     // configure the general UART
     configSerial();
+
+    adcconfig();
 
     // create the LED task
     if(xTaskCreate(vLedTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[0]) != pdPASS)

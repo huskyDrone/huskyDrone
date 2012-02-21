@@ -292,19 +292,24 @@
   @{
  */
 
+/*
+ * Clock Configuration
+ */
 #define CLOCK_SETUP           1
-#define SCS_Val               0x00000020
-#define CLKSRCSEL_Val         0x00000001
+#define SCS_Val               0x00000020    /* Enable main 12MHz osc.         */
+#define CLKSRCSEL_Val         0x00000001    /* Clock source is main osc.      */
 #define PLL0_SETUP            1
-#define PLL0CFG_Val           0x00050063
+#define PLL0CFG_Val           0x0000000E    /* Fcco = 12*15*2 = 360MHz  */
 #define PLL1_SETUP            1
-#define PLL1CFG_Val           0x00000023
-#define CCLKCFG_Val           0x00000003
-#define USBCLKCFG_Val         0x00000000
-#define PCLKSEL0_Val          0x00000000
-#define PCLKSEL1_Val          0x00000000
+#define PLL1CFG_Val           0x00000023    /* USB PLL */
+#define CCLKCFG_Val           0x00000002    /* CPU clock = 360/3 = 120 MHz    */
+#define USBCLKCFG_Val         0x00000000    /* Not used since PLL1 is enabled */
+#define PCLKSEL0_Val          0x00000000    /* All peripheral clocks operate  */
+#define PCLKSEL1_Val          0x00000000    /* at 30MHz                       */
 #define PCONP_Val             0x042887DE
-#define CLKOUTCFG_Val         0x00000000
+#define CLKOUTCFG_Val         0x00000130    /* Enable CCLK/4 out              */
+
+#define FLASHCFG_Val          0x0000403A    /* Flash access time 5 CPU cycles */
 
 
 /*--------------------- Flash Accelerator Configuration ----------------------
