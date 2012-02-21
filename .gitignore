@@ -4,3 +4,4 @@ Debug/
 .project
 *.o
 *.d
+download.cfg
