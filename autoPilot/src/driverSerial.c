@@ -65,7 +65,8 @@ void configSerial(void)
 	__BUF_RESET(serialRb.tx_tail);
 
 	// preemption = 1, sub-priority = 1
-	NVIC_SetPriority(UART3_IRQn, ((0x01<<3)|0x01));
+	//NVIC_SetPriority(UART3_IRQn, ((0x01<<3)|0x01));
+	NVIC_SetPriority(UART3_IRQn, 8);
 	// enable interrupt for GPS UART channel
 	NVIC_EnableIRQ(UART3_IRQn);
 
