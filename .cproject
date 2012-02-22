@@ -117,6 +117,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ee542/3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ee542/3rdParty/Drivers/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ee542/3rdParty/nmealib/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ee542/3rdParty/usb/include}&quot;"/>
 								</option>
 								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.input.588009062" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.input"/>
 							</tool>
@@ -137,6 +138,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ee542/3rdParty/Core/CM3/DeviceSupport/NXP/LPC17xx}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ee542/3rdParty/Drivers/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ee542/3rdParty/nmealib/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ee542/3rdParty/usb/include}&quot;"/>
 								</option>
 								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.c.compiler.base.input.1010763759" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.c.compiler.base.input"/>
 							</tool>

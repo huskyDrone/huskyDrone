@@ -10,6 +10,9 @@
 // GPS ring buffer
 RING_BUFFER_TYPE gpsRb;
 
+// GPS RX ring buffer
+RingBuffer gpsRxRb;
+
 // current Tx Interrupt enable state
 __IO FlagStatus TxIntStat;
 
@@ -69,6 +72,9 @@ void configGpsUART(void)
 	__BUF_RESET(gpsRb.rx_tail);
 	__BUF_RESET(gpsRb.tx_head);
 	__BUF_RESET(gpsRb.tx_tail);
+
+	// reset the Rx ring buffer
+	ringBufferInit(&gpsRxRb);
 
 	// preemption = 1, sub-priority = 1
 	//NVIC_SetPriority(UART0_IRQn, ((0x01<<3)|0x01));
@@ -134,6 +140,10 @@ void GPS_IntReceive(void)
 				gpsRb.rx[gpsRb.rx_head] = tmpc;
 				__BUF_INCR(gpsRb.rx_head);
 			}
+
+			// checks whether the buffer is full and if it not, adds the character
+			// if there there is no more room, trim the message
+			//ringBufferEnque(&gpsRxRb, tmpc);
 		}
 		else // no more data
 		{
@@ -146,8 +156,18 @@ uint32_t GPSReceive(char *rxBuf, uint8_t bufLen)
 {
 	uint8_t *data = (uint8_t *)rxBuf;
 	uint32_t bytes = 0;
-
+/*
 	// loop until receive buffer ring is empty or until max_bytes expires
+	while((bufLen > 0) && (!ringBufferIsEmpty(&gpsRxRb)))
+	{
+		ringBufferDeque(&gpsRxRb, data);
+		data++;
+
+		// increment data count and decrement buffer size count
+		bytes++;
+		bufLen--;
+	}
+*/
 	while((bufLen > 0) && (!(__BUF_IS_EMPTY(gpsRb.rx_head, gpsRb.rx_tail))))
 	{
 		// read from the ring buffer into user buffer

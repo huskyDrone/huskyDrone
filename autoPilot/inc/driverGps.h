@@ -17,6 +17,7 @@
 #include "lpc17xx_uart.h"
 #include "lpc17xx_pinsel.h"
 #include "platformConfig.h"
+#include "ringbuffer.h"
 #include "util.h"
 
 /*--- GPS Related Defines ---*/
