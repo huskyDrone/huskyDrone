@@ -20,9 +20,25 @@
 #define SER_PIN_RX     PINSEL_PIN_1
 #define SER_UART       LPC_UART3
 
+#define SER_IN_MSG_SZ      30
+
+typedef struct
+{
+	char      inputString[SER_IN_MSG_SZ];
+	uint8_t   msgId;
+	uint16_t  val;
+} serInputStruct;
+
+enum _serialMsgId
+{
+	DEBUG    = 0,
+	OTHER
+} serialMsgId;
+
 void configSerial(void);
 void Serial_IntReceive(void);
 uint32_t SerialReceive(uint8_t *rxBuf, uint8_t bufLen);
+Bool Serial_populateData(uint8_t *addr, uint8_t len);
 
 
 #endif /* DRIVERSERIAL_H_ */

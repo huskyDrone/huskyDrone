@@ -140,8 +140,8 @@ void GPS_IntReceive(void)
 				__BUF_INCR(gpsRb.rx_head);
 			}
 
-			// checks whether the buffer is full and if it not, adds the character
-			// if there there is no more room, trim the message
+			// checks whether the buffer is full and if it is not, adds the character
+			// if there is no more room, trim the message
 			//ringBufferEnque(&gpsRxRb, tmpc);
 		}
 		else // no more data
@@ -184,31 +184,107 @@ uint32_t GPSReceive(char *rxBuf, uint8_t bufLen)
 	return bytes;
 }
 
-void GPS_decodeParam(uint8_t paramNum)
+Bool GPS_populateGPVTG(uint8_t *addr, uint8_t len)
 {
-	uint8_t curIndx = 0;
-	uint8_t curParam = 0;
-	Bool    found = FALSE;
+	uint8_t *pBuff = addr;
+	int i;
 
-	while(!found)
+	for(i = 0; i < GPVTG_TOTAL; i++)
 	{
-		if(gpsData.cmdString[curIndx] == ',')
-			curParam++;
+		// get to the comma (',')
+		while(*pBuff != ',' && *pBuff != '*' && *pBuff != '\0')
+		{
+			pBuff++;
+			len--;
+			if(len == 0) return FALSE;
+		}
 
-		if(curParam == paramNum)
-			found = TRUE;
+		pBuff++;
 
-		curIndx++;
+		switch(i)
+		{
+		case DIR:
+			gpsData.dir = a2d(pBuff);
+			break;
+		case DIR_T:
+			gpsData.dir_t = *pBuff;
+			break;
+		case DEC:
+			gpsData.dec = a2d(pBuff);
+			break;
+		case DEC_M:
+		    gpsData.dec_m = *pBuff;
+		    break;
+		case SPN:
+			gpsData.spn = a2d(pBuff);
+			break;
+		case SPN_N:
+			gpsData.spn_n = *pBuff;
+			break;
+		case SPK:
+			gpsData.spk = a2d(pBuff);
+			break;
+		case SPK_K:
+			gpsData.spk_k = *pBuff;
+			break;
+		default:
+			return FALSE;
+			break;
+		}
+	}
+	return TRUE;
+}
+
+Bool GPS_validateChkSum(uint8_t *addr, uint8_t len)
+{
+	uint8_t *pBuff     = addr;
+	uint8_t compChkSum = 0;
+	uint8_t rxChkSum   = 0;
+
+	compChkSum = checkSum8((pBuff+1), len - 4);
+	rxChkSum = rxCheckSum(pBuff);
+
+	return (compChkSum == rxChkSum);
+}
+
+uint8_t checkSum8(uint8_t *addr, uint8_t len)
+{
+	__IO uint8_t checkSum = 0;
+
+	while(len > 1)
+	{
+		checkSum ^= *(addr)++;
+		len--;
 	}
 
-	switch(paramNum)
+	if(len > 0)
 	{
-	    case SPN:
-		    gpsData.spk = a2d(&gpsData.cmdString[curIndx]);
-		    break;
-	    default:
-		    break;
+		checkSum ^= *addr;
 	}
+
+	return checkSum;
+}
+
+uint8_t rxCheckSum(uint8_t *addr)
+{
+	uint8_t firstPart  = 0;
+	uint8_t secondPart = 0;
+	uint8_t final      = 0;
+
+	while(*addr != '\0' && *addr != '*')
+	{
+		addr++;
+	}
+
+	if(*addr == '*')
+	{
+		addr++;
+		firstPart = XTOD(*addr);
+		secondPart = XTOD(*(addr+1));
+		final = (firstPart << 4 | secondPart);
+	}
+
+	return final;
 }
 
 /*
