@@ -12,6 +12,8 @@
 #include "lpc17xx_uart.h"
 #include "lpc17xx_pinsel.h"
 #include "platformConfig.h"
+#include "ringbuffer.h"
+#include "util.h"
 
 /*--- Serial Related Defines ---*/
 #define SER_PIN_FUNC   PINSEL_FUNC_2
@@ -24,7 +26,7 @@
 
 typedef struct
 {
-	char      inputString[SER_IN_MSG_SZ];
+	uint8_t   inputString[SER_IN_MSG_SZ];
 	uint8_t   msgId;
 	uint16_t  val;
 } serInputStruct;

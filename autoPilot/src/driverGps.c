@@ -77,7 +77,8 @@ void configGpsUART(void)
 	ringBufferInit(&gpsRxRb);
 
 	// preemption = 1, sub-priority = 1
-	NVIC_SetPriority(UART0_IRQn, ((0x01<<3)|0x01));
+	//NVIC_SetPriority(UART0_IRQn, ((0x01<<3)|0x01));
+	NVIC_SetPriority(UART0_IRQn, 7);
 	// enable interrupt for GPS UART channel
 	NVIC_EnableIRQ(UART0_IRQn);
 

@@ -40,7 +40,7 @@ int strCmp(const char *str1, const char *str2);
 * Output			: None
 * Return			: Number (long)
 ------------------------------------------------------------------------------*/
-long a2l(const char *str);
+long a2l(uint8_t *str);
 
 /*-------------------------------------------------------------------------------
 * Function Name	    : a2d

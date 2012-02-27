@@ -26,13 +26,13 @@ void vLedTask( void *pvParameters )
 	for( ;; )
 	{
 		// wait for the next cycle
-		vTaskDelayUntil(&xLastWakeTime, ledRate);
+		vTaskDelayUntil(&xLastWakeTime, (portTickType)ledRate);
 
 		// Turn the LED on
 		LPC_GPIO3->FIOCLR = RED_LED;
 
 		// wait for the next cycle
-		vTaskDelayUntil(&xLastWakeTime, ledRate);
+		vTaskDelayUntil(&xLastWakeTime, (portTickType)ledRate);
 
 		// Turn the LED off
 		LPC_GPIO3->FIOSET = RED_LED;

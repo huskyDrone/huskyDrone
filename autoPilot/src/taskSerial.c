@@ -16,7 +16,7 @@ uint8_t testStr[20] = "huskyDrone";
 
 void vSerialTask( void *pvParameters )
 {
-	UART_Send(SER_UART, &testStr, 10, NONE_BLOCKING);
+	UART_Send(SER_UART, &testStr[0], 10, NONE_BLOCKING);
 
 	for( ;; )
 	{

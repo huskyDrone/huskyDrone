@@ -69,9 +69,11 @@
 #include "taskLed.h"
 #include "taskSerial.h"
 #include "driverGps.h"
+
 #include "driverSerial.h"
-#include "driverServo.h"
+#include "driverServos.h"
 //#include "driverGenAdc.h"
+#include "string.h"
 
 
 /*-----------------------------------------------------------*/
@@ -98,14 +100,17 @@ nmeaGPVTG gpsData;
 // serial input structure
 serInputStruct serData;
 
-portTickType ledRate = 500;
+uint16_t ledRate = 500;
 
 int main( void )
 {
 	// configure the system
 	SystemInit();
 	configRedLed();
-    //servoInit();
+
+	servos_Init();
+	mems_Init();
+
     // configure the general UART
     configSerial();
 

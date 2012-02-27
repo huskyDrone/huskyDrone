@@ -15,7 +15,7 @@ extern __IO SetState serialRxReady;
 
 extern serInputStruct serData;
 
-extern portTickType ledRate;
+extern uint16_t ledRate;
 
 // Serial RX ring buffer
 RingBuffer serialRxRb;
@@ -72,7 +72,8 @@ void configSerial(void)
 	__BUF_RESET(serialRb.tx_tail);
 
 	// preemption = 1, sub-priority = 1
-	NVIC_SetPriority(UART3_IRQn, ((0x01<<3)|0x01));
+	//NVIC_SetPriority(UART3_IRQn, ((0x01<<3)|0x01));
+	NVIC_SetPriority(UART3_IRQn, 8);
 	// enable interrupt for GPS UART channel
 	NVIC_EnableIRQ(UART3_IRQn);
 
@@ -122,7 +123,7 @@ void Serial_IntReceive(void)
 		{
 			// checks whether the buffer is full and if it is not, adds the character
 			// if there is no more room, trim the message
-			ringBufferEnque(&gpsRxRb, tmpc);
+			ringBufferEnque(&serialRxRb, tmpc);
 		}
 		else // no more data
 		{
@@ -137,9 +138,9 @@ uint32_t SerialReceive(uint8_t *rxBuf, uint8_t bufLen)
 	uint32_t bytes = 0;
 
 	// loop until receive buffer ring is empty or until max_bytes expires
-	while((bufLen > 0) && (!ringBufferIsEmpty(&gpsRxRb)))
+	while((bufLen > 0) && (!ringBufferIsEmpty(&serialRxRb)))
 	{
-		ringBufferDeque(&gpsRxRb, data);
+		ringBufferDeque(&serialRxRb, data);
 		data++;
 
 		// increment data count and decrement buffer size count
@@ -153,7 +154,6 @@ uint32_t SerialReceive(uint8_t *rxBuf, uint8_t bufLen)
 Bool Serial_populateData(uint8_t *addr, uint8_t len)
 {
 	uint8_t *pBuff = addr;
-	int i;
 
 	// find out type of the message
 	if(*pBuff == 'D' && *(pBuff+1) == 'B' && *(pBuff+2) == 'G')

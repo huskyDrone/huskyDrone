@@ -14,7 +14,7 @@ int strCmp(const char *str1, const char *str2)
 	return *str1;
 }
 
-long a2l(const char *str)
+long a2l(uint8_t *str)
 {
 	long ret = 0;
 	while(ISDIGIT(*str))
