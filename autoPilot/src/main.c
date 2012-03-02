@@ -119,6 +119,11 @@ int main( void )
     // enable the interrupts
     portENABLE_INTERRUPTS();
 
+	//Setting Priority for ADC
+	NVIC_DisableIRQ(ADC_IRQn);
+	NVIC_SetPriority(ADC_IRQn, 10);
+	NVIC_EnableIRQ(ADC_IRQn);
+
     // testing printf
     //printf("testing\r\n");
 
