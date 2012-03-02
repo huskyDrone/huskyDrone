@@ -1,11 +1,10 @@
 /*
- * driverServo.c
+ * driverServos.c
  *
  *  Created on: Feb 10, 2012
  *      Author: Trevor
  */
-#include "driverServo.h"
-#include "lpc17xx_pwm.h"
+#include "driverServos.h"
 
 #define DEFAULT_DEGREES 0.0f
 
@@ -22,7 +21,7 @@ float degreesMax[4] = {AILERON_MAX,AILERON_MAX,ELEVATOR_MAX,RUDDER_MAX};
 
 volatile uint32_t* matchRegisters[4] = {&(LPC_PWM1->MR1),&(LPC_PWM1->MR2),&(LPC_PWM1->MR3),&(LPC_PWM1->MR4)};
 
-void servoInit(void)
+void servos_Init(void)
 {
 	//Positive Pulse Width = (1ms + deg/180)
 	//Pulse Period = 20ms = 600000 cycles
@@ -70,7 +69,7 @@ void servoInit(void)
 	LPC_PWM1->TCR |= (1 << 0) | (1 << 3);  //Enable PWM and PWM Counter/Timer
 }
 
-int servoSetAngle(servo_channel_t channel, float degrees)
+int servos_SetAngle(servo_channel_t channel, float degrees)
 {
 	if((int)channel>3)
 	{
@@ -85,7 +84,7 @@ int servoSetAngle(servo_channel_t channel, float degrees)
 		return 2;
 	}
 }
-int servoSetThrust(float thrust_pct)
+int servos_SetThrust(float thrust_pct)
 {
 	if((thrust_pct>=THRUST_MIN)&&(thrust_pct<=THRUST_MAX))
 	{

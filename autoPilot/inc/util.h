@@ -9,20 +9,18 @@
 #define UTIL_H_
 
 #include "lpc_types.h"
+#include "string.h"
+#include "stdlib.h"
+
+#define XTOD(c) ((c>='0' && c<='9') ? c-'0' : ((c>='A' && c<='F') ? \
+		          c-'A'+10 : ((c>='a' && c<='f') ? c-'a'+10 : 0)))
+
+#define ISDIGIT(c) (c>='0' && c<='9')
 
 
           /***************************************************************
           ***************** Command Function Prototypes *****************
           **************************************************************/
-/*-------------------------------------------------------------------------------
-* Function Name	    : isDigit
-* Description		: Checks whether the character is a number
-* ASSUMPTIONS		:
-* Input			    : c-> a character
-* Output			: None
-* Return			: True if the character is a number, False otherwise
-------------------------------------------------------------------------------*/
-Bool isDigit(char c);
 
 /*-------------------------------------------------------------------------------
 * Function Name	    : strCmp
@@ -42,7 +40,7 @@ int strCmp(const char *str1, const char *str2);
 * Output			: None
 * Return			: Number (long)
 ------------------------------------------------------------------------------*/
-long a2l(const char *str);
+long a2l(uint8_t *str);
 
 /*-------------------------------------------------------------------------------
 * Function Name	    : a2d
@@ -54,6 +52,7 @@ long a2l(const char *str);
 * Output			: None
 * Return			: Number (unsigned long)
 ------------------------------------------------------------------------------*/
-unsigned long a2d(const char *str);
+double a2d(uint8_t *addr);
+
 
 #endif /* UTIL_H_ */

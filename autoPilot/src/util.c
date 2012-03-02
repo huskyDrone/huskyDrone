@@ -7,11 +7,6 @@
 
 #include "util.h"
 
-Bool isDigit(char c)
-{
-	return c >= '0' && c <= '9';
-}
-
 int strCmp(const char *str1, const char *str2)
 {
 	while(*str1 && *str1 == *str2)
@@ -19,32 +14,84 @@ int strCmp(const char *str1, const char *str2)
 	return *str1;
 }
 
-long a2l(const char *str)
+long a2l(uint8_t *str)
 {
 	long ret = 0;
-	while(isDigit(*str))
+	while(ISDIGIT(*str))
 		ret = 10 * ret + *str++ - '0';
 	return 0;
 }
 
-unsigned long a2d(const char *str)
+double a2d(uint8_t *addr)
 {
-	Bool isneg = *str == '-';
-	if(isneg) ++str;
+	double number;
+	int negative;
+	int exponent;
+	int n;
+	uint8_t *p = addr;
+	double p10;
+	int num_digits;
+	int num_decimals;
 
-	unsigned long ret = 100UL * a2l(str);
-	while(isDigit(*str)) ++str;
-
-	if(*str == '.')
+	negative = 0;
+	// find out if it is a negative value
+	switch (*p)
 	{
-		if(isDigit(str[1]))
-		{
-			ret += 10 * (str[1] - '0');
-			if(isDigit(str[2]))
-			{
-				ret += str[2] - '0';
-			}
-		}
+	case '-': negative = 1; // fall through
+	case '+': p++;
 	}
-	return isneg ? -ret : ret;
+
+	number = 0;
+	exponent = 0;
+	num_digits = 0;
+	num_decimals = 0;
+
+	// take of the whole number (before decimal point)
+	while(ISDIGIT(*p))
+	{
+		number = number * 10 + (*p - '0');
+		p++;
+		num_digits++;
+	}
+
+	// if there is a decimal point
+	if(*p == '.')
+	{
+		p++;
+
+		while(ISDIGIT(*p))
+		{
+			number = number * 10 + (*p - '0');
+			p++;
+			num_digits++;
+			num_decimals++;
+		}
+		exponent = -num_decimals;
+	}
+
+	if(num_digits == 0)
+	{
+		return 0.0;
+	}
+
+	// take care of negative sign
+	if(negative) number = -negative;
+
+	// take of the decimals
+	p10 = 10;
+	n = exponent;
+	if(n < 0) n = -n;
+	while(n)
+	{
+		if(n & 1)
+		{
+			if(exponent < 0)
+				number /= p10;
+			else
+				number *= p10;
+		}
+		n >>= 1;
+		p10 *= p10;
+	}
+	return number;
 }

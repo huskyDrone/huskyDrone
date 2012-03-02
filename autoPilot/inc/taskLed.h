@@ -8,7 +8,7 @@
 #ifndef TESTTASK_H_
 #define TESTTASK_H_
 
-#define DELAY_PERIOD 1000
+#define DELAY_PERIOD 500
 
 void vLedTask(void *pvParameters);
 

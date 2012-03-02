@@ -13,6 +13,13 @@ RING_BUFFER_TYPE serialRb;
 // current Serail port Rx status
 extern __IO SetState serialRxReady;
 
+extern serInputStruct serData;
+
+extern uint16_t ledRate;
+
+// Serial RX ring buffer
+RingBuffer serialRxRb;
+
 void configSerial(void)
 {
 	// GPS UART configuration structure
@@ -65,7 +72,8 @@ void configSerial(void)
 	__BUF_RESET(serialRb.tx_tail);
 
 	// preemption = 1, sub-priority = 1
-	NVIC_SetPriority(UART3_IRQn, ((0x01<<3)|0x01));
+	//NVIC_SetPriority(UART3_IRQn, ((0x01<<3)|0x01));
+	NVIC_SetPriority(UART3_IRQn, 8);
 	// enable interrupt for GPS UART channel
 	NVIC_EnableIRQ(UART3_IRQn);
 
@@ -85,13 +93,6 @@ void UART3_IRQHandler(void)
 	// receive data available
 	if(tmp == UART_IIR_INTID_RDA)
 	{
-		//xYieldRequired = xTaskResumeFromISR();
-		//if(xYieldRequired == pdTRUE)
-		//{
-		//	portYIELD_FROM_ISR();
-		//}
-		//GPS_IntReceive();
-
 		// disable the interrupt
 		UART_IntConfig(SER_UART, UART_INTCFG_RBR, DISABLE);
 
@@ -120,13 +121,9 @@ void Serial_IntReceive(void)
 		// if there is data to receive
 		if(rLen)
 		{
-			// check if there is more room in the buffer to put the character
-			// if not, the rest will be trimmed off
-			if(!__BUF_IS_FULL(serialRb.rx_head, serialRb.rx_tail))
-			{
-				serialRb.rx[serialRb.rx_head] = tmpc;
-				__BUF_INCR(serialRb.rx_head);
-			}
+			// checks whether the buffer is full and if it is not, adds the character
+			// if there is no more room, trim the message
+			ringBufferEnque(&serialRxRb, tmpc);
 		}
 		else // no more data
 		{
@@ -141,14 +138,10 @@ uint32_t SerialReceive(uint8_t *rxBuf, uint8_t bufLen)
 	uint32_t bytes = 0;
 
 	// loop until receive buffer ring is empty or until max_bytes expires
-	while((bufLen > 0) && (!(__BUF_IS_EMPTY(serialRb.rx_head, serialRb.rx_tail))))
+	while((bufLen > 0) && (!ringBufferIsEmpty(&serialRxRb)))
 	{
-		// read from the ring buffer into user buffer
-		*data = serialRb.rx[serialRb.rx_tail];
+		ringBufferDeque(&serialRxRb, data);
 		data++;
-
-		// update the pointer
-		__BUF_INCR(serialRb.rx_tail);
 
 		// increment data count and decrement buffer size count
 		bytes++;
@@ -156,6 +149,40 @@ uint32_t SerialReceive(uint8_t *rxBuf, uint8_t bufLen)
 	}
 
 	return bytes;
+}
+
+Bool Serial_populateData(uint8_t *addr, uint8_t len)
+{
+	uint8_t *pBuff = addr;
+
+	// find out type of the message
+	if(*pBuff == 'D' && *(pBuff+1) == 'B' && *(pBuff+2) == 'G')
+		serData.msgId = DEBUG;
+	else
+		serData.msgId = OTHER;
+
+	// get to the comma (',')
+	while(*pBuff != ',' && *pBuff != '*' && *pBuff != '\0')
+	{
+		pBuff++;
+		len--;
+		if(len == 0) return FALSE;
+	}
+
+	// next character after the comma
+	pBuff++;
+
+	switch (serData.msgId)
+	{
+	case DEBUG:
+		ledRate = a2l(pBuff);
+		break;
+	default :
+		return FALSE;
+		break;
+	}
+
+	return TRUE;
 }
 
 void outbyte(char c)

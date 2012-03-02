@@ -53,6 +53,7 @@
 
 /* Standard includes. */
 #include "stdio.h"
+#include "string.h"
 
 #define ARM_MATH_CM3
 
@@ -68,10 +69,12 @@
 #include "taskLed.h"
 #include "taskSerial.h"
 #include "driverGps.h"
+
 #include "driverSerial.h"
-#include "driverServo.h"
-#include "driverGenAdc.h"
+#include "driverServos.h"
+//#include "driverGenAdc.h"
 #include "string.h"
+
 
 /*-----------------------------------------------------------*/
 
@@ -94,16 +97,24 @@ __IO SetState serialRxReady;
 // GPS data structure
 nmeaGPVTG gpsData;
 
+// serial input structure
+serInputStruct serData;
+
+uint16_t ledRate = 500;
+
 int main( void )
 {
 	// configure the system
 	SystemInit();
 	configRedLed();
-    servoInit();
+
+	servos_Init();
+	mems_Init();
+
     // configure the general UART
     configSerial();
 
-    adcconfig();
+    //adcconfig();
 
     // create the LED task
     if(xTaskCreate(vLedTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[0]) != pdPASS)

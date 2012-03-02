@@ -17,6 +17,7 @@
 #include "lpc17xx_uart.h"
 #include "lpc17xx_pinsel.h"
 #include "platformConfig.h"
+#include "ringbuffer.h"
 #include "util.h"
 
 /*--- GPS Related Defines ---*/
@@ -42,6 +43,23 @@ enum nmeaPACKTYPE
 };
 
 */
+
+/*
+ *  This enum reflects the order of parameters in a GPVTG type message
+ */
+enum _nmeaGPVTG_pack
+{
+	DIR            = 0,
+	DIR_T          = 1,
+	DEC            = 2,
+	DEC_M          = 3,
+	SPN            = 4,
+	SPN_N          = 5,
+	SPK            = 6,
+	SPK_K          = 7,
+	GPVTG_TOTAL    = 8
+} nmeaGPVTG_pack;
+
 typedef struct
 {
 	char  cmdString[GPS_DATA_SIZE];
@@ -50,24 +68,12 @@ typedef struct
 	double          dec;    // Magnetic track made good
 	uint8_t         dec_m;  // Fixed text 'M'
 	double          spn;    // Ground speed, knots
-	uint8_t         spn_t;  // Fixed text 'N' indicates that speed over ground is in knots
-	unsigned long   spk;    // Ground speed, k/h
-	uint8_t         spk_t;  // Fixed text 'K' indicates that speed over ground in in K/h
+	uint8_t         spn_n;  // Fixed text 'N' indicates that speed over ground is in knots
+	double          spk;    // Ground speed, k/h
+	uint8_t         spk_k;  // Fixed text 'K' indicates that speed over ground in in K/h
 
 } nmeaGPVTG;
 
-enum gpvtgPACK
-{
-	MESSID  = 0,    // Message ID
-	DIR     = 1,      // True track make good (degrees)
-	DIRTYPE = 2,    // True track made good type
-	DEC     = 3,    // Magnetic track made good
-	DECTYPE = 4,    // Magnetic track made good type
-	SPN     = 5,    // Speed in knots
-	SPNTYPE = 6,    // Speed type in knots
-	SPK     = 7,    // speed in km/h
-	SPKTYPE = 8,    // speed type (km/h)
-};
 
 void configGpsUART(void);
 
@@ -76,8 +82,11 @@ void GPS_IntReceive(void);
 
 uint32_t GPSReceive(char *rxBuf, uint8_t bufLen);
 uint32_t GPSSend(LPC_UART_TypeDef *UARTPort, uint8_t *txBuf, uint8_t bufLen);
+Bool GPS_validateChkSum(uint8_t *addr, uint8_t len);
+uint8_t checkSum8(uint8_t *addr, uint8_t len);
+uint8_t rxCheckSum(uint8_t *addr);
 
-//void GPS_decodeParam(uint8_t paramNum);
+Bool GPS_populateGPVTG(uint8_t *addr, uint8_t len);
 
 //void nmea_zero_GPVTG(nmeaGPVTG *pack);
 

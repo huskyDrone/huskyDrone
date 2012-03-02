@@ -25,7 +25,7 @@
 #define USON_PORT       PINSEL_PORT_0
 #define USON_PIN		PINSEL_PIN_24
 
-uint32_t ADCAveraging = 100;
+#define ADCAVERAGING 100;
 
 
 void adcconfig(void);

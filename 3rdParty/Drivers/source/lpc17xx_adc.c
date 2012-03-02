@@ -344,4 +344,3 @@ FlagStatus	ADC_GlobalGetStatus(LPC_ADC_TypeDef *ADCx, uint32_t StatusType)
  */
 
 /* --------------------------------- End Of File ------------------------------ */
-

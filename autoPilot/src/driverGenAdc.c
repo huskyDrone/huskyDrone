@@ -9,8 +9,8 @@
 
 uint32_t   airpressADC;
 uint32_t   usonicADC;
-uint32_t   AirSpdADC[ADCAveraging];
-uint32_t   DistADC[ADCAveraging];
+uint32_t   AirSpdADC[ADCAVERAGING];
+uint32_t   DistADC[ADCAVERAGING];
 uint32_t   ADCCount;
 uint32_t   AveAirSpdADC;
 uint32_t   AveDistADC;
@@ -84,7 +84,8 @@ void ADC_IRQHandler(void)
     //Calculate Averaged Sensor Values
 
     AveDistADC=0;
-    for (int i = 0; i<ADCAveraging; i++)
+    int i;
+    for (i = 0; i<ADCAVERAGING; i++)
     {
     	AveAirSpdADC=AveAirSpdADC+AirSpdADC[i];
     	AveDistADC=AveDistADC+DistADC[i];
