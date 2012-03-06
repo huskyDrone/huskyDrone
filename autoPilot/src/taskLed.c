@@ -14,6 +14,7 @@
 #include "hwConfig.h"
 #include "platformConfig.h"
 #include "taskLed.h"
+#include "driverServos.h"
 
 extern portTickType ledRate;
 
@@ -22,6 +23,8 @@ void vLedTask( void *pvParameters )
 	portTickType xLastWakeTime;
 
 	xLastWakeTime = xTaskGetTickCount();
+
+	servos_SetAngle(AILERON_LEFT, 120);
 
 	for( ;; )
 	{

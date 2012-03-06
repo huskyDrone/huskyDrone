@@ -10,37 +10,36 @@
 // current GPS Rx status
 extern __IO SetState serialRxReady;
 
-extern serInputStruct serData;
+//extern serInputStruct serData;
 
-uint8_t testStr[20] = "huskyDrone";
+//extern RingBuffer serialRxRb;
+
+uint8_t buff[10];
 
 void vSerialTask( void *pvParameters )
 {
-	UART_Send(SER_UART, &testStr[0], 10, NONE_BLOCKING);
+	uint32_t len;
+
+	printf("Hello, this is a welcome message\r");
+	printf("for huskyDrone project\r");
+	printf("Authors: Trevor Wilcox, Derek Knox and Yevgeniy Maksimenko\r");
 
 	for( ;; )
 	{
+		len = 0;
+
 
 		if(serialRxReady)
 		{
-			// get the message from the UART port and place it
-			// into the ring buffer
-			Serial_IntReceive();
-
-			// copy the command in the local buffer
-			SerialReceive(&serData.inputString[0], SER_IN_MSG_SZ);
-
-			// we are done with the current message, re-enable
-			// the RX interrupt
-			UART_IntConfig(SER_UART, UART_INTCFG_RBR, ENABLE);
-
-			// reset the RX flag, should follow right
-			// after enabling the interrupt
+			printf("here\r");
 			serialRxReady = RESET;
-
-			// decompose the message
-			Serial_populateData(&serData.inputString[0], SER_IN_MSG_SZ);
 		}
+/*
+		while(len == 0)
+		{
+			len = UART_Receive(SER_UART, buff, sizeof(buff)-1, NONE_BLOCKING);
+		}
+		printf("len = %d\r", len);
+*/
 	}
-
 }

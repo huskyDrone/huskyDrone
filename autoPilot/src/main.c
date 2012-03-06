@@ -52,7 +52,7 @@
 */
 
 /* Standard includes. */
-#include "stdio.h"
+//#include "stdio.h"
 #include "string.h"
 
 #define ARM_MATH_CM3
@@ -65,10 +65,14 @@
 #include "queue.h"
 #include "semphr.h"
 #include "platformConfig.h"
+
+#include "print_utils.h"
 #include "hwConfig.h"
 #include "taskLed.h"
 #include "taskSerial.h"
 #include "driverGps.h"
+#include "muxControl.h"
+#include "driverMEMs.h"
 
 #include "driverSerial.h"
 #include "driverServos.h"
@@ -114,6 +118,9 @@ int main( void )
     // configure the general UART
     configSerial();
 
+    // configure the mux select line
+    //muxControlInit();
+
     //adcconfig();
 
     // create the LED task
@@ -129,9 +136,6 @@ int main( void )
 
     // enable the interrupts
     portENABLE_INTERRUPTS();
-
-    // testing printf
-    //printf("testing\r\n");
 
     // start the scheduler
 	vTaskStartScheduler();

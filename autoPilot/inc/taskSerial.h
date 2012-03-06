@@ -15,6 +15,7 @@
 #include "hwConfig.h"
 #include "platformConfig.h"
 #include "driverSerial.h"
+#include "print_utils.h"
 
 void vSerialTask( void *pvParameters );
 

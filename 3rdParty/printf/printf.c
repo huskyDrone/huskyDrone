@@ -1,6 +1,5 @@
 /*
 	Copyright 2001, 2002 Georges Menie (www.menie.org)
-	stdarg version contributed by Christian Ettinger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,28 +18,20 @@
 
 /*
 	putchar is the only external dependency for this file,
-	if you have a working putchar, leave it commented out.
-	If not, uncomment the define below and
+	if you have a working putchar, just remove the following
+	define. If the function should be called something else,
 	replace outbyte(c) by your own function call.
-
 */
-
 #define putchar(c) outbyte(c)
-
-#include <stdarg.h>
 
 static void printchar(char **str, int c)
 {
 	extern int putchar(int c);
-	
 	if (str) {
-		**str = (char)c;
+		**str = c;
 		++(*str);
 	}
-	else
-	{ 
-		(void)putchar(c);
-	}
+	else (void)putchar(c);
 }
 
 #define PAD_RIGHT 1
@@ -84,7 +75,7 @@ static int printi(char **out, int i, int b, int sg, int width, int pad, int letb
 	char print_buf[PRINT_BUF_LEN];
 	register char *s;
 	register int t, neg = 0, pc = 0;
-	register unsigned int u = (unsigned int)i;
+	register unsigned int u = i;
 
 	if (i == 0) {
 		print_buf[0] = '0';
@@ -94,17 +85,17 @@ static int printi(char **out, int i, int b, int sg, int width, int pad, int letb
 
 	if (sg && b == 10 && i < 0) {
 		neg = 1;
-		u = (unsigned int)-i;
+		u = -i;
 	}
 
 	s = print_buf + PRINT_BUF_LEN-1;
 	*s = '\0';
 
 	while (u) {
-		t = (unsigned int)u % b;
+		t = u % b;
 		if( t >= 10 )
 			t += letbase - '0' - 10;
-		*--s = (char)(t + '0');
+		*--s = t + '0';
 		u /= b;
 	}
 
@@ -122,10 +113,11 @@ static int printi(char **out, int i, int b, int sg, int width, int pad, int letb
 	return pc + prints (out, s, width, pad);
 }
 
-static int print( char **out, const char *format, va_list args )
+static int print(char **out, int *varg)
 {
 	register int width, pad;
 	register int pc = 0;
+	register char *format = (char *)(*varg++);
 	char scr[2];
 
 	for (; *format != 0; ++format) {
@@ -147,33 +139,38 @@ static int print( char **out, const char *format, va_list args )
 				width += *format - '0';
 			}
 			if( *format == 's' ) {
-				register char *s = (char *)va_arg( args, int );
+				register char *s = *((char **)varg++);
 				pc += prints (out, s?s:"(null)", width, pad);
 				continue;
 			}
+                        if( *format == 'c' ) {
+                                /* char are converted to int then pushed on the stack */
+                                scr[0] = *varg++;
+                                scr[1] = '\0';
+                                pc += prints (out, scr, width, pad);
+                                continue;
+                        }
+                        if( *format == 'l' ) {
+                                /* skip long format designations */
+                                format++;
+                        }
 			if( *format == 'd' ) {
-				pc += printi (out, va_arg( args, int ), 10, 1, width, pad, 'a');
+				pc += printi (out, *varg++, 10, 1, width, pad, 'a');
 				continue;
 			}
 			if( *format == 'x' ) {
-				pc += printi (out, va_arg( args, int ), 16, 0, width, pad, 'a');
+				pc += printi (out, *varg++, 16, 0, width, pad, 'a');
 				continue;
 			}
 			if( *format == 'X' ) {
-				pc += printi (out, va_arg( args, int ), 16, 0, width, pad, 'A');
+				pc += printi (out, *varg++, 16, 0, width, pad, 'A');
 				continue;
 			}
 			if( *format == 'u' ) {
-				pc += printi (out, va_arg( args, int ), 10, 0, width, pad, 'a');
+				pc += printi (out, *varg++, 10, 0, width, pad, 'a');
 				continue;
 			}
-			if( *format == 'c' ) {
-				/* char are converted to int then pushed on the stack */
-				scr[0] = (char)va_arg( args, int );
-				scr[1] = '\0';
-				pc += prints (out, scr, width, pad);
-				continue;
-			}
+
 		}
 		else {
 		out:
@@ -182,37 +179,22 @@ static int print( char **out, const char *format, va_list args )
 		}
 	}
 	if (out) **out = '\0';
-	va_end( args );
 	return pc;
 }
 
+/* assuming sizeof(void *) == sizeof(int) */
+
 int printf(const char *format, ...)
 {
-        va_list args;
-        
-        va_start( args, format );
-        return print( 0, format, args );
+	register int *varg = (int *)(&format);
+	return print(0, varg);
 }
 
 int sprintf(char *out, const char *format, ...)
 {
-        va_list args;
-        
-        va_start( args, format );
-        return print( &out, format, args );
+	register int *varg = (int *)(&format);
+	return print(&out, varg);
 }
-
-
-int snprintf( char *buf, unsigned int count, const char *format, ... )
-{
-        va_list args;
-        
-        ( void ) count;
-        
-        va_start( args, format );
-        return print( &buf, format, args );
-}
-
 
 #ifdef TEST_PRINTF
 int main(void)
@@ -280,14 +262,4 @@ int main(void)
  */
 
 #endif
-
-
-/* To keep linker happy. */
-int	write( int i, char* c, int n)
-{
-	(void)i;
-	(void)n;
-	(void)c;
-	return 0;
-}
 

@@ -20,6 +20,20 @@ extern uint16_t ledRate;
 // Serial RX ring buffer
 RingBuffer serialRxRb;
 
+uint8_t menu1[] = "Hello, this is a welcome message \r";
+uint8_t menu2[] = "for huskyDrone project \r";
+uint8_t menu3[] = "Trevor Wilcox, Derek Knox and Yevgeniy Maksimenko\n";
+
+void SerialPrintWelcomeMenu(void)
+{
+	//UART_Send(SER_UART, menu1, sizeof(menu1)-1, BLOCKING);
+	//UART_Send(SER_UART, menu2, sizeof(menu2)-1, BLOCKING);
+	//UART_Send(SER_UART, menu3, sizeof(menu3)-1, BLOCKING);
+	uint8_t val = 8;
+
+	printf("Initial MENU\r");
+}
+
 void configSerial(void)
 {
 	// GPS UART configuration structure
@@ -40,7 +54,7 @@ void configSerial(void)
 	PINSEL_ConfigPin(&pin_initStructure);
 
 	// initialize GPS UART
-	UART_initStructure.Baud_rate = 115200;
+	UART_initStructure.Baud_rate = 9600;
 	UART_initStructure.Databits  = UART_DATABIT_8;
 	UART_initStructure.Parity    = UART_PARITY_NONE;
 	UART_initStructure.Stopbits  = UART_STOPBIT_1;
@@ -50,7 +64,7 @@ void configSerial(void)
 
 	// initialize FIFO to default state:
 	//          -FIFO_DMAMode = DISABLE
-	//          -FIFO_Level = UART_FIFO_TRGLEV0
+	//          -FIFO_Level = UART_FIFO_TRGLEV3
 	//          -FIFO_ResetRxBuf = ENABLE
 	//          -FIFO_ResetTxBuf = ENABLE
 	//          -FIFO_State = ENABLE
@@ -65,39 +79,54 @@ void configSerial(void)
 	// enable GPS_UART Rx interrupt
 	UART_IntConfig(SER_UART, UART_INTCFG_RBR, ENABLE);
 
-	// reset ring buf head and tail idx
-	__BUF_RESET(serialRb.rx_head);
-	__BUF_RESET(serialRb.rx_tail);
-	__BUF_RESET(serialRb.tx_head);
-	__BUF_RESET(serialRb.tx_tail);
+	// reset the Rx ring buffer
+	ringBufferInit(&serialRxRb);
 
-	// preemption = 1, sub-priority = 1
-	//NVIC_SetPriority(UART3_IRQn, ((0x01<<3)|0x01));
+	// reset the Rx state
+	serialRxReady = RESET;
+
 	NVIC_SetPriority(UART3_IRQn, 8);
 	// enable interrupt for GPS UART channel
 	NVIC_EnableIRQ(UART3_IRQn);
 
-	// reset the Rx state
-	serialRxReady = RESET;
+	SerialPrintWelcomeMenu();
 }
 
 void UART3_IRQHandler(void)
 {
-	//portBASE_TYPE xYieldRequired;
-	uint32_t intsrc, tmp;
+	uint32_t intsrc, tmp, tmp1;
 
 	// determine the interrupt source
 	intsrc = UART_GetIntId(SER_UART);
 	tmp = intsrc & UART_IIR_INTID_MASK;
 
-	// receive data available
-	if(tmp == UART_IIR_INTID_RDA)
+	// receive line status
+	if(tmp == UART_IIR_INTID_RLS)
 	{
-		// disable the interrupt
-		UART_IntConfig(SER_UART, UART_INTCFG_RBR, DISABLE);
+		// check line status
+		tmp1 = UART_GetLineStatus(SER_UART);
+		// mask out the receive ready and transmit holding empty status
+		tmp1 = (UART_LSR_OE | UART_LSR_PE | UART_LSR_FE \
+				| UART_LSR_BI | UART_LSR_RXFE);
+		// if any error exist
+		if(tmp1)
+		{
+			// FIXME: need to handle this
+		}
+	}
+
+	// receive data available
+	if((tmp == UART_IIR_INTID_RDA) || (tmp == UART_IIR_INTID_CTI))
+	{
 
 		// set the Rx state flag
 		serialRxReady = SET;
+
+		// disable the interrupt
+		UART_IntConfig(SER_UART, UART_INTCFG_RBR, DISABLE);
+
+
+		//Serial_IntReceive();
 	}
 
 	// transmit holding empty
@@ -107,11 +136,12 @@ void UART3_IRQHandler(void)
 	}
 }
 
-
+/*
 void Serial_IntReceive(void)
 {
 	uint8_t tmpc;
 	uint32_t rLen;
+	uint8_t endChar = '*';
 
 	while(1)
 	{
@@ -124,6 +154,11 @@ void Serial_IntReceive(void)
 			// checks whether the buffer is full and if it is not, adds the character
 			// if there is no more room, trim the message
 			ringBufferEnque(&serialRxRb, tmpc);
+
+			if(tmpc == endChar)
+			{
+				serialRxReady = SET;
+			}
 		}
 		else // no more data
 		{
@@ -137,6 +172,8 @@ uint32_t SerialReceive(uint8_t *rxBuf, uint8_t bufLen)
 	uint8_t *data = (uint8_t *)rxBuf;
 	uint32_t bytes = 0;
 
+	UART_IntConfig(SER_UART, UART_INTCFG_RBR, DISABLE);
+
 	// loop until receive buffer ring is empty or until max_bytes expires
 	while((bufLen > 0) && (!ringBufferIsEmpty(&serialRxRb)))
 	{
@@ -148,12 +185,17 @@ uint32_t SerialReceive(uint8_t *rxBuf, uint8_t bufLen)
 		bufLen--;
 	}
 
+	UART_IntConfig(SER_UART, UART_INTCFG_RBR, ENABLE);
+
 	return bytes;
 }
+*/
 
 Bool Serial_populateData(uint8_t *addr, uint8_t len)
 {
 	uint8_t *pBuff = addr;
+
+	uint8_t test1[10] = "test1\r\n";
 
 	// find out type of the message
 	if(*pBuff == 'D' && *(pBuff+1) == 'B' && *(pBuff+2) == 'G')
@@ -178,6 +220,7 @@ Bool Serial_populateData(uint8_t *addr, uint8_t len)
 		ledRate = a2l(pBuff);
 		break;
 	default :
+		UART_Send(SER_UART, &test1[0], sizeof(test1), NONE_BLOCKING);
 		return FALSE;
 		break;
 	}
