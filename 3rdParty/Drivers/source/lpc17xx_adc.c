@@ -64,7 +64,7 @@ void ADC_Init(LPC_ADC_TypeDef *ADCx, uint32_t rate)
 	uint32_t ADCPClk, temp, tmp;
 
 	CHECK_PARAM(PARAM_ADCx(ADCx));
-	CHECK_PARAM(PARAM_ADC_RATE(rate));
+//	CHECK_PARAM(PARAM_ADC_RATE(rate));
 
 	// Turn on power and clock
 	CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCAD, ENABLE);
@@ -344,4 +344,3 @@ FlagStatus	ADC_GlobalGetStatus(LPC_ADC_TypeDef *ADCx, uint32_t StatusType)
  */
 
 /* --------------------------------- End Of File ------------------------------ */
-
