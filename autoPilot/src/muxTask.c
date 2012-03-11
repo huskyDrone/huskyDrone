@@ -16,15 +16,12 @@ void vMuxTask( void *pvParameters )
 	Bool stable = FALSE;
 	uint32_t cnt = 0;
 	uint32_t cnt1 = 0;
-	Bool toggle2 = 0;
+	Bool toggle = 0;
 	__IO uint32_t val1 = 0;
 	uint32_t val1Old = 0;
 	__IO uint32_t val2 = 0;
 	__IO uint32_t val3 = 0;
 	ledFlag = TRUE;
-
-	portTickType xLastWakeTime;
-	xLastWakeTime = xTaskGetTickCount();
 
 	for( ;; )
 	{
@@ -47,9 +44,13 @@ void vMuxTask( void *pvParameters )
 			else
 			{
 				cnt = 0;
-				toggle2 = ~toggle2;
 
-				if (toggle2)
+				// the interrupt is generated on both rising and falling edges
+				// need to distinguish the counter value between the HIGH and
+				// LOW states
+				toggle = ~toggle;
+
+				if (toggle)
 				{
 					val1 = TIM_GetCaptureValue(MUX_TIMER, TIM_COUNTER_INCAP0);
 				}
@@ -67,18 +68,19 @@ void vMuxTask( void *pvParameters )
 		//val1 = 599813: connected to PWM, one edge detection
 		if(val1 > 480000)
 		{
-			muxSelManual();
+			muxSelManual();   // switch the mode to Manual
 
+			// this is used to make sure that the mode is switch
+			// if the radio is switch OFF or mode is switch
 			if(val1 == val1Old) cnt1++;
 			else {cnt1 = 0;}
 			val1Old = val1;
-
 			if(cnt1 > 100000) val1 = 0;
 
 		}
 		else
 		{
-			muxSelAutonomous();
+			muxSelAutonomous();  // switch the mode to Autonomous
 		}
 	}
 }

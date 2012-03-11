@@ -7,9 +7,6 @@
 
 #include "muxControl.h"
 
-#include "taskLed.h"
-#include "platformConfig.h"
-
 __IO Bool muxFlag = FALSE;
 
 void muxControlInit(void)
@@ -17,9 +14,6 @@ void muxControlInit(void)
 	PINSEL_CFG_Type     PinCfg;
 	TIM_TIMERCFG_Type   muxTimer;
 	TIM_CAPTURECFG_Type muxControlCapture;
-
-	TIM_COUNTERCFG_Type muxCounterStructure;
-	TIM_MATCHCFG_Type   muxMatchStructure;
 
 	// prepare the GPIO for PWM capture
 	PinCfg.Funcnum   = SWITCH_PIN_FUNC;
@@ -44,40 +38,29 @@ void muxControlInit(void)
 	muxControlCapture.RisingEdge     = ENABLE;
 	muxControlCapture.IntOnCaption   = ENABLE;
 
-	// prepare the counter structure
-	muxCounterStructure.CountInputSelect = TIM_COUNTER_INCAP0;
-	muxCounterStructure.CounterOption    = TIM_COUNTER_INCAP0;
-
-	// prepare the match structure
-	muxMatchStructure.ExtMatchOutputType = TIM_EXTMATCH_NOTHING;
-	muxMatchStructure.IntOnMatch         = ENABLE;
-	muxMatchStructure.MatchChannel       = 2;
-	muxMatchStructure.MatchValue         = 1;
-	muxMatchStructure.ResetOnMatch       = ENABLE;
-	muxMatchStructure.StopOnMatch        = DISABLE;
-
+	// initialize and reset the counter
 	TIM_Init(MUX_TIMER, TIM_TIMER_MODE, &muxTimer);
-	//TIM_Init(MUX_TIMER, TIM_COUNTER_RISING_MODE, &muxCounterStructure);
 	TIM_ConfigCapture(MUX_TIMER, &muxControlCapture);
-	//TIM_ConfigMatch(MUX_TIMER, &muxMatchStructure);
-
 	TIM_ResetCounter(MUX_TIMER);
 
-
+	// prioritize the interrupt and start it
 	NVIC_SetPriority(MUX_TIMER_IRQ, 10);
 	NVIC_EnableIRQ(MUX_TIMER_IRQ);
 	TIM_Cmd(MUX_TIMER, ENABLE);
 }
+
 
 void muxSelManual(void)
 {
 	GPIO_ClearValue(SEL_PORT, (1 << SEL_PIN));
 }
 
+
 void muxSelAutonomous(void)
 {
 	GPIO_SetValue(SEL_PORT, (1 << SEL_PIN));
 }
+
 
 void TIMER2_IRQHandler(void)
 {

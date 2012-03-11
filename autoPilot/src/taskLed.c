@@ -5,18 +5,7 @@
  *      Author: jenya
  */
 
-/* Scheduler includes. */
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
-#include "semphr.h"
-
-#include "hwConfig.h"
-#include "platformConfig.h"
 #include "taskLed.h"
-#include "driverServos.h"
-#include "muxControl.h"
-#include "muxTask.h"
 
 extern __IO Bool ledFlag;
 
@@ -42,8 +31,5 @@ void vLedTask( void *pvParameters )
 			// Turn the LED off
 			LPC_GPIO3->FIOSET = RED_LED;
 		}
-
-
 	}
-
 }

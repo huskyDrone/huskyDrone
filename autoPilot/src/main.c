@@ -77,7 +77,7 @@
 
 #include "driverSerial.h"
 #include "driverServos.h"
-//#include "driverGenAdc.h"
+#include "driverGenAdc.h"
 #include "string.h"
 
 
@@ -122,7 +122,8 @@ int main( void )
     // configure the mux select line
     muxControlInit();
 
-    //adcconfig();
+    // configure the analog sensors
+    analogSensorsInit();
 
     // create the LED task
     if(xTaskCreate(vLedTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[0]) != pdPASS)
@@ -165,7 +166,7 @@ int main( void )
 
 void vApplicationTickHook( void )
 {
-static unsigned long ulTicksSinceLastDisplay = 0;
+//static unsigned long ulTicksSinceLastDisplay = 0;
 
 	// Called from every tick interrupt as described in the comments at the top
 	//of this file.
