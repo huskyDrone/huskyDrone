@@ -20,28 +20,14 @@ extern uint16_t ledRate;
 // Serial RX ring buffer
 RingBuffer serialRxRb;
 
-uint8_t menu1[] = "Hello, this is a welcome message \r";
-uint8_t menu2[] = "for huskyDrone project \r";
-uint8_t menu3[] = "Trevor Wilcox, Derek Knox and Yevgeniy Maksimenko\n";
-
-void SerialPrintWelcomeMenu(void)
-{
-	//UART_Send(SER_UART, menu1, sizeof(menu1)-1, BLOCKING);
-	//UART_Send(SER_UART, menu2, sizeof(menu2)-1, BLOCKING);
-	//UART_Send(SER_UART, menu3, sizeof(menu3)-1, BLOCKING);
-	uint8_t val = 8;
-
-	printf("Initial MENU\r");
-}
-
 void configSerial(void)
 {
 	// GPS UART configuration structure
-	UART_CFG_Type   UART_initStructure;
+	UART_CFG_Type      UART_initStructure;
 	// GPS UART FIFO configuration structure
 	UART_FIFO_CFG_Type UARTFIFO_initStructure;
 	// Pin configuration for GPS UART
-	PINSEL_CFG_Type pin_initStructure;
+	PINSEL_CFG_Type    pin_initStructure;
 
 	// initialize UART3 pin connect
 	pin_initStructure.Funcnum   = SER_PIN_FUNC;
@@ -85,11 +71,10 @@ void configSerial(void)
 	// reset the Rx state
 	serialRxReady = RESET;
 
+	// set the interrupt priority
 	NVIC_SetPriority(UART3_IRQn, 8);
 	// enable interrupt for GPS UART channel
 	NVIC_EnableIRQ(UART3_IRQn);
-
-	SerialPrintWelcomeMenu();
 }
 
 void UART3_IRQHandler(void)
@@ -100,6 +85,8 @@ void UART3_IRQHandler(void)
 	intsrc = UART_GetIntId(SER_UART);
 	tmp = intsrc & UART_IIR_INTID_MASK;
 
+	//LPC_GPIO3->FIOCLR = RED_LED;
+/*
 	// receive line status
 	if(tmp == UART_IIR_INTID_RLS)
 	{
@@ -114,26 +101,21 @@ void UART3_IRQHandler(void)
 			// FIXME: need to handle this
 		}
 	}
-
+*/
 	// receive data available
-	if((tmp == UART_IIR_INTID_RDA) || (tmp == UART_IIR_INTID_CTI))
+	if(tmp == UART_IIR_INTID_RDA)
 	{
 
 		// set the Rx state flag
 		serialRxReady = SET;
 
 		// disable the interrupt
-		UART_IntConfig(SER_UART, UART_INTCFG_RBR, DISABLE);
+		//UART_IntConfig(SER_UART, UART_INTCFG_RBR, DISABLE);
 
 
 		//Serial_IntReceive();
 	}
 
-	// transmit holding empty
-	if(tmp == UART_IIR_INTID_THRE)
-	{
-		//GPS_IntTransmit();
-	}
 }
 
 /*

@@ -73,6 +73,7 @@
 #include "driverGps.h"
 #include "muxControl.h"
 #include "driverMEMs.h"
+#include "muxTask.h"
 
 #include "driverSerial.h"
 #include "driverServos.h"
@@ -119,7 +120,7 @@ int main( void )
     configSerial();
 
     // configure the mux select line
-    //muxControlInit();
+    muxControlInit();
 
     //adcconfig();
 
@@ -131,6 +132,15 @@ int main( void )
 
     // create the serialPort task
     if(xTaskCreate(vSerialTask, (signed portCHAR*) "SERIAL",1024,NULL, 1, &taskHandles[1]) != pdPASS)
+    {
+    	//TODO: the task was not created, do something
+    }
+
+    // create the MUX task
+    if(xTaskCreate(vMuxTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[2]) != pdPASS)
+    {
+    	//TODO: the task was not created, do something
+    }
 
     taskHandles[4] = 0; //TODO: will need to change when we know how many tasks there will be
 

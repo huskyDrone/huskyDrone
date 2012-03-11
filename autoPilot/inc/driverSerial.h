@@ -37,7 +37,6 @@ enum _serialMsgId
 	OTHER
 } serialMsgId;
 
-void SerialPrintWelcomeMenu(void);
 void configSerial(void);
 void Serial_IntReceive(void);
 uint32_t SerialReceive(uint8_t *rxBuf, uint8_t bufLen);
