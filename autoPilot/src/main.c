@@ -124,7 +124,6 @@ int main( void )
 
     // configure the analog sensors
     analogSensorsInit();
-
     // create the LED task
     if(xTaskCreate(vLedTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[0]) != pdPASS)
     {
