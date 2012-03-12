@@ -74,10 +74,11 @@
 #include "driverGps.h"
 #include "muxControl.h"
 #include "driverMEMs.h"
+#include "muxTask.h"
 
 #include "driverSerial.h"
 #include "driverServos.h"
-//#include "driverGenAdc.h"
+#include "driverGenAdc.h"
 #include "string.h"
 
 
@@ -119,9 +120,10 @@ int main( void )
     configSerial();
 
     // configure the mux select line
-    //muxControlInit();
+    muxControlInit();
 
-    //adcconfig();
+    // configure the analog sensors
+    analogSensorsInit();
 
     // create the LED task
     if(xTaskCreate(vLedTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[0]) != pdPASS)
@@ -132,7 +134,13 @@ int main( void )
     // create the serialPort task
     if(xTaskCreate(vSerialTask, (signed portCHAR*) "SERIAL",1024,NULL, 1, &taskHandles[1]) != pdPASS)
     {
+    	//TODO: the task was not created, do something
+    }
 
+    // create the MUX task
+    if(xTaskCreate(vMuxTask, (signed portCHAR*) "LED",128,NULL, 1, &taskHandles[2]) != pdPASS)
+    {
+    	//TODO: the task was not created, do something
     }
     // create the demo task
 	if(xTaskCreate(vDemoTask, (signed portCHAR*) "DEMO",1024,NULL, 1, &taskHandles[2]) != pdPASS)
@@ -143,11 +151,6 @@ int main( void )
 
     // enable the interrupts
     portENABLE_INTERRUPTS();
-
-	//Setting Priority for ADC
-	NVIC_DisableIRQ(ADC_IRQn);
-	NVIC_SetPriority(ADC_IRQn, 10);
-	NVIC_EnableIRQ(ADC_IRQn);
 
     // start the scheduler
 	vTaskStartScheduler();
@@ -162,7 +165,7 @@ int main( void )
 
 void vApplicationTickHook( void )
 {
-static unsigned long ulTicksSinceLastDisplay = 0;
+//static unsigned long ulTicksSinceLastDisplay = 0;
 
 	// Called from every tick interrupt as described in the comments at the top
 	//of this file.
