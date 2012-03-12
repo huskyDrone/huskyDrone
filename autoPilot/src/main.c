@@ -70,6 +70,7 @@
 #include "hwConfig.h"
 #include "taskLed.h"
 #include "taskSerial.h"
+#include "taskDemo.h"
 #include "driverGps.h"
 #include "muxControl.h"
 #include "driverMEMs.h"
@@ -87,7 +88,6 @@ tick hook. */
 #define mainCHECK_DELAY						( ( portTickType ) 5000 / portTICK_RATE_MS )
 
 /*-----------------------------------------------------------*/
-
 // contains the handles for all tasks
 // define one more taskHandle than you need, zero the last entry
 xTaskHandle taskHandles[5];  //TODO: need to know how many there will be
@@ -131,7 +131,14 @@ int main( void )
 
     // create the serialPort task
     if(xTaskCreate(vSerialTask, (signed portCHAR*) "SERIAL",1024,NULL, 1, &taskHandles[1]) != pdPASS)
+    {
 
+    }
+    // create the demo task
+	if(xTaskCreate(vDemoTask, (signed portCHAR*) "DEMO",1024,NULL, 1, &taskHandles[2]) != pdPASS)
+	{
+
+	}
     taskHandles[4] = 0; //TODO: will need to change when we know how many tasks there will be
 
     // enable the interrupts
@@ -247,4 +254,3 @@ const unsigned long TCR_COUNT_RESET = 2, CTCR_CTM_TIMER = 0x00, TCR_COUNT_ENABLE
 	LPC_TIM0->TCR = TCR_COUNT_ENABLE;
 }
 /*-----------------------------------------------------------*/
-

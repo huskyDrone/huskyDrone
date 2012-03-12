@@ -10,7 +10,7 @@
 
 #include "lpc17xx_pwm.h"
 
-typedef enum {AILERON_LEFT = 0, AILERON_RIGHT = 1, ELEVATOR = 2, RUDDER = 3} servo_channel_t;
+typedef enum {AILERONS = 0, ELEVATOR = 1, RUDDER = 2} servo_channel_t;
 
 extern int servos_SetAngle(servo_channel_t channel, float degrees);
 extern int servos_SetThrust(float thrust_pct);

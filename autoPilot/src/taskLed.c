@@ -24,8 +24,6 @@ void vLedTask( void *pvParameters )
 
 	xLastWakeTime = xTaskGetTickCount();
 
-	servos_SetAngle(AILERON_LEFT, 120);
-
 	for( ;; )
 	{
 		// wait for the next cycle

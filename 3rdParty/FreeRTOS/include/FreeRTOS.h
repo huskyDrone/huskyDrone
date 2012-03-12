@@ -198,7 +198,6 @@ typedef portBASE_TYPE (*pdTASK_HOOK_CODE)( void * );
 
 /* The timers module relies on xTaskGetSchedulerState(). */
 #if configUSE_TIMERS == 1
-
 	#ifndef configTIMER_TASK_PRIORITY
 		#error If configUSE_TIMERS is set to 1 then configTIMER_TASK_PRIORITY must also be defined.
 	#endif /* configTIMER_TASK_PRIORITY */
